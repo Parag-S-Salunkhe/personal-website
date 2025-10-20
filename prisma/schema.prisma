@@ -1,0 +1,97 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model HealthData {
+  id        String   @id @default(cuid())
+  date      DateTime @unique
+  steps     Int
+  calories  Int
+  createdAt DateTime @default(now())
+}
+
+model Movie {
+  id         String   @id @default(cuid())
+  title      String
+  type       MediaType
+  rating     Int
+  review     String   @db.Text
+  watchDate  DateTime
+  posterUrl  String?
+  createdAt  DateTime @default(now())
+}
+
+enum MediaType {
+  MOVIE
+  SERIES
+}
+
+model Blog {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @db.Text
+  imageUrl    String?
+  blogType    String?
+  publishDate DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  techStack   String[]
+  projectUrl  String?
+  githubUrl   String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
+  category  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cooking {
+  id          String   @id @default(cuid())
+  dishName    String
+  category    String
+  rating      Int      @default(5)
+  review      String   @db.Text
+  imageUrl    String?
+  videoUrl    String?
+  ingredients String[] @default([])
+  cookDate    DateTime
+  createdAt   DateTime @default(now())
+}
+
+model GuestbookMessage {
+  id        String   @id @default(cuid())
+  message   String   @db.VarChar(500)
+  emoji     String?
+  createdAt DateTime @default(now())
+  ipHash    String?
+}
+
+model MoodVote {
+  id        String   @id @default(cuid())
+  mood      String
+  createdAt DateTime @default(now())
+  ipHash    String?
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
