@@ -33,6 +33,25 @@ export default function CookingPage() {
   }, [])
 
   useEffect(() => {
+    const filterDishes = () => {
+      let filtered = dishes
+
+      // Filter by category
+      if (activeCategory !== 'All') {
+        filtered = filtered.filter(dish => dish.category === activeCategory)
+      }
+
+      // Filter by search query
+      if (searchQuery) {
+        filtered = filtered.filter(dish =>
+          dish.dishName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          dish.review.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      }
+
+      setFilteredDishes(filtered)
+    }
+
     filterDishes()
   }, [dishes, searchQuery, activeCategory])
 
@@ -46,25 +65,6 @@ export default function CookingPage() {
       console.error('Error fetching dishes:', error)
       setLoading(false)
     }
-  }
-
-  const filterDishes = () => {
-    let filtered = dishes
-
-    // Filter by category
-    if (activeCategory !== 'All') {
-      filtered = filtered.filter(dish => dish.category === activeCategory)
-    }
-
-    // Filter by search query
-    if (searchQuery) {
-      filtered = filtered.filter(dish =>
-        dish.dishName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        dish.review.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    }
-
-    setFilteredDishes(filtered)
   }
 
   // Calculate counts for each category
@@ -100,7 +100,7 @@ export default function CookingPage() {
             </h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Dishes I've made and loved
+            Dishes I&apos;ve made and loved
           </p>
         </motion.div>
 
