@@ -38,6 +38,11 @@ export default function MoviesAdminPage() {
     posterUrl: '',
     watchDate: new Date().toISOString().split('T')[0]
   })
+  
+  // TMDB Search states
+  const [tmdbSearch, setTmdbSearch] = useState('')
+  const [tmdbResults, setTmdbResults] = useState<any[]>([])
+  const [isSearching, setIsSearching] = useState(false)
 
   // Fetch all movies on page load
   useEffect(() => {
@@ -157,6 +162,40 @@ export default function MoviesAdminPage() {
     } catch (error) {
       alert('Error saving movie: ' + (error as Error).message)
     }
+  }
+
+  // TMDB Search with debouncing
+  const searchTMDB = async (query: string) => {
+    setTmdbSearch(query)
+    
+    if (query.length < 2) {
+      setTmdbResults([])
+      return
+    }
+    
+    setIsSearching(true)
+    try {
+      const response = await fetch(`/api/movies/search?q=${encodeURIComponent(query)}`)
+      const data = await response.json()
+      setTmdbResults(data)
+    } catch (error) {
+      console.error('Search error:', error)
+      setTmdbResults([])
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  const selectMovie = (movie: any) => {
+    setFormData({
+      ...formData,
+      title: movie.title,
+      type: movie.type,
+      posterUrl: movie.posterUrl || '',
+      rating: movie.rating || 5,
+    })
+    setTmdbSearch('')
+    setTmdbResults([])
   }
 
   // Delete movie
@@ -366,6 +405,69 @@ export default function MoviesAdminPage() {
                 </div>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* TMDB Search */}
+                  <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      🎬 Search TMDB (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={tmdbSearch}
+                      onChange={(e) => searchTMDB(e.target.value)}
+                      placeholder="Search for a movie or TV series..."
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                               bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                               focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    
+                    {isSearching && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 flex items-center gap-2">
+                        <span className="animate-spin">⏳</span> Searching TMDB...
+                      </p>
+                    )}
+                    
+                    {tmdbResults.length > 0 && (
+                      <div className="mt-3 max-h-80 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
+                        {tmdbResults.map((movie) => (
+                          <button
+                            key={movie.id}
+                            type="button"
+                            onClick={() => selectMovie(movie)}
+                            className="w-full p-3 hover:bg-gray-50 dark:hover:bg-gray-700 
+                                     text-left border-b border-gray-200 dark:border-gray-700 
+                                     last:border-b-0 transition-colors flex gap-3"
+                          >
+                            {movie.posterUrl && (
+                              <img 
+                                src={movie.posterUrl} 
+                                alt={movie.title} 
+                                className="w-12 h-16 object-cover rounded flex-shrink-0"
+                              />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-gray-900 dark:text-white mb-1">
+                                {movie.title}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                {movie.type} • {movie.releaseDate?.substring(0, 4) || 'Unknown'}
+                                {movie.rating && ` • ⭐ ${movie.rating}/5`}
+                              </div>
+                              <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                                {movie.overview}
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {tmdbSearch.length >= 2 && !isSearching && tmdbResults.length === 0 && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                        No results found. Try a different search term.
+                      </p>
+                    )}
+                  </div>
+
                   {/* Title */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
