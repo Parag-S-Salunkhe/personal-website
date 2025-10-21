@@ -95,10 +95,10 @@ export default function Home() {
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative py-16 overflow-hidden bg-gradient-to-b from-purple-50/50 to-white dark:from-purple-950/20 dark:to-[#0F0F14] transition-colors duration-300"
+        className="relative py-12 sm:py-16 overflow-hidden bg-gradient-to-b from-purple-50/50 to-white dark:from-purple-950/20 dark:to-[#0F0F14] transition-colors duration-300"
       >
-        <div className="relative max-w-6xl mx-auto px-8">
-          <div className="flex flex-col lg:flex-row gap-12 items-start">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
             {/* LEFT COLUMN - Profile (30%) - Everything Centered */}
             <div className="w-full lg:w-[30%] flex-shrink-0 flex flex-col items-center space-y-4">
               {/* Profile Image - 280px with Glazing Effect */}
@@ -115,7 +115,7 @@ export default function Home() {
                 {/* Glazing border */}
                 <div className="relative rounded-full p-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 animate-gradient"
                      style={{ backgroundSize: '200% 200%' }}>
-                  <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden bg-white dark:bg-gray-900">
+                  <div className="relative w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] rounded-full overflow-hidden bg-white dark:bg-gray-900">
                     <Image
                       src="/profile.jpg"
                       alt="Parag Salunkhe"
@@ -132,7 +132,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-2xl font-bold tracking-tight text-center bg-gradient-to-r from-purple-600 to-purple-400 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent"
+                className="text-xl sm:text-2xl font-bold tracking-tight text-center bg-gradient-to-r from-purple-600 to-purple-400 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent"
               >
                 Parag Salunkhe
               </motion.h1>
@@ -232,24 +232,24 @@ export default function Home() {
       </motion.section>
 
       {/* Compact Health Chart */}
-      <div id="health-chart" className="py-12">
+      <div id="health-chart" className="py-8">
         <CompactHealthChart />
       </div>
 
       {/* Bento Grid */}
-      <div className="py-12">
+      <div className="py-8">
         <BentoGrid />
       </div>
 
       {/* Projects Carousel */}
-      <div className="py-12">
+      <div className="py-8">
         <ProjectsCarousel />
       </div>
 
       {/* Recent Content Previews */}
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto px-6 mb-20">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
+      <div className="py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-900 dark:text-white">
             Recent Updates
           </h2>
           
@@ -258,7 +258,7 @@ export default function Home() {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <RecentMovieCard movie={recentContent.movie} />
               <RecentCookingCard dish={recentContent.cooking} />
               <RecentBlogCard post={recentContent.blog} />

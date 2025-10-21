@@ -85,17 +85,17 @@ export default function CookingPage() {
   const categoryCounts = getCategoryCounts()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white dark:from-orange-950/10 dark:to-[#0F0F14] transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white dark:from-orange-950/10 dark:to-[#0F0F14] transition-colors duration-300 pt-20 pb-12 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <ChefHat className="w-12 h-12 text-orange-600 dark:text-orange-400" />
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent">
+            <ChefHat className="w-10 h-10 sm:w-12 sm:h-12 text-orange-600 dark:text-orange-400" />
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent">
               My Cooking Journey
             </h1>
           </div>

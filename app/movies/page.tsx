@@ -90,21 +90,21 @@ export default function MoviesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] dark:bg-[#0a0a0a] transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-20 pb-12 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Film className="w-12 h-12 text-red-600" />
-            <h1 className="text-4xl md:text-5xl font-bold text-white">
+            <Film className="w-10 h-10 sm:w-12 sm:h-12 text-red-600" />
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
               Cinema <span className="text-red-600">Collection</span>
             </h1>
           </div>
-          <p className="text-lg text-gray-400">
+          <p className="text-base sm:text-lg text-gray-400">
             My personal reviews and ratings of movies and series
           </p>
         </motion.div>
