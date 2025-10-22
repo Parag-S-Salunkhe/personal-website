@@ -65,7 +65,7 @@ export default function TodayActivities() {
       <div 
         key={type}
         className={`bg-white dark:bg-gray-800 rounded-xl p-4 border-2 ${
-          colorClasses[config.color]
+          colorClasses[config.color as keyof typeof colorClasses]
         } ${
           !activity && 'opacity-60'
         } transition-all hover:shadow-lg cursor-pointer`}
@@ -76,7 +76,7 @@ export default function TodayActivities() {
         </div>
         {activity ? (
           <>
-            <div className={`text-lg font-bold ${textColorClasses[config.color]}`}>
+            <div className={`text-lg font-bold ${textColorClasses[config.color as keyof typeof textColorClasses]}`}>
               {activity.duration} min
             </div>
             {activity.distance && (
