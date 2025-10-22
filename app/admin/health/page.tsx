@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, Calendar, Activity, Flame } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import TodayActivities from '@/components/home/TodayActivities'
 
 interface HealthEntry {
   id: string
@@ -373,6 +374,11 @@ export default function HealthAdmin() {
           ))}
         </div>
       )}
+
+      {/* Activity Tracking - Admin Only */}
+      <div className="mt-8">
+        <TodayActivities />
+      </div>
     </div>
   )
 }

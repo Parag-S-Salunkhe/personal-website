@@ -15,6 +15,21 @@ model HealthData {
   createdAt DateTime @default(now())
 }
 
+model Activity {
+  id             String   @id @default(cuid())
+  date           DateTime
+  type           String   // "running", "cycling", "gym", "swimming", "yoga", etc.
+  duration       Int      // minutes
+  distance       Float?   // km (optional, for running/cycling)
+  category       String?  // For gym: "upper", "lower", "cardio", "full_body"
+  notes          String?
+  caloriesBurned Int?
+  createdAt      DateTime @default(now())
+  
+  @@index([date])
+  @@index([type])
+}
+
 model Movie {
   id         String   @id @default(cuid())
   title      String

@@ -14,8 +14,8 @@ import GuestbookBubbles from '@/components/home/GuestbookBubbles'
 
 export default function Home() {
   const [pageViews, setPageViews] = useState<number | null>(null)
-  const todaySteps = 8547
-  const todayCalories = 342
+  const [todaySteps, setTodaySteps] = useState<number>(0)
+  const [todayCalories, setTodayCalories] = useState<number>(0)
 
   // Add state for recent content
   const [recentContent, setRecentContent] = useState<{
@@ -49,10 +49,40 @@ export default function Home() {
     updatePageViews()
   }, [])
 
+  // Fetch today's health data
+  useEffect(() => {
+    fetchTodayData()
+  }, [])
+
   // Fetch recent content
   useEffect(() => {
     fetchRecentContent()
   }, [])
+
+  const fetchTodayData = async () => {
+    try {
+      const response = await fetch('/api/health')
+      const allData = await response.json()
+      
+      // Get today's date (start of day)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const todayStr = today.toISOString().split('T')[0]
+      
+      // Find today's entry
+      const todayEntry = allData.find((item: any) => {
+        const itemDate = new Date(item.date).toISOString().split('T')[0]
+        return itemDate === todayStr
+      })
+      
+      if (todayEntry) {
+        setTodaySteps(todayEntry.steps || 0)
+        setTodayCalories(todayEntry.calories || 0)
+      }
+    } catch (error) {
+      console.error('Error fetching today data:', error)
+    }
+  }
 
   const fetchRecentContent = async () => {
     setIsLoadingRecent(true)
@@ -209,21 +239,21 @@ export default function Home() {
                   I&apos;m constantly growing in my DevOps journey, carving out time each day to learn something new. But above all, I prioritize my fitness and health because it&apos;s the one thing that truly belongs to me.
                 </p>
                 <p>
-                  Today, I&apos;ve walked{' '}
+                  Yesterday, I walked{' '}
                   <button
                     onClick={scrollToHealth}
                     className="font-semibold text-purple-600 dark:text-purple-400 underline decoration-purple-600/50 dark:decoration-purple-400/50 decoration-2 underline-offset-2 hover:decoration-purple-600 dark:hover:decoration-purple-400 hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.5)] transition-all cursor-pointer"
                   >
-                    {todaySteps.toLocaleString()} steps
-                  </button>
-                  {' '}and burned{' '}
+                    {todaySteps.toLocaleString()}
+                  </button>{' '}
+                  steps and burned{' '}
                   <button
                     onClick={scrollToHealth}
-                    className="font-semibold text-purple-600 dark:text-purple-400 underline decoration-purple-600/50 dark:decoration-purple-400/50 decoration-2 underline-offset-2 hover:decoration-purple-600 dark:hover:decoration-purple-400 hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.5)] transition-all cursor-pointer"
+                    className="font-semibold text-orange-600 dark:text-orange-400 underline decoration-orange-600/50 dark:decoration-orange-400/50 decoration-2 underline-offset-2 hover:decoration-orange-600 dark:hover:decoration-orange-400 hover:drop-shadow-[0_0_8px_rgba(249,115,22,0.5)] transition-all cursor-pointer"
                   >
-                    {todayCalories} calories
-                  </button>
-                  .
+                    {todayCalories.toLocaleString()}
+                  </button>{' '}
+                  calories.
                 </p>
               </div>
             </motion.div>
