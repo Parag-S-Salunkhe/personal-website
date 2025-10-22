@@ -24,8 +24,25 @@ export default function HealthAdmin() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Google Fit integration state
+  const [isGoogleFitConnected, setIsGoogleFitConnected] = useState(false)
+  const [isSyncing, setIsSyncing] = useState(false)
+
   useEffect(() => {
     fetchEntries()
+  }, [])
+
+  // Check if Google Fit is connected
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const response = await fetch('/api/health/sync')
+        setIsGoogleFitConnected(response.ok)
+      } catch {
+        setIsGoogleFitConnected(false)
+      }
+    }
+    checkConnection()
   }, [])
 
   const fetchEntries = async () => {
@@ -86,6 +103,31 @@ export default function HealthAdmin() {
     }
   }
 
+  // Sync health data from Google Fit
+  const syncGoogleFit = async () => {
+    setIsSyncing(true)
+    try {
+      const response = await fetch('/api/health/sync')
+      if (response.ok) {
+        alert('✅ Health data synced successfully! Refresh to see updated data.')
+        window.location.reload()
+      } else {
+        const data = await response.json()
+        alert(`❌ Failed to sync: ${data.error || 'Please try reconnecting Google Fit.'}`)
+      }
+    } catch (error) {
+      console.error('Sync error:', error)
+      alert('❌ Sync failed. Please try again.')
+    } finally {
+      setIsSyncing(false)
+    }
+  }
+
+  // Connect to Google Fit
+  const connectGoogleFit = () => {
+    window.location.href = '/api/auth/google'
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -101,6 +143,83 @@ export default function HealthAdmin() {
           <Plus className="w-5 h-5" />
           Add Entry
         </button>
+      </div>
+
+      {/* Google Fit Integration Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              🏃‍♂️ Google Fit Integration
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Automatically sync your daily steps and calories from Google Fit
+            </p>
+          </div>
+          
+          {isGoogleFitConnected ? (
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 dark:text-green-400 text-sm font-medium">
+                ✓ Connected
+              </span>
+            </div>
+          ) : (
+            <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+              Not connected
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          {isGoogleFitConnected ? (
+            <>
+              <button
+                onClick={syncGoogleFit}
+                disabled={isSyncing}
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {isSyncing ? (
+                  <>
+                    <span className="animate-spin">⏳</span>
+                    Syncing...
+                  </>
+                ) : (
+                  <>
+                    🔄 Sync Now
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm('Disconnect Google Fit? You can reconnect anytime.')) {
+                    document.cookie = 'google_access_token=; Max-Age=0; path=/'
+                    document.cookie = 'google_refresh_token=; Max-Age=0; path=/'
+                    setIsGoogleFitConnected(false)
+                    alert('✅ Disconnected from Google Fit')
+                  }
+                }}
+                className="px-6 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors"
+              >
+                Disconnect
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={connectGoogleFit}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+            >
+              🔗 Connect Google Fit
+            </button>
+          )}
+        </div>
+
+        {isGoogleFitConnected && (
+          <div className="mt-4 p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <p className="text-sm text-blue-800 dark:text-blue-200">
+              💡 <strong>Tip:</strong> Click &quot;Sync Now&quot; to fetch today&apos;s data from Google Fit and automatically save it to your dashboard.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Add Entry Form */}
