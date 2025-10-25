@@ -63,18 +63,18 @@ export default function Home() {
     try {
       const response = await fetch('/api/health')
       const allData = await response.json()
-      
+
       // Get today's date (start of day)
       const today = new Date()
       today.setHours(0, 0, 0, 0)
       const todayStr = today.toISOString().split('T')[0]
-      
+
       // Find today's entry
       const todayEntry = allData.find((item: any) => {
         const itemDate = new Date(item.date).toISOString().split('T')[0]
         return itemDate === todayStr
       })
-      
+
       if (todayEntry) {
         setTodaySteps(todayEntry.steps || 0)
         setTodayCalories(todayEntry.calories || 0)
@@ -139,12 +139,12 @@ export default function Home() {
                 className="relative"
               >
                 {/* Animated gradient border (rotating) */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded-full blur-sm opacity-75 animate-spin-slow" 
-                     style={{ backgroundSize: '200% 200%' }} />
-                
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded-full blur-sm opacity-75 animate-spin-slow"
+                  style={{ backgroundSize: '200% 200%' }} />
+
                 {/* Glazing border */}
                 <div className="relative rounded-full p-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 animate-gradient"
-                     style={{ backgroundSize: '200% 200%' }}>
+                  style={{ backgroundSize: '200% 200%' }}>
                   <div className="relative w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] rounded-full overflow-hidden bg-white dark:bg-gray-900">
                     <Image
                       src="/profile.jpg"
@@ -238,6 +238,9 @@ export default function Home() {
                 <p>
                   I&apos;m constantly growing in my DevOps journey, carving out time each day to learn something new. But above all, I prioritize my fitness and health because it&apos;s the one thing that truly belongs to me.
                 </p>
+                <p className="mt-4">
+                  Yesterday, I walked <span className="font-semibold text-purple-600 dark:text-purple-400">{todaySteps.toLocaleString()}</span> steps and burned <span className="font-semibold text-orange-600 dark:text-orange-400">{todayCalories.toLocaleString()}</span> calories.
+                </p>
               </div>
             </motion.div>
           </div>
@@ -265,7 +268,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-900 dark:text-white">
             Recent Updates
           </h2>
-          
+
           {isLoadingRecent ? (
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -303,7 +306,7 @@ function RecentMovieCard({ movie }: { movie: any }) {
       </div>
     )
   }
-  
+
   return (
     <Link href="/movies" className="block group">
       <div className="bg-[#0a0a0a] dark:bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-red-600 transition-all duration-300 hover:shadow-lg hover:shadow-red-600/20 transform hover:-translate-y-1">
@@ -311,11 +314,11 @@ function RecentMovieCard({ movie }: { movie: any }) {
           <span className="text-2xl">🎬</span>
           <h3 className="text-lg font-bold text-white">Recently Watched</h3>
         </div>
-        
+
         <div className="flex gap-4">
           {movie.posterUrl && (
-            <img 
-              src={movie.posterUrl} 
+            <img
+              src={movie.posterUrl}
               alt={movie.title}
               className="w-20 h-28 object-cover rounded-lg"
             />
@@ -337,7 +340,7 @@ function RecentMovieCard({ movie }: { movie: any }) {
             </p>
           </div>
         </div>
-        
+
         <div className="mt-4 text-red-500 text-sm flex items-center justify-end group-hover:translate-x-1 transition-transform">
           View All Movies →
         </div>
@@ -358,7 +361,7 @@ function RecentCookingCard({ dish }: { dish: any }) {
       </div>
     )
   }
-  
+
   return (
     <Link href="/cooking" className="block group">
       <div className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-gray-900 dark:to-gray-800 rounded-xl p-6 border border-orange-200 dark:border-gray-700 hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20 transform hover:-translate-y-1">
@@ -366,11 +369,11 @@ function RecentCookingCard({ dish }: { dish: any }) {
           <span className="text-2xl">🍳</span>
           <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recently Cooked</h3>
         </div>
-        
+
         <div className="flex gap-4">
           {dish.imageUrl && (
-            <img 
-              src={dish.imageUrl} 
+            <img
+              src={dish.imageUrl}
               alt={dish.dishName}
               className="w-20 h-20 object-cover rounded-lg"
             />
@@ -392,7 +395,7 @@ function RecentCookingCard({ dish }: { dish: any }) {
             </p>
           </div>
         </div>
-        
+
         <div className="mt-4 text-orange-600 dark:text-orange-400 text-sm flex items-center justify-end group-hover:translate-x-1 transition-transform">
           View All Dishes →
         </div>
@@ -413,7 +416,7 @@ function RecentBlogCard({ post }: { post: any }) {
       </div>
     )
   }
-  
+
   return (
     <Link href={`/blog/${post.id}`} className="block group">
       <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 transform hover:-translate-y-1">
@@ -421,15 +424,15 @@ function RecentBlogCard({ post }: { post: any }) {
           <span className="text-2xl">📝</span>
           <h3 className="text-lg font-bold text-gray-900 dark:text-white">Latest Post</h3>
         </div>
-        
+
         {post.imageUrl && (
-          <img 
-            src={post.imageUrl} 
+          <img
+            src={post.imageUrl}
             alt={post.title}
             className="w-full h-32 object-cover rounded-lg mb-4"
           />
         )}
-        
+
         <div>
           <h4 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
             {post.title}
@@ -446,7 +449,7 @@ function RecentBlogCard({ post }: { post: any }) {
             {new Date(post.publishDate).toLocaleDateString()}
           </p>
         </div>
-        
+
         <div className="mt-4 text-purple-600 dark:text-purple-400 text-sm flex items-center justify-end group-hover:translate-x-1 transition-transform">
           Read More →
         </div>
@@ -467,7 +470,7 @@ function RecentProjectCard({ project }: { project: any }) {
       </div>
     )
   }
-  
+
   return (
     <Link href="/projects" className="block group">
       <div className="bg-[#0d1117] rounded-xl p-6 border border-green-900/30 hover:border-green-500 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 transform hover:-translate-y-1">
@@ -475,7 +478,7 @@ function RecentProjectCard({ project }: { project: any }) {
           <span className="text-2xl">💼</span>
           <h3 className="text-lg font-bold text-white">Recent Project</h3>
         </div>
-        
+
         <div>
           <h4 className="font-bold text-white mb-3 line-clamp-2 group-hover:text-green-400 transition-colors">
             {project.title}
@@ -491,7 +494,7 @@ function RecentProjectCard({ project }: { project: any }) {
             {project.description}
           </p>
         </div>
-        
+
         <div className="mt-4 text-green-400 text-sm flex items-center justify-end group-hover:translate-x-1 transition-transform">
           View All Projects →
         </div>
@@ -512,7 +515,7 @@ function RecentNoteCard({ note }: { note: any }) {
       </div>
     )
   }
-  
+
   return (
     <Link href="/notes" className="block group">
       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 rounded-xl p-6 border border-blue-200 dark:border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 transform hover:-translate-y-1">
@@ -520,7 +523,7 @@ function RecentNoteCard({ note }: { note: any }) {
           <span className="text-2xl">📔</span>
           <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent Note</h3>
         </div>
-        
+
         <div>
           <h4 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
             {note.title}
@@ -534,7 +537,7 @@ function RecentNoteCard({ note }: { note: any }) {
             {note.content}
           </p>
         </div>
-        
+
         <div className="mt-4 text-blue-600 dark:text-blue-400 text-sm flex items-center justify-end group-hover:translate-x-1 transition-transform">
           View All Notes →
         </div>

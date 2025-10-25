@@ -18,24 +18,24 @@ type TabType = 'Last 7 Days' | 'Last 30 Days' | 'Select Month' | 'Custom Range'
 // Custom Tooltip Component for Steps
 const StepsTooltip = ({ active, payload, label, healthData }: any) => {
   if (!active || !payload || !payload[0]) return null
-  
+
   const steps = payload[0].value
   const entry = healthData.find((d: any) => d.date === label)
   if (!entry) return null
-  
+
   const date = new Date(entry.rawDate)
-  
+
   const today = new Date()
   const isToday = date.toDateString() === today.toDateString()
-  
+
   const dataIndex = healthData.findIndex((item: any) => item.date === label)
   const yesterdayData = dataIndex > 0 ? healthData[dataIndex - 1] : null
   const change = yesterdayData ? steps - yesterdayData.steps : 0
   const percentChange = yesterdayData ? ((change / yesterdayData.steps) * 100).toFixed(1) : null
-  
+
   const dailyGoal = 10000
   const goalProgress = Math.min((steps / dailyGoal) * 100, 100)
-  
+
   return (
     <div className="animate-fadeIn" style={{
       background: 'linear-gradient(135deg, rgba(17, 24, 39, 0.97) 0%, rgba(31, 41, 55, 0.97) 100%)',
@@ -56,28 +56,28 @@ const StepsTooltip = ({ active, payload, label, healthData }: any) => {
           </span>
         )}
       </div>
-      
+
       <div style={{ fontSize: '13px', fontWeight: 500, color: '#D1D5DB', marginBottom: '16px' }}>
         {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
       </div>
-      
+
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '12px' }}>
         <span style={{ fontSize: '28px', fontWeight: 900, background: 'linear-gradient(to right, #C4B5FD, #F9A8D4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
           {steps.toLocaleString()}
         </span>
         <span style={{ fontSize: '13px', fontWeight: 500, color: '#9CA3AF' }}>steps</span>
       </div>
-      
+
       <div style={{ marginBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
           <span style={{ fontSize: '11px', color: '#9CA3AF' }}>Daily Goal</span>
           <span style={{ fontSize: '11px', fontWeight: 600, color: '#C4B5FD' }}>{goalProgress.toFixed(0)}%</span>
         </div>
         <div style={{ height: '8px', background: 'rgba(55, 65, 81, 0.5)', borderRadius: '9999px', overflow: 'hidden' }}>
-          <div 
-            style={{ 
-              height: '100%', 
-              background: 'linear-gradient(to right, #8B5CF6, #EC4899)', 
+          <div
+            style={{
+              height: '100%',
+              background: 'linear-gradient(to right, #8B5CF6, #EC4899)',
               borderRadius: '9999px',
               width: `${goalProgress}%`,
               transition: 'width 0.5s ease-out'
@@ -85,7 +85,7 @@ const StepsTooltip = ({ active, payload, label, healthData }: any) => {
           />
         </div>
       </div>
-      
+
       {percentChange !== null && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '12px', borderTop: '1px solid rgba(55, 65, 81, 0.5)' }}>
           {change > 0 ? (
@@ -109,7 +109,7 @@ const StepsTooltip = ({ active, payload, label, healthData }: any) => {
           )}
         </div>
       )}
-      
+
       {steps >= dailyGoal && (
         <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', background: 'linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(249, 115, 22, 0.2))', borderRadius: '8px', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
           <span style={{ fontSize: '16px' }}>🏆</span>
@@ -123,24 +123,24 @@ const StepsTooltip = ({ active, payload, label, healthData }: any) => {
 // Custom Tooltip Component for Calories
 const CaloriesTooltip = ({ active, payload, label, healthData }: any) => {
   if (!active || !payload || !payload[0]) return null
-  
+
   const calories = payload[0].value
   const entry = healthData.find((d: any) => d.date === label)
   if (!entry) return null
-  
+
   const date = new Date(entry.rawDate)
-  
+
   const today = new Date()
   const isToday = date.toDateString() === today.toDateString()
-  
+
   const dataIndex = healthData.findIndex((item: any) => item.date === label)
   const yesterdayData = dataIndex > 0 ? healthData[dataIndex - 1] : null
   const change = yesterdayData ? calories - yesterdayData.calories : 0
   const percentChange = yesterdayData ? ((change / yesterdayData.calories) * 100).toFixed(1) : null
-  
+
   const dailyGoal = 2500
   const goalProgress = Math.min((calories / dailyGoal) * 100, 100)
-  
+
   return (
     <div className="animate-fadeIn" style={{
       background: 'linear-gradient(135deg, rgba(17, 24, 39, 0.97) 0%, rgba(31, 41, 55, 0.97) 100%)',
@@ -161,28 +161,28 @@ const CaloriesTooltip = ({ active, payload, label, healthData }: any) => {
           </span>
         )}
       </div>
-      
+
       <div style={{ fontSize: '13px', fontWeight: 500, color: '#D1D5DB', marginBottom: '16px' }}>
         {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
       </div>
-      
+
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '12px' }}>
         <span style={{ fontSize: '28px', fontWeight: 900, background: 'linear-gradient(to right, #FB923C, #FCD34D)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
           {calories.toLocaleString()}
         </span>
         <span style={{ fontSize: '13px', fontWeight: 500, color: '#9CA3AF' }}>cal</span>
       </div>
-      
+
       <div style={{ marginBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
           <span style={{ fontSize: '11px', color: '#9CA3AF' }}>Daily Burn</span>
           <span style={{ fontSize: '11px', fontWeight: 600, color: '#FB923C' }}>{goalProgress.toFixed(0)}%</span>
         </div>
         <div style={{ height: '8px', background: 'rgba(55, 65, 81, 0.5)', borderRadius: '9999px', overflow: 'hidden' }}>
-          <div 
-            style={{ 
-              height: '100%', 
-              background: 'linear-gradient(to right, #F59E0B, #FCD34D)', 
+          <div
+            style={{
+              height: '100%',
+              background: 'linear-gradient(to right, #F59E0B, #FCD34D)',
               borderRadius: '9999px',
               width: `${goalProgress}%`,
               transition: 'width 0.5s ease-out'
@@ -190,7 +190,7 @@ const CaloriesTooltip = ({ active, payload, label, healthData }: any) => {
           />
         </div>
       </div>
-      
+
       {percentChange !== null && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '12px', borderTop: '1px solid rgba(55, 65, 81, 0.5)' }}>
           {change > 0 ? (
@@ -214,7 +214,7 @@ const CaloriesTooltip = ({ active, payload, label, healthData }: any) => {
           )}
         </div>
       )}
-      
+
       {calories >= dailyGoal && (
         <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', background: 'linear-gradient(to right, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2))', borderRadius: '8px', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
           <span style={{ fontSize: '16px' }}>🔥</span>
@@ -240,17 +240,36 @@ export default function CompactHealthChart() {
     todayCalories: 0,
     weekAvgCalories: 0,
     bestDayCalories: 0,
+    totalDays: 0,
+    totalSteps: 0,
+    totalCalories: 0,
   })
 
   const fetchData = async () => {
     setLoading(true)
     try {
       const res = await fetch('/api/health')
-      const allData = await res.json()
-      
+      let allData = await res.json()
+
+      // Remove duplicates - keep entry with most steps
+      const uniqueData = allData.reduce((acc: any[], curr: any) => {
+        const dateStr = new Date(curr.date).toDateString()
+        const existingIndex = acc.findIndex(item =>
+          new Date(item.date).toDateString() === dateStr
+        )
+        if (existingIndex === -1) {
+          acc.push(curr)
+        } else if (curr.steps > acc[existingIndex].steps) {
+          acc[existingIndex] = curr
+        }
+        return acc
+      }, [])
+
+      allData = uniqueData
+
       let filtered = allData
       const now = new Date()
-      
+
       if (activeTab === 'Last 7 Days') {
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
         filtered = allData.filter((item: HealthData) => new Date(item.date) >= sevenDaysAgo)
@@ -274,7 +293,7 @@ export default function CompactHealthChart() {
           })
         }
       }
-      
+
       setData(filtered)
     } catch (error) {
       console.error('Error fetching health data:', error)
@@ -288,58 +307,60 @@ export default function CompactHealthChart() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, selectedMonth])
 
-  // Calculate summary stats when data changes
+  // Calculate summary stats dynamically based on filtered data
   useEffect(() => {
     const calculateStats = async () => {
       try {
+        // Fetch all data for today and streak calculation
         const res = await fetch('/api/health')
         const allData = await res.json()
-        
-        if (allData.length > 0) {
-          // Sort by date descending
-          const sorted = allData.sort((a: HealthData, b: HealthData) => 
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-          )
-          
-          const today = sorted[0]
-          const last7Days = sorted.slice(0, 7)
-          
-          // Calculate averages
-          const avgSteps = Math.round(
-            last7Days.reduce((sum: number, d: HealthData) => sum + d.steps, 0) / last7Days.length
-          )
-          const avgCalories = Math.round(
-            last7Days.reduce((sum: number, d: HealthData) => sum + d.calories, 0) / last7Days.length
-          )
-          
-          // Find best days
-          const bestSteps = Math.max(...last7Days.map((d: HealthData) => d.steps))
-          const bestCalories = Math.max(...last7Days.map((d: HealthData) => d.calories))
-          
-          // Calculate streak (days with >= 5000 steps)
-          let currentStreak = 0
-          for (const day of sorted) {
-            if (day.steps >= 5000) currentStreak++
-            else break
-          }
-          
-          setSummaryStats({
-            todaySteps: today.steps,
-            weekAvgSteps: avgSteps,
-            bestDaySteps: bestSteps,
-            streak: currentStreak,
-            todayCalories: today.calories,
-            weekAvgCalories: avgCalories,
-            bestDayCalories: bestCalories,
-          })
+
+        if (allData.length === 0) return
+
+        // Sort by date descending
+        const sorted = allData.sort((a: HealthData, b: HealthData) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
+
+        const today = sorted[0]
+
+        // Use filtered data for period-specific stats
+        const dataToAnalyze = data.length > 0 ? data : sorted.slice(0, 7)
+
+        // Calculate totals
+        const totalSteps = dataToAnalyze.reduce((sum, d) => sum + (d.steps || 0), 0)
+        const totalCalories = dataToAnalyze.reduce((sum, d) => sum + (d.calories || 0), 0)
+
+        // Find best days from analyzed period
+        const bestSteps = dataToAnalyze.length > 0 ? Math.max(...dataToAnalyze.map(d => d.steps || 0)) : 0
+        const bestCalories = dataToAnalyze.length > 0 ? Math.max(...dataToAnalyze.map(d => d.calories || 0)) : 0
+
+        // Calculate streak from all data
+        let currentStreak = 0
+        for (const day of sorted) {
+          if ((day.steps || 0) >= 5000) currentStreak++
+          else break
         }
+
+        setSummaryStats({
+          todaySteps: today.steps || 0,
+          weekAvgSteps: totalSteps,
+          bestDaySteps: bestSteps,
+          streak: currentStreak,
+          todayCalories: today.calories || 0,
+          weekAvgCalories: totalCalories,
+          bestDayCalories: bestCalories,
+          totalDays: dataToAnalyze.length,
+          totalSteps: totalSteps,
+          totalCalories: totalCalories,
+        })
       } catch (error) {
         console.error('Error calculating stats:', error)
       }
     }
-    
+
     calculateStats()
-  }, [])
+  }, [data])
 
   const chartData = data.map((item) => ({
     date: activeTab === 'Last 7 Days' ? format(new Date(item.date), 'EEE') : format(new Date(item.date), 'MMM dd'),
@@ -381,15 +402,15 @@ export default function CompactHealthChart() {
                     {summaryStats.todaySteps.toLocaleString()}
                   </div>
                 </div>
-                
-                {/* 7-Day Avg */}
+
+                {/* 7-Day Total */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-                  <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">7-Day</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">7-Day Total</div>
                   <div className="text-xl font-black text-gray-900 dark:text-white">
-                    {summaryStats.weekAvgSteps.toLocaleString()}
+                    {summaryStats.totalSteps?.toLocaleString() || '0'}
                   </div>
                 </div>
-                
+
                 {/* Best */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
                   <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Best</div>
@@ -397,7 +418,7 @@ export default function CompactHealthChart() {
                     {summaryStats.bestDaySteps.toLocaleString()}
                   </div>
                 </div>
-                
+
                 {/* Streak */}
                 <div className="bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 rounded-lg p-3 border border-yellow-200 dark:border-yellow-700/50">
                   <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Streak</div>
@@ -408,7 +429,7 @@ export default function CompactHealthChart() {
                 </div>
               </div>
             </div>
-            
+
             {/* Calories Stats */}
             <div className="col-span-2 sm:col-span-2 lg:col-span-4">
               <div className="text-xs font-semibold text-orange-600 dark:text-orange-400 mb-2 flex items-center gap-2">
@@ -423,7 +444,7 @@ export default function CompactHealthChart() {
                     {summaryStats.todayCalories.toLocaleString()}
                   </div>
                 </div>
-                
+
                 {/* 7-Day Avg */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
                   <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">7-Day</div>
@@ -431,7 +452,7 @@ export default function CompactHealthChart() {
                     {summaryStats.weekAvgCalories.toLocaleString()}
                   </div>
                 </div>
-                
+
                 {/* Best */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
                   <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Best</div>
@@ -439,7 +460,7 @@ export default function CompactHealthChart() {
                     {summaryStats.bestDayCalories.toLocaleString()}
                   </div>
                 </div>
-                
+
                 {/* Weekly Total */}
                 <div className="bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 rounded-lg p-3 border border-yellow-200 dark:border-yellow-700/50">
                   <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Week</div>
@@ -457,11 +478,10 @@ export default function CompactHealthChart() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
-                  activeTab === tab
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                }`}
+                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${activeTab === tab
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  }`}
               >
                 {tab}
               </button>
@@ -542,91 +562,91 @@ export default function CompactHealthChart() {
               exit={{ opacity: 0, y: -10 }}
               className="grid grid-cols-1 lg:grid-cols-2 gap-6"
             >
-          {/* Steps Chart */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Steps Trend
-            </h3>
-            <div className="p-6 rounded-3xl bg-white/10 dark:bg-black/10 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <ResponsiveContainer width="100%" height={180}>
-              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="stepsGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#A78BFA" stopOpacity={1} />
-                    <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0.8} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="#9CA3AF"
-                  style={{ fontSize: '12px' }}
-                />
-                <YAxis 
-                  stroke="#9CA3AF"
-                  style={{ fontSize: '12px' }}
-                />
-                <Tooltip 
-                  content={<StepsTooltip healthData={chartData} />}
-                  cursor={{ 
-                    fill: 'rgba(139, 92, 246, 0.08)',
-                    radius: 8
-                  }}
-                />
-                <Bar 
-                  dataKey="steps" 
-                  fill="url(#stepsGradient)"
-                  radius={[8, 8, 0, 0]}
-                  animationDuration={800}
-                  animationEasing="ease-out"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-            </div>
-          </div>
+              {/* Steps Chart */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Steps Trend
+                </h3>
+                <div className="p-6 rounded-3xl bg-white/10 dark:bg-black/10 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300">
+                  <ResponsiveContainer width="100%" height={180}>
+                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <defs>
+                        <linearGradient id="stepsGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#A78BFA" stopOpacity={1} />
+                          <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0.8} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
+                      <XAxis
+                        dataKey="date"
+                        stroke="#9CA3AF"
+                        style={{ fontSize: '12px' }}
+                      />
+                      <YAxis
+                        stroke="#9CA3AF"
+                        style={{ fontSize: '12px' }}
+                      />
+                      <Tooltip
+                        content={<StepsTooltip healthData={chartData} />}
+                        cursor={{
+                          fill: 'rgba(139, 92, 246, 0.08)',
+                          radius: 8
+                        }}
+                      />
+                      <Bar
+                        dataKey="steps"
+                        fill="url(#stepsGradient)"
+                        radius={[8, 8, 0, 0]}
+                        animationDuration={800}
+                        animationEasing="ease-out"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
 
-          {/* Calories Chart */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Calories Trend
-            </h3>
-            <div className="p-6 rounded-3xl bg-white/10 dark:bg-black/10 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <ResponsiveContainer width="100%" height={180}>
-              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="caloriesGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#FCD34D" stopOpacity={1} />
-                    <stop offset="100%" stopColor="#F59E0B" stopOpacity={0.8} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="#9CA3AF"
-                  style={{ fontSize: '12px' }}
-                />
-                <YAxis 
-                  stroke="#9CA3AF"
-                  style={{ fontSize: '12px' }}
-                />
-                <Tooltip 
-                  content={<CaloriesTooltip healthData={chartData} />}
-                  cursor={{ 
-                    fill: 'rgba(245, 158, 11, 0.08)',
-                    radius: 8
-                  }}
-                />
-                <Bar 
-                  dataKey="calories" 
-                  fill="url(#caloriesGradient)"
-                  radius={[8, 8, 0, 0]}
-                  animationDuration={800}
-                  animationEasing="ease-out"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-            </div>
-          </div>
+              {/* Calories Chart */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Calories Trend
+                </h3>
+                <div className="p-6 rounded-3xl bg-white/10 dark:bg-black/10 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300">
+                  <ResponsiveContainer width="100%" height={180}>
+                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <defs>
+                        <linearGradient id="caloriesGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#FCD34D" stopOpacity={1} />
+                          <stop offset="100%" stopColor="#F59E0B" stopOpacity={0.8} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
+                      <XAxis
+                        dataKey="date"
+                        stroke="#9CA3AF"
+                        style={{ fontSize: '12px' }}
+                      />
+                      <YAxis
+                        stroke="#9CA3AF"
+                        style={{ fontSize: '12px' }}
+                      />
+                      <Tooltip
+                        content={<CaloriesTooltip healthData={chartData} />}
+                        cursor={{
+                          fill: 'rgba(245, 158, 11, 0.08)',
+                          radius: 8
+                        }}
+                      />
+                      <Bar
+                        dataKey="calories"
+                        fill="url(#caloriesGradient)"
+                        radius={[8, 8, 0, 0]}
+                        animationDuration={800}
+                        animationEasing="ease-out"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
