@@ -328,12 +328,12 @@ export default function CompactHealthChart() {
         const dataToAnalyze = data.length > 0 ? data : sorted.slice(0, 7)
 
         // Calculate totals
-        const totalSteps = dataToAnalyze.reduce((sum, d) => sum + (d.steps || 0), 0)
-        const totalCalories = dataToAnalyze.reduce((sum, d) => sum + (d.calories || 0), 0)
+        const totalSteps = dataToAnalyze.reduce((sum: number, d: any) => sum + (d.steps || 0), 0)
+        const totalCalories = dataToAnalyze.reduce((sum: number, d: any) => sum + (d.calories || 0), 0)
 
         // Find best days from analyzed period
-        const bestSteps = dataToAnalyze.length > 0 ? Math.max(...dataToAnalyze.map(d => d.steps || 0)) : 0
-        const bestCalories = dataToAnalyze.length > 0 ? Math.max(...dataToAnalyze.map(d => d.calories || 0)) : 0
+        const bestSteps = dataToAnalyze.length > 0 ? Math.max(...dataToAnalyze.map((d: any) => d.steps || 0)) : 0
+        const bestCalories = dataToAnalyze.length > 0 ? Math.max(...dataToAnalyze.map((d: any) => d.calories || 0)) : 0
 
         // Calculate streak from all data
         let currentStreak = 0
