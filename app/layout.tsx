@@ -8,8 +8,13 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Personal Website',
-  description: 'A premium personal website with multiple themed pages',
-  viewport: 'width=device-width, initial-scale=1.0, maximum-scale=5.0',
+  description: 'A premium personal website with multiple themed pages'
+}
+
+export const viewportConfig = {
+  width: 'device-width',
+  initialScale: 1.0,
+  maximumScale: 5.0
 }
 
 export default function RootLayout({

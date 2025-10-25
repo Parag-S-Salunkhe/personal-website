@@ -185,21 +185,21 @@ export default function Home() {
                 className="flex gap-4 justify-center items-center"
               >
                 <Link
-                  href="https://linkedin.com/in/paragsalunkhe"
+                  href="https://www.linkedin.com/in/parag-salunkhe"
                   target="_blank"
                   className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
                 >
                   <Linkedin className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </Link>
                 <Link
-                  href="https://github.com/paragsalunkhe"
+                  href="https://github.com/Parag-S-Salunkhe"
                   target="_blank"
                   className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
                 >
                   <Github className="w-5 h-5 text-gray-900 dark:text-gray-100" />
                 </Link>
                 <Link
-                  href="mailto:parag@example.com"
+                  href="mailto:paragsalunkhe28@gmail.com"
                   className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
                 >
                   <Mail className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -237,23 +237,6 @@ export default function Home() {
                 </p>
                 <p>
                   I&apos;m constantly growing in my DevOps journey, carving out time each day to learn something new. But above all, I prioritize my fitness and health because it&apos;s the one thing that truly belongs to me.
-                </p>
-                <p>
-                  Yesterday, I walked{' '}
-                  <button
-                    onClick={scrollToHealth}
-                    className="font-semibold text-purple-600 dark:text-purple-400 underline decoration-purple-600/50 dark:decoration-purple-400/50 decoration-2 underline-offset-2 hover:decoration-purple-600 dark:hover:decoration-purple-400 hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.5)] transition-all cursor-pointer"
-                  >
-                    {todaySteps.toLocaleString()}
-                  </button>{' '}
-                  steps and burned{' '}
-                  <button
-                    onClick={scrollToHealth}
-                    className="font-semibold text-orange-600 dark:text-orange-400 underline decoration-orange-600/50 dark:decoration-orange-400/50 decoration-2 underline-offset-2 hover:decoration-orange-600 dark:hover:decoration-orange-400 hover:drop-shadow-[0_0_8px_rgba(249,115,22,0.5)] transition-all cursor-pointer"
-                  >
-                    {todayCalories.toLocaleString()}
-                  </button>{' '}
-                  calories.
                 </p>
               </div>
             </motion.div>
