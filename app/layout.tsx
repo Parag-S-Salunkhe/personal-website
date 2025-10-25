@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'A premium personal website with multiple themed pages'
 }
 
-export const viewportConfig = {
+export const viewport = {
   width: 'device-width',
   initialScale: 1.0,
   maximumScale: 5.0

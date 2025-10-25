@@ -47,13 +47,21 @@ export default function HealthAdmin() {
   }, [])
 
   const fetchEntries = async () => {
+    setLoading(true)
     try {
-      const res = await fetch('/api/health')
-      const data = await res.json()
-      setEntries(data.data || [])
-      setLoading(false)
-    } catch (err) {
-      console.error('Error fetching health data:', err)
+      const response = await fetch('/api/health')
+      if (!response.ok) {
+        throw new Error('Failed to fetch health data')
+      }
+      const data = await response.json()
+      console.log('Fetched health data:', data) // Debug log
+      // API returns array directly, not wrapped in data property
+      setEntries(Array.isArray(data) ? data : [])
+    } catch (error) {
+      console.error('Error fetching health data:', error)
+      setError('Failed to load health data')
+      setEntries([])
+    } finally {
       setLoading(false)
     }
   }
@@ -157,7 +165,7 @@ export default function HealthAdmin() {
               Automatically sync your daily steps and calories from Google Fit
             </p>
           </div>
-          
+
           {isGoogleFitConnected ? (
             <div className="flex items-center gap-2">
               <span className="text-green-600 dark:text-green-400 text-sm font-medium">
@@ -337,10 +345,10 @@ export default function HealthAdmin() {
                   <div className="flex items-center gap-2">
                     <Calendar className="w-5 h-5 text-gray-400" />
                     <span className="font-medium text-gray-900 dark:text-white">
-                      {new Date(entry.date).toLocaleDateString('en-US', { 
-                        weekday: 'short', 
-                        month: 'short', 
-                        day: 'numeric' 
+                      {new Date(entry.date).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
                       })}
                     </span>
                   </div>
