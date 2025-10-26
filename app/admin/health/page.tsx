@@ -56,7 +56,11 @@ export default function HealthAdmin() {
       const data = await response.json()
       console.log('Fetched health data:', data) // Debug log
       // API returns array directly, not wrapped in data property
-      setEntries(Array.isArray(data) ? data : [])
+      const sorted = (Array.isArray(data) ? data : []).sort(
+        (a: HealthEntry, b: HealthEntry) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+      )
+      setEntries(sorted)
     } catch (error) {
       console.error('Error fetching health data:', error)
       setError('Failed to load health data')
@@ -105,9 +109,18 @@ export default function HealthAdmin() {
     if (!confirm('Are you sure you want to delete this entry?')) return
 
     try {
-      await fetch(`/api/health?id=${id}`, { method: 'DELETE' })
-      fetchEntries()
-    } catch (err) {
+      const response = await fetch(`/api/health?id=${id}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        fetchEntries()
+      } else {
+        const data = await response.json()
+        alert(`Failed to delete entry: ${data.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Delete error:', error)
       alert('Failed to delete entry')
     }
   }

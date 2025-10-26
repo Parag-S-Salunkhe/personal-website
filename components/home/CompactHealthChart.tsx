@@ -465,7 +465,7 @@ export default function CompactHealthChart() {
                 <div className="bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 rounded-lg p-3 border border-yellow-200 dark:border-yellow-700/50">
                   <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Week</div>
                   <div className="text-xl font-black text-yellow-600 dark:text-yellow-400">
-                    {(summaryStats.weekAvgCalories * 7).toLocaleString()}
+                    {summaryStats.weekAvgCalories.toLocaleString()}
                   </div>
                 </div>
               </div>
