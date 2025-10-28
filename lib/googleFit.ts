@@ -39,23 +39,29 @@ export async function getTokens(code: string) {
 export async function refreshAccessToken(refreshToken: string) {
   const response = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
     body: new URLSearchParams({
-      refresh_token: refreshToken,
       client_id: GOOGLE_CLIENT_ID!,
       client_secret: GOOGLE_CLIENT_SECRET!,
+      refresh_token: refreshToken,
       grant_type: 'refresh_token',
     }),
   });
 
-  return response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to refresh token: ${response.statusText}`);
+  }
+
+  return await response.json();
 }
 
 export async function getStepsAndCalories(accessToken: string, date: Date = new Date()) {
   // Set time range for the day
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
-  
+
   const endOfDay = new Date(date);
   endOfDay.setHours(23, 59, 59, 999);
 

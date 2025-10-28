@@ -1,72 +1,105 @@
 import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 import { getStepsAndCalories, refreshAccessToken } from '@/lib/googleFit';
-import { prisma } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
-    // Verify this is coming from Vercel Cron (security)
+    // Verify cron secret
     const authHeader = request.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      console.log('❌ Unauthorized cron request');
+      console.error('Unauthorized cron request');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('🔄 Cron job started: Daily health sync at', new Date().toISOString());
+    console.log('🕐 Cron job started at:', new Date().toISOString());
 
-    // Note: Cron jobs don't have access to user cookies
-    // We need to store refresh token in environment variable
-    const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-    
-    if (!refreshToken) {
-      console.log('❌ No refresh token found in environment');
-      return NextResponse.json(
-        { error: 'Refresh token not configured. Add GOOGLE_REFRESH_TOKEN to environment variables.' },
-        { status: 401 }
-      );
+    // Get OAuth tokens from database
+    const oauthData = await prisma.oAuthToken.findFirst({
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!oauthData) {
+      console.error('❌ No OAuth tokens found');
+      return NextResponse.json({ error: 'No OAuth tokens' }, { status: 400 });
     }
 
-    // Refresh access token
-    console.log('🔄 Refreshing access token');
-    const tokens = await refreshAccessToken(refreshToken);
-    const accessToken = tokens.access_token;
+    let accessToken = oauthData.accessToken;
+    const refreshToken = oauthData.refreshToken;
+
+    // Check if token is expired (expires in ~1 hour)
+    const tokenAge = Date.now() - new Date(oauthData.createdAt).getTime();
+    const oneHour = 60 * 60 * 1000;
+
+    if (tokenAge > oneHour) {
+      console.log('🔄 Access token expired, refreshing...');
+      try {
+        const newTokens = await refreshAccessToken(refreshToken);
+        accessToken = newTokens.access_token;
+        
+        // Update tokens in database
+        await prisma.oAuthToken.update({
+          where: { id: oauthData.id },
+          data: {
+            accessToken: newTokens.access_token,
+            createdAt: new Date(),
+          },
+        });
+        console.log('✅ Token refreshed successfully');
+      } catch (refreshError) {
+        console.error('❌ Failed to refresh token:', refreshError);
+        return NextResponse.json({ error: 'Token refresh failed' }, { status: 500 });
+      }
+    }
 
     // Fetch today's data
-    console.log('📊 Fetching health data from Google Fit');
-    const { steps, calories } = await getStepsAndCalories(accessToken);
-
-    // Save to database
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const existing = await prisma.healthData.findFirst({
-      where: { date: today },
+    console.log('📊 Fetching health data for:', today.toDateString());
+
+    const { steps, calories } = await getStepsAndCalories(accessToken, today);
+
+    console.log(`📈 Fetched: ${steps} steps, ${calories} calories`);
+
+    // Check if entry already exists for today
+    const existingEntry = await prisma.healthData.findFirst({
+      where: {
+        date: today,
+      },
     });
 
-    if (existing) {
+    if (existingEntry) {
+      // Update existing entry
       await prisma.healthData.update({
-        where: { id: existing.id },
+        where: { id: existingEntry.id },
         data: { steps, calories },
       });
-      console.log('✅ Updated existing health data:', { steps, calories });
+      console.log('✅ Updated existing entry');
     } else {
+      // Create new entry
       await prisma.healthData.create({
-        data: { date: today, steps, calories },
+        data: {
+          date: today,
+          steps,
+          calories,
+        },
       });
-      console.log('✅ Created new health data:', { steps, calories });
+      console.log('✅ Created new entry');
     }
 
     return NextResponse.json({ 
       success: true, 
       steps, 
       calories,
-      synced: new Date().toISOString()
+      timestamp: new Date().toISOString()
     });
+
   } catch (error) {
-    console.error('❌ Cron job error:', error);
+    console.error('❌ Cron job failed:', error);
     return NextResponse.json(
-      { error: 'Sync failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Cron job failed', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

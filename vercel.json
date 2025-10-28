@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/sync-health",
-      "schedule": "45 22 * * *"
+      "schedule": "45 23 * * *"
     }
   ]
 }

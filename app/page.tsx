@@ -64,20 +64,21 @@ export default function Home() {
       const response = await fetch('/api/health')
       const allData = await response.json()
 
-      // Get today's date (start of day)
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const todayStr = today.toISOString().split('T')[0]
+      // Get yesterday's date (since cron runs at midnight)
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      yesterday.setHours(0, 0, 0, 0)
+      const yesterdayStr = yesterday.toISOString().split('T')[0]
 
-      // Find today's entry
-      const todayEntry = allData.find((item: any) => {
+      // Find yesterday's entry
+      const yesterdayEntry = allData.find((item: any) => {
         const itemDate = new Date(item.date).toISOString().split('T')[0]
-        return itemDate === todayStr
+        return itemDate === yesterdayStr
       })
 
-      if (todayEntry) {
-        setTodaySteps(todayEntry.steps || 0)
-        setTodayCalories(todayEntry.calories || 0)
+      if (yesterdayEntry) {
+        setTodaySteps(yesterdayEntry.steps || 0)
+        setTodayCalories(yesterdayEntry.calories || 0)
       }
     } catch (error) {
       console.error('Error fetching today data:', error)
