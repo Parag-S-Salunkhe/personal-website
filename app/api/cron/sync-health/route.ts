@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { getStepsAndCalories, refreshAccessToken } from '@/lib/googleFit';
 
 export const dynamic = 'force-dynamic';
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
       try {
         const newTokens = await refreshAccessToken(refreshToken);
         accessToken = newTokens.access_token;
-        
+
         // Update tokens in database
         await prisma.oAuthToken.update({
           where: { id: oauthData.id },
@@ -89,9 +89,9 @@ export async function GET(request: Request) {
       console.log('✅ Created new entry');
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      steps, 
+    return NextResponse.json({
+      success: true,
+      steps,
       calories,
       timestamp: new Date().toISOString()
     });
