@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { prisma } from '@/lib/prisma'
 
 interface BlogPost {
   id: string
@@ -10,24 +11,22 @@ interface BlogPost {
 }
 
 export default async function BlogPostPage({ params }: { params: { id: string } }) {
-  const response = await fetch(`/api/blog/${params.id}`, {
-    cache: 'no-store'
-  })
-  
-  if (!response.ok) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0F0F14]">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Blog Post Not Found</h1>
-          <Link href="/blog" className="text-blue-600 dark:text-blue-400 hover:underline">
-            ← Back to Blog
-          </Link>
-        </div>
+  const blog = await prisma.blog.findUnique({
+  where: { id: params.id }
+})
+
+if (!blog) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0F0F14]">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Blog Post Not Found</h1>
+        <Link href="/blog" className="text-blue-600 dark:text-blue-400 hover:underline">
+          ← Back to Blog
+        </Link>
       </div>
-    )
-  }
-  
-  const blog: BlogPost = await response.json()
+    </div>
+  )
+}
   
   return (
     <div className="min-h-screen bg-white dark:bg-[#0F0F14] py-16">
