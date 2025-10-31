@@ -40,7 +40,7 @@ export default function Home() {
         // Increment
         const res = await fetch('/api/pageviews', { method: 'POST' })
         const data = await res.json()
-        setPageViews(data.count)
+        setPageViews(data.count ?? 0)
       } catch (error) {
         console.error('Error updating page views:', error)
       }

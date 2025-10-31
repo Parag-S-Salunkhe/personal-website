@@ -10,7 +10,7 @@ interface BlogPost {
 }
 
 export default async function BlogPostPage({ params }: { params: { id: string } }) {
-  const response = await fetch(`http://localhost:3000/api/blog/${params.id}`, {
+  const response = await fetch(`/api/blog/${params.id}`, {
     cache: 'no-store'
   })
   
