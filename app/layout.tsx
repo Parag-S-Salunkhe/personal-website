@@ -7,8 +7,8 @@ import ThemeProvider from '@/components/ThemeProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Personal Website',
-  description: 'A premium personal website with multiple themed pages'
+  title: 'Parag Salunkhe',
+  description: 'Cloud and DevOps engineer in Dublin, specializing in infrastructure, automation, and data center operations'
 }
 
 export const viewport = {
