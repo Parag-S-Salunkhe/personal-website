@@ -8,7 +8,10 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Parag Salunkhe',
-  description: 'Cloud and DevOps engineer in Dublin, specializing in infrastructure, automation, and data center operations'
+  description: 'Cloud and DevOps engineer in Dublin, specializing in infrastructure, automation, and data center operations',
+  icons: {
+    icon: '/favicon.ico',  // Add this
+  }
 }
 
 export const viewport = {
@@ -35,3 +38,4 @@ export default function RootLayout({
     </html>
   )
 }
+

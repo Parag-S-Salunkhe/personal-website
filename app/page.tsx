@@ -6,10 +6,10 @@ import Link from 'next/link'
 import { Linkedin, Github, Mail, Eye } from 'lucide-react'
 import { motion } from 'framer-motion'
 import InteractiveCursor from '@/components/home/InteractiveCursor'
-import CompactHealthChart from '@/components/home/CompactHealthChart'
+
 import BentoGrid from '@/components/home/BentoGrid'
 import ProjectsCarousel from '@/components/home/ProjectsCarousel'
-import MoodGuestbookRow from '@/components/home/MoodGuestbookRow'
+
 import GuestbookBubbles from '@/components/home/GuestbookBubbles'
 
 export default function Home() {
@@ -229,39 +229,37 @@ export default function Home() {
               className="flex-1"
             >
               {/* Bio - Justified, No Name/Title Duplication */}
-              <div className="max-w-2xl space-y-4 text-base leading-loose text-justify text-gray-700 dark:text-gray-300">
-                <p>
-                  I thrive on solving complex IT challenges and finding innovative, cost-effective solutions that make a real impact. Beyond the technical work, I love connecting with people whether it&apos;s collaborating with executives or helping clients navigate their onboarding journey.
-                </p>
-                <p>
-                  Outside of work, you&apos;ll find me in the kitchen experimenting with new recipes (check out my cooking page to see what I&apos;ve been making!), binge-watching the latest series, or sitting in meditation trying to stay consistent with my practice.
-                </p>
-                <p>
-                  I&apos;m constantly growing in my DevOps journey, carving out time each day to learn something new. But above all, I prioritize my fitness and health because it&apos;s the one thing that truly belongs to me.
-                </p>
-                <p className="mt-4">
-                  Yesterday, I walked <span className="font-semibold text-purple-600 dark:text-purple-400">{todaySteps.toLocaleString()}</span> steps and burned <span className="font-semibold text-orange-600 dark:text-orange-400">{todayCalories.toLocaleString()}</span> calories.
-                </p>
-              </div>
+        <div className="max-w-2xl space-y-4 text-base leading-loose text-justify text-gray-700 dark:text-gray-300 
+                [&>p]:transition-all [&>p]:duration-200 
+                [&>p:hover]:text-gray-900 [&>p:hover]:dark:text-white
+                [&>p:hover]:scale-[1.01] [&>p:hover]:shadow-lg [&>p:hover]:shadow-purple-500/10
+                [&>p:hover]:bg-gradient-to-r [&>p:hover]:from-purple-50/50 [&>p:hover]:to-transparent
+                [&>p:hover]:dark:from-purple-900/10 [&>p:hover]:dark:to-transparent
+                [&>p:hover]:px-4 [&>p:hover]:py-2 [&>p:hover]:rounded-lg [&>p:hover]:-mx-4">
+  <p>
+    I&apos;ve spent my career in the spaces most people don&apos;t see: data centers, cloud infrastructure, the backend systems that power everything.
+  </p>
+  <p>
+    I&apos;m a Cloud Operations and Data Center Engineer who thrives on the challenge of keeping complex systems running smoothly. I&apos;ve managed blade servers, automated deployments across Kubernetes clusters, debugged production incidents, and found cost-saving solutions that executives actually care about.
+  </p>
+  <p>
+    What I love most isn&apos;t just the technical work, it&apos;s the problem-solving. Whether it&apos;s a critical server issue or helping a team understand why their deployment failed.
+  </p>
+  <p>
+    When I&apos;m not in the terminal, you&apos;ll find me cooking (seriously, check out my recipes), meditating (trying to stay consistent), or prioritizing my health and fitness because sustainable performance starts with taking care of yourself.
+  </p>
+  <p>
+    I&apos;m currently deepening my expertise in cloud architecture, DevOps practices, and infrastructure automation. Always learning. Always building.
+  </p>
+</div>
             </motion.div>
           </div>
         </div>
       </motion.section>
 
-      {/* Compact Health Chart */}
-      <div id="health-chart" className="py-8">
-        <CompactHealthChart />
-      </div>
+      
 
-      {/* Bento Grid */}
-      <div className="py-8">
-        <BentoGrid />
-      </div>
-
-      {/* Projects Carousel */}
-      <div className="py-8">
-        <ProjectsCarousel />
-      </div>
+      
 
       {/* Recent Content Previews */}
       <div className="py-6">
@@ -288,7 +286,7 @@ export default function Home() {
 
       {/* Mood + Guestbook Row */}
       <div className="py-12 pb-20">
-        <MoodGuestbookRow />
+        
       </div>
     </div>
   )
