@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/auth'
 
 // GET - Fetch all cooking entries
 export async function GET() {
@@ -19,6 +20,9 @@ export async function GET() {
 
 // POST - Create new cooking entry
 export async function POST(request: Request) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const body = await request.json()
     const { dishName, category, rating, review, imageUrl, videoUrl, ingredients, cookDate } = body
@@ -45,7 +49,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error creating cooking entry:', error)
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to create cooking entry' },
+      { error: 'Failed to create cooking entry' },
       { status: 500 }
     )
   }
@@ -53,6 +57,9 @@ export async function POST(request: Request) {
 
 // DELETE - Delete a cooking entry
 export async function DELETE(request: Request) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')

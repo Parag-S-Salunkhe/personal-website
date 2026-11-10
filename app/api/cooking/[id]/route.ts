@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/auth'
 
 // GET single dish
 export async function GET(
@@ -27,6 +28,9 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const body = await request.json()
     const { dishName, category, rating, review, imageUrl, videoUrl, ingredients, cookDate } = body
@@ -54,7 +58,7 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating dish:', error)
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to update dish' }, 
+      { error: 'Failed to update dish' }, 
       { status: 500 }
     )
   }
@@ -65,6 +69,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     await prisma.cooking.delete({
       where: { id: params.id },

@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/auth'
 
 // GET all activities
 export async function GET(request: Request) {
@@ -47,6 +48,9 @@ export async function GET(request: Request) {
 
 // POST new activity
 export async function POST(request: Request) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const body = await request.json();
     const { date, type, duration, distance, category, notes, caloriesBurned } = body;
@@ -82,6 +86,9 @@ export async function POST(request: Request) {
 
 // DELETE activity
 export async function DELETE(request: Request) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/auth'
+import { optionalHttpUrl } from '@/lib/url'
 
 // GET single project
 export async function GET(
@@ -27,9 +29,18 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const body = await request.json()
-    const { title, description, techStack, projectUrl, githubUrl, imageUrl } = body
+    const { title, description, techStack } = body
+    const projectUrl = optionalHttpUrl(body.projectUrl)
+    const githubUrl = optionalHttpUrl(body.githubUrl)
+    const imageUrl = optionalHttpUrl(body.imageUrl)
+    if (!projectUrl.ok || !githubUrl.ok || !imageUrl.ok) {
+      return NextResponse.json({ error: 'Links must be http(s) URLs' }, { status: 400 })
+    }
 
     const project = await prisma.project.update({
       where: { id: params.id },
@@ -37,9 +48,9 @@ export async function PUT(
         title,
         description,
         techStack,
-        projectUrl: projectUrl || null,
-        githubUrl: githubUrl || null,
-        imageUrl: imageUrl || null,
+        projectUrl: projectUrl.value,
+        githubUrl: githubUrl.value,
+        imageUrl: imageUrl.value,
       },
     })
 
@@ -55,6 +66,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     await prisma.project.delete({
       where: { id: params.id },

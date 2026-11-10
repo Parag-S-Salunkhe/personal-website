@@ -4,8 +4,12 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getStepsAndCalories, refreshAccessToken } from '@/lib/googleFit';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/auth'
 
 export async function GET() {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const cookieStore = cookies();
     let accessToken = cookieStore.get('google_access_token')?.value;
