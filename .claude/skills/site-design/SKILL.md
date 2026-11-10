@@ -1,11 +1,19 @@
 ---
 name: site-design
-description: "Design system and design process for Parag's personal site (paragsalunkhe.me, Next.js 14 + Tailwind + framer-motion). Use whenever building, restyling, prototyping, reviewing or writing copy for ANY page, component or section of this site (home, movies, cooking, blog, notes, projects, login, admin, /lab prototypes), and before choosing colours, fonts, type sizes, spacing, radii, icons, illustrations, motion or animation. Covers the anti-AI-slop rules, the lab scoring rubric, and (once chosen) the site's committed visual system."
+description: "Design system and design process for Parag's personal site (paragsalunkhe.me, Next.js 16 + React 19 + Tailwind; motion with GSAP, three.js/react-three-fiber, shaders, physics). Use whenever building, restyling, prototyping, reviewing or writing copy for ANY page, component or section of this site (home, movies, cooking, blog, notes, projects, login, admin, /lab prototypes), and before choosing colours, fonts, type sizes, spacing, radii, icons, illustrations, motion or animation. Covers the anti-AI-slop rules, the lab scoring rubric, and (once chosen) the site's committed visual system."
 ---
 
 # Site design: paragsalunkhe.me
 
 The goal is a site people remember. Parag's brief: "the design must be amazing". Completely new visuals; real animation and graphics. The old purple UI and the July 2026 cream/Fraunces/terracotta homepage are retired; both read as AI-generated.
+
+**Parag's verdict on 2026-11-10, after House Zine went live:**
+- He **rejected House Zine** (§10).
+- He found every page short on dynamic motion, scroll-driven animation and motion graphics.
+- He **overruled the old "no heavy tools" rule**: "I disagree… go all out". 3D, shaders, physics, scroll-driven scenes, motion graphics and illusions are wanted.
+- His taste ranking from the first lab: **Table for Eight** (liked most) > **Late Show** (a little) > the rest.
+
+For anything that moves, the `motion-lab` skill is the playbook, and §5 below is its summary.
 
 **Authority.** This file decides. Parag's own words beat this file. The files in `references/` are inspiration and checklists. They were written for other briefs (landing-page-design is for single-offer SaaS pages), so their hard bans (font lists, "no italics", "one CTA", "mandatory tagline section", "gradient hero text") apply **only where this file adopts them**.
 
@@ -80,14 +88,27 @@ The brief can earn any of these except the eyebrow ban. If you use one, write th
 
 ## 5. Motion and graphics
 
-Parag wants real animation and graphics; earn them.
-- **One signature moment per page** (the hero sequence, a scroll-driven scene, a page-load reveal). Everything else is quiet. Motion that **answers the visitor** (hover, open, filter, submit, tilt) is welcome when it shows what changed.
-- **Curve:** `cubic-bezier(0.22,1,0.36,1)` (Tailwind `ease-[cubic-bezier(0.22,1,0.36,1)]`). Use 500ms for layout and position, 200–300ms for colour and opacity. Never the browser `ease`/`linear` defaults for UI motion.
-- **What to animate:** prefer `transform` and `opacity`; `clip-path`, `mask`, `filter` and `backdrop-filter` are fine when smooth. Never animate `top`, `left`, `width` or `height`.
-- **Triggers:** framer-motion `whileInView` with `once: true`, or IntersectionObserver. Never an unthrottled `scroll` listener; use `useScroll` / rAF.
-- **Reduced motion:** `prefers-reduced-motion` → final state immediately (opacity-only at most). Disable cursor and tilt effects on touch.
-- **Graphics:** hand-authored SVG (illustration, patterns, tickets, plates, film strips, doodles), CSS texture and grain, `next/image` for photos, and `next/og` for share images. No three.js / react-three, no Lottie, no heavy canvas loops. A canvas effect must cap its particle count, pause offscreen (IntersectionObserver), and drop to a static frame on mobile and under reduced motion.
-- **Performance budget:** LCP ≤ 2.5s, CLS ≤ 0.1, INP ≤ 200ms. Lighthouse targets: performance ≥ 85 desktop and ≥ 70 mobile; accessibility, SEO and best practices ≥ 90. Lazy-load below-the-fold motion components with `next/dynamic` when heavy.
+**Go all out (Parag, 2026-11-10).** Motion is the main event on experience and browse pages, not decoration. The full playbook is in the `motion-lab` skill.
+- **Allowed and wanted:**
+  - three.js / react-three-fiber / drei scenes
+  - GLSL shaders and postprocessing (grain, bloom, depth of field, light beams)
+  - rapier physics
+  - GSAP timelines and ScrollTrigger pinned and scrubbed scenes, with Lenis smooth scroll
+  - SplitText kinetic type, particles, p5.brush painted animation
+  - page and shared-element transitions, illusions (infinite zoom, anamorphic text, parallax depth)
+  - Blender-made models (GLB)
+- **The failure mode** is the same soft fade-up on every section, which is what House Zine shipped. Every page needs at least one scene the visitor *plays with by scrolling or moving*.
+- **Motion that answers the visitor** (hover, open, filter, submit, tilt, drag) should feel physical: springs, overshoot and settle, follow-through.
+- **Floors** (they never limit the look, only how it degrades):
+  - First paint is server HTML with real text plus a static poster frame of the scene. Heavy scenes load with `next/dynamic(..., { ssr: false })` and mount when near the viewport.
+  - `prefers-reduced-motion` gets a composed still or a cross-fade version, never a blank.
+  - Low-power or phone gets a lighter scene: lower DPR, fewer particles, baked lighting.
+  - No autoplay sound; sound is opt-in.
+  - Text over moving backgrounds keeps ≥ 4.5:1 contrast.
+  - Read mode (§2) stays calm behind the text column.
+- **Performance is measured, not a veto:** record FPS (avg and p5), JS KB, LCP, CLS and INP per page in the lab report. A slow page gets optimised (instancing, texture compression, frameloop="demand", pausing offscreen), not stripped.
+- **Easing:** springs or expo/quart-out for arrivals (`cubic-bezier(0.22,1,0.36,1)` stays a good UI default). Scrubbed scroll scenes map progress directly. Never the browser `ease`/`linear` defaults for UI motion.
+- **Mechanics:** animate transforms, opacity, shader uniforms and camera, never layout properties. Use one rAF/ticker per page: GSAP's ticker drives Lenis, and R3F uses its own loop. Clean up every ScrollTrigger and WebGL context on unmount (`useGSAP`, R3F disposal).
 
 ## 6. Content-type treatments
 
@@ -117,17 +138,20 @@ Plain verbs, sentence case, the host's voice (see site context). Controls name t
 - **Never edit shared files from a prototype:** `tailwind.config.ts`, `app/layout.tsx`, `app/globals.css`, `components/shared/*`. They collide, and Tailwind config changes need a dev-server restart.
 - Content: hero, a movies row, a cooking row and a blog row from the local DB (server component with Prisma, dates serialised to ISO strings), at 1440 and 390.
 - Each prototype ships with a short `SPEC.md` beside it: palette, type, signature moment, motif, light/dark stance, and which §3 traps it avoided.
-- **Score** each 1–5 on:
-  - **distinctiveness (×2):** cover the name; could this be anyone's site?
-  - **brand fit:** host, warmth, wit
-  - **readability:** read mode survives
-  - **mobile**
-  - **motion quality:** one authored moment
-  - **performance cost**
-  - **accessibility and contrast**
-- Record scores and the winner's reasoning in the decisions ledger. The runner-up stays live under `/lab` for Parag.
+- **Record, don't just screenshot.** Motion can't be judged from stills.
+  - `node .claude/redesign-v3/tools/record.mjs` writes an MP4 per width for Parag and a contact sheet for you. Judge motion from the contact sheet.
+- **Score (v2, 2026-11-10), out of 50:**
+  - motion "wow", judged from recordings and contact sheets: 15
+  - fit to Parag's taste ranking (Table for Eight > Late Show > rest; never House Zine): 10
+  - distinctiveness (cover the name; could this be anyone's site?): 10
+  - brand fit (host, warmth, wit; dinner table + home cinema): 5
+  - usability, readability and mobile: 5
+  - measured performance: 5
+- **Scores are advisory.** Parag picks the direction. Claude's own pick (House Zine) was rejected once. Keep every prototype live under `/lab` with its recordings in the report until he decides.
 
-## 10. Chosen system: House Zine (chosen 2026-11-10)
+## 10. Live system: House Zine (REJECTED by Parag, 2026-11-10)
+
+> **Rejected.** This is what production runs until a new direction replaces it. It is kept here only so you can maintain the live pages and compare against them. Don't reuse its look: riso inks, zine, tape, staples, halftone dossier, handwriting margins. The next system comes from the motion lab (`.claude/redesign-v3/`) after Parag picks a direction.
 
 The site is the risograph zine Parag hands guests at the door: two fluorescent inks on cool paper, cut, taped and scribbled on. Winner of the design lab (scores and reasons in `.claude/redesign/PROGRESS.md` ledger; the prototype stays at `/lab/house-zine`). Light only: paper is the point, so there is no dark mode.
 

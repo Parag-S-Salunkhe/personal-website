@@ -28,9 +28,15 @@ Files in `.claude/skills/` copied (read-only, via the GitHub API on 2026-11-10) 
 | [obra/superpowers](https://github.com/obra/superpowers) | `skills/requesting-code-review/SKILL.md` | `bb92a7774141` | MIT | `code-review/SKILL.md (renamed)` |
 | [obra/superpowers](https://github.com/obra/superpowers) | `skills/requesting-code-review/code-reviewer.md` | `5bf4e7801107` | MIT | `code-review/code-reviewer.md` |
 | [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | `.claude/commands/security-review.md` | `c19afa74097b` | MIT | `security-audit/references/security-review-method.md (auto-run shell lines replaced)` |
+| [greensock/gsap-skills](https://github.com/greensock/gsap-skills) | `skills/gsap-{core,frameworks,performance,plugins,react,scrolltrigger,timeline,utils}/SKILL.md` | `aed9cfd32777` | MIT | `gsap/references/gsap-*.md (unchanged; index SKILL.md is ours)` |
+| [lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) | `styles/{art-deco,silent-film,paper-popup,tilt-shift,watercolor,impasto,crayon-book,isometric-picture-book,shadow-puppet,paper-lantern,spy-titles,lowpoly-island,glass-product}/STYLE.md` | `9eb7739a0fca` | MIT | `motion-lab/references/film-styles/*.md (unchanged)` |
+| [JohnHeibel/ClaudeAnimationBase](https://github.com/JohnHeibel/ClaudeAnimationBase) | `ANIMATION_GUIDE.md` | `0ac8bf2b3194` | MIT | `motion-lab/references/painted-animation-guide.md (unchanged; its character is not to be used)` |
+| [motionvideohq/motionvideo.xyz](https://github.com/motionvideohq/motionvideo.xyz) | `.agents/skills/cinematic-shot/SKILL.md` | `baebee4ac13b` | MIT | `motion-lab/references/cinematic-shot.md (two wait-for-user lines changed to self-review)` |
+| [patch-gg/pixelfx](https://github.com/patch-gg/pixelfx) | `skills/pixelfx/SKILL.md` | `044e12a45dc9` | MIT | `motion-lab/references/pixelfx.md (section 5 "Publish it on Patch" removed)` |
 
 ## Licences
 
 - **MIT** (elayadesign/ai-design-skills, elayadesign/redesign-skill, vercel-labs/web-interface-guidelines, nextlevelbuilder/ui-ux-pro-max-skill, coreyhaines31/marketingskills, AgriciDaniel/claude-seo, obra/superpowers, anthropics/claude-code-security-review): permission is granted free of charge to use, copy, modify and distribute, provided the copyright notice and permission notice are included. Full text: `licenses/MIT-elayadesign.txt` (identical MIT terms; copyright belongs to each project's authors).
+- **MIT** (greensock/gsap-skills, lemomo-ai/lemo-opuscar, JohnHeibel/ClaudeAnimationBase, motionvideohq/motionvideo.xyz, patch-gg/pixelfx; added 2026-11-10): full texts in `licenses/gsap-skills-MIT.txt`, `licenses/lemo-opuscar-MIT.txt`, `licenses/ClaudeAnimationBase-MIT.txt`, `licenses/motionvideo-MIT.txt`, `licenses/pixelfx-MIT.txt`.
 - **Apache-2.0** (anthropics/skills `frontend-design`, pbakaus/impeccable): full text in `licenses/Apache-2.0-anthropic-frontend-design.txt`. The modified files carry the notes above.
 - `landing-page-design.md` itself credits parts adapted from Leonxlnx/taste-skill (MIT); that notice is preserved inside the file.
