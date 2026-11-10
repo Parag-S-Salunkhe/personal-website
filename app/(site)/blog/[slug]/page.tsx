@@ -5,7 +5,7 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import { ArrowLeft, Play } from 'lucide-react'
 import { getPostBySlug, getPosts } from '@/lib/content'
 import { fmtDate, fmtLongDate, paragraphs, readingMinutes } from '@/lib/format'
-import { safeHttpUrl } from '@/lib/url'
+import { safeHttpUrl, isOptimizable } from '@/lib/url'
 import PrintTitle from '@/components/zine/PrintTitle'
 import { CutLine, Staple } from '@/components/zine/Marks'
 import { isVideo } from '@/components/zine/PostSpread'
@@ -92,7 +92,7 @@ export default async function PostPage({ params }: Props) {
       {image && (
         <figure className="mx-auto -mt-6 max-w-3xl px-4 sm:px-6">
           <div className="relative aspect-[16/9] overflow-hidden border-4 border-slip">
-            <Image src={image} alt="" fill priority sizes="(min-width: 768px) 720px, 92vw" className="object-cover" />
+            <Image unoptimized={!isOptimizable(image)} src={image} alt="" fill priority sizes="(min-width: 768px) 720px, 92vw" className="object-cover" />
           </div>
         </figure>
       )}

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { ExternalLink } from 'lucide-react'
 import { Github } from '@/components/icons/Brand'
 import type { Project } from '@/lib/content'
-import { safeHttpUrl } from '@/lib/url'
+import { safeHttpUrl, isOptimizable } from '@/lib/url'
 import { Staple } from './Marks'
 
 // A build sheet: what it is, what it's made of, where to see it. Links are http(s) only.
@@ -20,7 +20,7 @@ export default function ProjectSheet({ project }: { project: Project }) {
       </div>
       {image && (
         <div className="duo relative aspect-[16/9] border-b-2 border-riso-blue">
-          <Image src={image} alt={`Screenshot of ${project.title}`} fill sizes="(min-width: 1024px) 360px, 90vw" />
+          <Image unoptimized={!isOptimizable(image)} src={image} alt={`Screenshot of ${project.title}`} fill sizes="(min-width: 1024px) 360px, 90vw" />
         </div>
       )}
       <div className="p-4">

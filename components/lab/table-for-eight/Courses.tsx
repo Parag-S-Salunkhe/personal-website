@@ -4,6 +4,7 @@ import { Star, Play, Feather } from 'lucide-react'
 import type { LabMovie, LabDish, LabPost, LabNote } from '@/components/lab/data'
 import { Plate } from './Plate'
 import styles from './styles.module.css'
+import { isOptimizable } from '@/lib/url'
 
 const fmt = (iso: string) => new Date(iso).toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
 
@@ -54,7 +55,7 @@ export function MovieRow({ movies }: { movies: LabMovie[] }) {
                     <>
                       <Plate kind="film" className="absolute inset-0 h-full w-full" />
                       <span className="absolute inset-[11%] overflow-hidden rounded-full shadow-[inset_0_0_0_3px_#F1EEE6,0_0_0_1px_#C9C3B2]">
-                        <Image src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="160px" className="object-cover" />
+                        <Image unoptimized={!isOptimizable(m.posterUrl)} src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="160px" className="object-cover" />
                       </span>
                     </>
                   ) : (

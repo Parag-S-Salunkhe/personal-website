@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Movie } from '@/lib/content'
 import { fmtDate } from '@/lib/format'
 import { NoPoster, Rated, Tape } from './Marks'
+import { isOptimizable } from '@/lib/url'
 
 // A taped duotone poster with the score stamped in a pink circle. The whole card is the link.
 export default function MovieCard({ movie, sizes = '(min-width: 1024px) 270px, (min-width: 640px) 40vw, 64vw', priority = false, headingLevel = 'h3' }: {
@@ -18,7 +19,7 @@ export default function MovieCard({ movie, sizes = '(min-width: 1024px) 270px, (
       <div className="relative transition-transform duration-300 ease-zine group-hover:-translate-y-1">
         <div className="duo relative aspect-[2/3] shadow-[0_1px_0_rgba(27,35,80,.15)]">
           {movie.posterUrl ? (
-            <Image src={movie.posterUrl} alt={`Poster for ${movie.title}`} fill sizes={sizes} priority={priority} />
+            <Image unoptimized={!isOptimizable(movie.posterUrl)} src={movie.posterUrl} alt={`Poster for ${movie.title}`} fill sizes={sizes} priority={priority} />
           ) : (
             <NoPoster label={`No poster for ${movie.title} yet: a clapperboard`} />
           )}

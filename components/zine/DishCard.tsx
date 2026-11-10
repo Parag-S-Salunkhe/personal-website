@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Dish } from '@/lib/content'
 import { fmtDate } from '@/lib/format'
 import { Plate, Rated } from './Marks'
+import { isOptimizable } from '@/lib/url'
 
 // A recipe clipping: dashed cut edge, photo or a hand-drawn plate, ingredients as a real list.
 export default function DishCard({ dish, index = 0, headingLevel = 'h3' }: { dish: Dish; index?: number; headingLevel?: 'h2' | 'h3' }) {
@@ -12,7 +13,7 @@ export default function DishCard({ dish, index = 0, headingLevel = 'h3' }: { dis
     <article className="cut group relative h-full bg-slip px-4 pb-5 pt-5 transition-transform duration-300 ease-zine hover:-translate-y-1">
       {dish.imageUrl ? (
         <div className="relative aspect-[16/9] w-full overflow-hidden">
-          <Image src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="(min-width: 1024px) 270px, (min-width: 640px) 46vw, 78vw" className="object-cover" />
+          <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="(min-width: 1024px) 270px, (min-width: 640px) 46vw, 78vw" className="object-cover" />
         </div>
       ) : (
         <Plate variant={index} className="aspect-[16/9] h-auto w-full" />

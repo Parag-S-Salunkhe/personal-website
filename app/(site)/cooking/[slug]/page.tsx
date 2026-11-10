@@ -5,7 +5,7 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import { ArrowLeft, Play } from 'lucide-react'
 import { excerpt, getDishBySlug, getDishes } from '@/lib/content'
 import { fmtLongDate, fmtRating, paragraphs, tilt } from '@/lib/format'
-import { safeHttpUrl } from '@/lib/url'
+import { safeHttpUrl, isOptimizable } from '@/lib/url'
 import PrintTitle from '@/components/zine/PrintTitle'
 import DishCard from '@/components/zine/DishCard'
 import Settle from '@/components/zine/Settle'
@@ -95,7 +95,7 @@ export default async function DishPage({ params }: Props) {
           <figure className="relative mt-8 md:hidden">
             {dish.imageUrl ? (
               <div className="relative aspect-[4/3] overflow-hidden">
-                <Image src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill priority sizes="90vw" className="object-cover" />
+                <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill priority sizes="90vw" className="object-cover" />
               </div>
             ) : (
               <Plate variant={variant} className="mx-auto h-auto w-full max-w-xs" />
@@ -125,7 +125,7 @@ export default async function DishPage({ params }: Props) {
               <figure className="hidden md:block">
                 {dish.imageUrl ? (
                   <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="400px" className="object-cover" />
+                    <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="400px" className="object-cover" />
                   </div>
                 ) : (
                   <Plate variant={variant} className="h-auto w-full" />

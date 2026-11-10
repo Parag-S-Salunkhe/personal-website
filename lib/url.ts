@@ -24,3 +24,6 @@ export function optionalHttpUrl(value: unknown): { ok: true; value: string | nul
   const safe = safeHttpUrl(value)
   return safe ? { ok: true, value: safe } : { ok: false }
 }
+
+/** TMDB posters go through the Next image optimizer; anything else is shown as-is (the optimizer only proxies known hosts). */
+export const isOptimizable = (src: string) => /^https:\/\/image\.tmdb\.org\/t\/p\//.test(src)

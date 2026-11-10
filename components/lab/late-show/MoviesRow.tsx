@@ -7,6 +7,7 @@ import PosterFallback from './PosterFallback'
 import Empty from './Empty'
 import Reveal from './Reveal'
 import { fmtDate } from './fmt'
+import { isOptimizable } from '@/lib/url'
 
 function Holes({ n }: { n: number }) {
   return (
@@ -32,7 +33,7 @@ export default function MoviesRow({ movies }: { movies: LabMovie[] }) {
                 <Link href="/movies" className={`${s.lift} block`} aria-label={`${m.title}, ${m.type === 'SERIES' ? 'series' : 'film'}, rated ${m.rating} out of 5`}>
                   <div className="relative aspect-[2/3] border-[6px] border-[var(--brass)] bg-[var(--velvet)] shadow-[0_14px_30px_-10px_rgba(0,0,0,0.8)]">
                     {m.posterUrl ? (
-                      <Image src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="200px" className="object-cover" />
+                      <Image unoptimized={!isOptimizable(m.posterUrl)} src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="200px" className="object-cover" />
                     ) : (
                       <PosterFallback label={`No poster for ${m.title}`} />
                     )}

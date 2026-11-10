@@ -11,6 +11,7 @@ import Settle from '@/components/zine/Settle'
 import { NoPoster, Rated, Tape } from '@/components/zine/Marks'
 import { SectionHead } from '@/components/zine/SectionHead'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
+import { isOptimizable } from '@/lib/url'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -69,7 +70,7 @@ export default async function MoviePage({ params }: Props) {
             <Tape className="-top-3 left-1/2 -translate-x-1/2 rotate-3" />
             <div className="relative aspect-[2/3] overflow-hidden bg-riso-blue">
               {movie.posterUrl ? (
-                <Image src={movie.posterUrl} alt={`Poster for ${movie.title}`} fill priority sizes="(min-width: 768px) 420px, 80vw" className="object-cover" />
+                <Image unoptimized={!isOptimizable(movie.posterUrl)} src={movie.posterUrl} alt={`Poster for ${movie.title}`} fill priority sizes="(min-width: 768px) 420px, 80vw" className="object-cover" />
               ) : (
                 <NoPoster label={`No poster for ${movie.title} yet: a clapperboard`} />
               )}

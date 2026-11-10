@@ -6,6 +6,7 @@ import { NoPoster, Plate, Rated, Staple, Tape } from './Marks'
 import Settle from './Settle'
 import { fmtDate } from './util'
 import s from './styles.module.css'
+import { isOptimizable } from '@/lib/url'
 
 const TILTS = [-2, 1.5, -1, 2.5, -1.5, 1, -2.5, 2]
 
@@ -47,7 +48,7 @@ export function MoviesRow({ movies }: { movies: LabMovie[] }) {
                   <div className="relative">
                     <div className={`${s.duo} relative aspect-[2/3]`}>
                       {m.posterUrl ? (
-                        <Image src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="(min-width: 1024px) 280px, 64vw" />
+                        <Image unoptimized={!isOptimizable(m.posterUrl)} src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="(min-width: 1024px) 280px, 64vw" />
                       ) : <NoPoster />}
                     </div>
                     <div className="absolute -bottom-5 right-2 z-[3] rounded-full bg-[var(--paper)]"><Rated n={m.rating} /></div>
@@ -77,7 +78,7 @@ export function DishesRow({ dishes }: { dishes: LabDish[] }) {
               <Settle rotate={TILTS[(i + 3) % TILTS.length] / 2} delay={(i % 4) * 0.06} className="h-full">
                 <article className={`${s.cut} relative h-full bg-[var(--slip)] px-4 pb-5 pt-6`}>
                   {d.imageUrl ? (
-                    <div className="relative h-24 w-full"><Image src={d.imageUrl} alt={d.dishName} fill sizes="(min-width: 1024px) 280px, 78vw" className="object-cover" /></div>
+                    <div className="relative h-24 w-full"><Image unoptimized={!isOptimizable(d.imageUrl)} src={d.imageUrl} alt={d.dishName} fill sizes="(min-width: 1024px) 280px, 78vw" className="object-cover" /></div>
                   ) : <Plate variant={i % 3} />}
                   <h3 className={`${s.title} mt-3 text-2xl [overflow-wrap:anywhere]`}>{d.dishName}</h3>
                   <div className="mt-2 flex items-center justify-between gap-2">

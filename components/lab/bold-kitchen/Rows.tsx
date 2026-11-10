@@ -5,6 +5,7 @@ import Band, { Empty } from './Band'
 import { Plate, Pot, Reel } from './Shapes'
 import { Rating, fmtDate, isTmdb } from './util'
 import s from './styles.module.css'
+import { isOptimizable } from '@/lib/url'
 
 const scroller = `${s.snap} -mx-4 flex gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:overflow-visible md:px-0 md:pb-0`
 
@@ -21,7 +22,7 @@ export function MoviesRow({ movies }: { movies: LabData['movies'] }) {
               <article>
                 <div className="relative aspect-[2/3] overflow-hidden rounded-3xl bg-[var(--ink)]/30">
                   {isTmdb(m.posterUrl) ? (
-                    <Image src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="(min-width: 768px) 25vw, 72vw" className="object-cover" />
+                    <Image unoptimized={!isOptimizable(m.posterUrl)} src={m.posterUrl} alt={`Poster for ${m.title}`} fill sizes="(min-width: 768px) 25vw, 72vw" className="object-cover" />
                   ) : (
                     <Reel className="absolute inset-0 h-full w-full" />
                   )}
@@ -56,7 +57,7 @@ export function CookingRow({ dishes }: { dishes: LabData['dishes'] }) {
                 <p className={`${s.display} break-words`} style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>{d.category}</p>
                 <div className="relative mt-4 aspect-[3/2] overflow-hidden rounded-2xl">
                   {isTmdbOrRemote(d.imageUrl) ? (
-                    <Image src={d.imageUrl} alt={`Photo of ${d.dishName}`} fill sizes="(min-width: 768px) 33vw, 82vw" className="object-cover" />
+                    <Image unoptimized={!isOptimizable(d.imageUrl)} src={d.imageUrl} alt={`Photo of ${d.dishName}`} fill sizes="(min-width: 768px) 33vw, 82vw" className="object-cover" />
                   ) : (
                     <Pot body={pots[i % pots.length]} className="absolute inset-0 h-full w-full" />
                   )}
