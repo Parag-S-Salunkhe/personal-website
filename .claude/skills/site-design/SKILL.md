@@ -127,9 +127,51 @@ Plain verbs, sentence case, the host's voice (see site context). Controls name t
   - **accessibility and contrast**
 - Record scores and the winner's reasoning in the decisions ledger. The runner-up stays live under `/lab` for Parag.
 
-## 10. Chosen system
+## 10. Chosen system: House Zine (chosen 2026-11-10)
 
-_Not chosen yet. Filled in after the design lab: palette tokens (hex + CSS var + Tailwind name), fonts and text-style classes, radius scale, motion primitives (file paths), signature motifs and graphics (file paths), per-content-type card components, nav/footer patterns, and light/dark stance._
+The site is the risograph zine Parag hands guests at the door: two fluorescent inks on cool paper, cut, taped and scribbled on. Winner of the design lab (scores and reasons in `.claude/redesign/PROGRESS.md` ledger; the prototype stays at `/lab/house-zine`). Light only: paper is the point, so there is no dark mode.
+
+**Palette** (CSS variables in `app/globals.css`, Tailwind names in `tailwind.config.ts`)
+| Token | Hex | Tailwind | Use |
+|---|---|---|---|
+| `--paper` | #F1F1EC | `paper` | page (cool newsprint, with a faint blue noise grain) |
+| `--slip` | #FAFAF7 | `slip` | cards, clippings, form slips |
+| `--riso-blue` | #2F4FA2 | `riso-blue` | the main text ink, rules, buttons (6.6:1 on paper) |
+| `--riso-pink` | #FF4FA3 | `riso-pink` | second ink: misregistration, halftone, rating circles, underlines. **Never carries text.** |
+| `--riso-yellow` | #FFE14A | `riso-yellow` | tape, sticky notes, highlights, `::selection` |
+| `--ink` | #1B2350 | `ink` | text on pink or yellow, focus ring |
+
+**Type** (`next/font/google` in `app/layout.tsx`)
+- Anybody (variable `wdth` + `wght`): `.t-display` (900, wdth 150, the zine headline), `.t-title` (800, wdth 100, card and article titles), `.t-label` (700, wdth 60, nav, buttons, meta lines).
+- Literata: body and reading (17px base, 1.6 line height; article column 65–70ch).
+- Reenie Beanie: `.t-hand`, the host's margin scribbles under section titles, and guestbook quotes. One per section, never for information.
+- `.nums` for dates and ratings (tabular-nums).
+
+**Motifs** (`app/globals.css` component classes + `components/zine/Marks.tsx`)
+- `.mis`: the pink 3px/2px misregistration shadow on display headings (an earned exception: it is riso misregistration, not a neo-brutalist shadow).
+- `.halftone` / `.halftone-blue`: radial-gradient dot fields, masked to fade.
+- `.duo`: pink/blue duotone for posters and photos (grayscale + multiply + lighten). Item pages show the image in full colour.
+- `Tape`, `Staple`, `CutLine` (scissors + dashed rule between sections), `.torn` (torn slip edge), `.cut` (dashed clipping border).
+- `Rated`: the score in a hand-drawn pink circle. `NoPoster` (clapperboard on halftone), `Plate` (3 hand-drawn plate variants) are the designed no-image states.
+
+**Motion** (`components/zine/`)
+- Signature: `PrintTitle.tsx`, the print run. The pink layer wipes in, then the blue layer slides into near-registration and a 4px offset stays. Full size on the home hero; every page's h1 uses a smaller version of it.
+- `Settle.tsx`: taped things settle with a small rotation as they enter view (`whileInView`, once). Opacity stays 1, so nothing is ever blank.
+- `app/template.tsx`: a short paper-slide page transition.
+- Curve `cubic-bezier(0.22,1,0.36,1)`; `useReducedMotion()` gives the final state.
+
+**Components** (`components/zine/`)
+- `Masthead.tsx` (current page underlined in pink, skip link) and `Footer.tsx` (blue band, "That's the zine.").
+- `SectionHead.tsx` (display title + scribble + "All the …" link) and `Empty.tsx` (a composed invitation in a dashed clipping).
+- Cards: `MovieCard.tsx` (taped duotone poster + Rated), `DishCard.tsx` (dashed recipe clipping, plate or photo, ingredients), `PostSpread.tsx` (two-page spread with staples), `NoteScrap.tsx` (yellow sticky with tape), `ProjectSheet.tsx` (build sheet).
+- `GuestForm.tsx` (the one next step) and `Filters.tsx` (search + filter chips as cut-out tabs).
+
+**Rules of thumb**
+- Radius: none on paper things (clippings, slips, buttons); rounding only on the rating stamp and plates.
+- Buttons: blue fill with paper text, hover pink fill with ink text, `:active` translateY(1px) scale(.98).
+- Links: pink 3px underline that floods on hover (`.ink-link`).
+- Rotation is for paper objects only (cards, tape, slips), within ±2.5°, and never on text blocks you read.
+- Admin and login are the "office copy": the same paper, ink and Anybody labels, with no tape, tilt or halftone.
 
 ## References (open only when needed)
 | File | Use it for |
