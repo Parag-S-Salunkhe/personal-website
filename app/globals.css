@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* House Zine: two riso inks on cool paper. Variables live on :root; everything
-   that styles elements is scoped to .zine so the /lab prototypes stay untouched. */
+   that styles elements is scoped to .zine. */
 :root {
   --paper: #F1F1EC;
   --slip: #FAFAF7;
