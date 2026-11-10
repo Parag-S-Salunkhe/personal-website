@@ -1,0 +1,17 @@
+.pn-root { background: #2B0B14; color: #FFF3D6; font-family: var(--pn-sans), system-ui, sans-serif; }
+.pn-wrap { height: 500vh; position: relative; }
+.pn-stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: radial-gradient(ellipse 70% 60% at 50% 45%, #7a3424 0%, #4a1522 50%, #1a0710 100%); }
+.pn-poster { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; transition: opacity .9s .5s ease; }
+.pn-poster h1 { font-family: var(--pn-display), sans-serif; font-weight: 900; font-size: clamp(7rem, 30vw, 22rem); line-height: .85; margin: 0; color: #F9E0A0; text-shadow: 0 0 60px rgba(255,200,120,.5), 0 6px 0 #D99A4A; letter-spacing: .01em; }
+.pn-stage[data-ready='1'] .pn-poster { opacity: 0; }
+.pn-cap { position: absolute; left: clamp(20px, 5vw, 72px); top: 4.2rem; max-width: 22rem; margin: 0; font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.35; color: #FFF3D6; text-shadow: 0 1px 14px #1a0710, 0 0 3px #1a0710; pointer-events: none; animation: pn-in .6s ease-out both; }
+@keyframes pn-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.pn-hint { position: absolute; right: clamp(20px, 4vw, 56px); bottom: 24px; margin: 0; font-size: .9rem; color: #D8A84E; pointer-events: none; text-shadow: 0 1px 12px #1a0710; }
+.pn-list { padding: clamp(56px, 10vw, 120px) clamp(20px, 5vw, 72px); max-width: 60rem; margin: 0 auto; }
+.pn-list h2 { font-family: var(--pn-display), sans-serif; font-weight: 900; font-size: clamp(2.6rem, 7vw, 5rem); line-height: .9; margin: 0 0 2rem; color: #D8A84E; }
+.pn-list ol { list-style: none; margin: 0; padding: 0; }
+.pn-list li { display: flex; gap: 1.1rem; align-items: center; padding: 1rem 0; border-top: 1px solid rgba(216,168,78,.35); }
+.pn-list img, .pn-nothumb { width: 64px; height: 96px; object-fit: cover; border-radius: 3px; flex: none; background: #6B1A2B; box-shadow: 0 4px 18px rgba(0,0,0,.45); }
+.pn-li-title { font-family: var(--pn-display), sans-serif; font-weight: 800; font-size: 1.7rem; line-height: 1; margin: 0; }
+.pn-li-meta { margin: .3rem 0 0; color: #E9D3AE; }
+@media (prefers-reduced-motion: reduce) { .pn-wrap { height: 100dvh; } .pn-hint { display: none; } .pn-cap { animation: none; } .pn-poster { transition: none; } }
