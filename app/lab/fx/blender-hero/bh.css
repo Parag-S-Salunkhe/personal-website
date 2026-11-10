@@ -1,0 +1,37 @@
+.bh-root { background: #2B0B14; color: #FFF3D6; font-family: var(--bh-sans), system-ui, sans-serif; }
+.bh-wrap { height: 620vh; position: relative; }
+.bh-stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: #1a0710; }
+.bh-static { position: absolute; inset: 0; background: radial-gradient(ellipse 55% 55% at 50% 52%, #7a3b2a 0%, #3a0f1c 55%, #1a0710 100%); display: grid; place-items: center; }
+.bh-static i { display: block; width: min(34vw, 40dvh); aspect-ratio: 1 / 1.15; border-radius: 6px; background: linear-gradient(160deg, #6b1a2b, #4a1726 60%, #2b0b14); box-shadow: 0 0 0 2px rgba(216,168,78,.5), 0 30px 80px rgba(0,0,0,.6); }
+.bh-scene { position: absolute; inset: 0; }
+.bh-scene canvas { display: block; }
+.bh-intro { position: absolute; left: clamp(20px, 5vw, 72px); bottom: clamp(48px, 9vh, 110px); max-width: 34rem; pointer-events: none; text-shadow: 0 2px 24px rgba(20,4,10,.95); }
+.bh-intro h1 { font-family: var(--bh-display), sans-serif; font-weight: 900; font-size: clamp(3.4rem, 11vw, 8.5rem); line-height: .86; margin: 0; color: #FFF3D6; }
+.bh-intro p { margin: .8rem 0 0; font-size: clamp(1rem, 1.6vw, 1.25rem); color: #f1dcc0; }
+.bh-hint { position: absolute; right: clamp(20px, 4vw, 56px); bottom: 28px; margin: 0; font-size: .9rem; color: #D8A84E; pointer-events: none; text-shadow: 0 1px 12px #1a0710; }
+.bh-parts { position: absolute; right: clamp(20px, 5vw, 72px); top: 50%; transform: translateY(-50%); margin: 0; padding: 0; list-style: none; display: grid; gap: 1rem; pointer-events: none; }
+.bh-parts li { display: grid; grid-template-columns: 2.4rem 1fr; align-items: baseline; gap: .6rem; max-width: 17rem; opacity: 0; transform: translateX(16px); transition: opacity .45s, transform .45s; text-shadow: 0 2px 18px #1a0710; }
+.bh-parts li.on { opacity: 1; transform: none; }
+.bh-parts b { font-family: var(--bh-display), sans-serif; font-weight: 800; font-size: 1.7rem; line-height: 1; color: #D8A84E; border-top: 2px solid #D8A84E; padding-top: .25rem; }
+.bh-parts span { font-size: 1rem; line-height: 1.3; color: #FFF3D6; }
+.bh-parts em { display: block; font-style: normal; font-family: var(--bh-display), sans-serif; font-weight: 800; font-size: 1.35rem; color: #FFF3D6; }
+.bh-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 4.5rem clamp(20px, 5vw, 72px) clamp(22px, 5vh, 48px); background: linear-gradient(to top, rgba(22,5,11,.92), rgba(22,5,11,0)); pointer-events: none; opacity: 0; transition: opacity .4s; }
+.bh-cap.on { opacity: 1; }
+.bh-cap-title { font-family: var(--bh-display), sans-serif; font-weight: 800; font-size: clamp(2rem, 5vw, 3.6rem); line-height: .95; margin: 0; color: #FFF3D6; }
+.bh-cap-meta { margin: .45rem 0 0; font-size: 1rem; color: #E9D3AE; }
+.bh-notes { padding: clamp(56px, 10vw, 120px) clamp(20px, 5vw, 72px) 0; max-width: 60rem; margin: 0 auto; }
+.bh-notes h2, .bh-list h2 { font-family: var(--bh-display), sans-serif; font-weight: 900; font-size: clamp(2.6rem, 7vw, 5rem); line-height: .9; margin: 0 0 1.6rem; color: #D8A84E; }
+.bh-notes ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; font-size: 1.15rem; line-height: 1.45; color: #F1DCC0; }
+.bh-notes li { border-top: 1px solid rgba(216,168,78,.35); padding-top: 1rem; }
+.bh-list { padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 72px) clamp(64px, 10vw, 120px); max-width: 60rem; margin: 0 auto; }
+.bh-list ol { list-style: none; margin: 0; padding: 0; display: grid; }
+.bh-list li { display: flex; gap: 1.1rem; align-items: center; padding: 1rem 0; border-top: 1px solid rgba(216,168,78,.35); }
+.bh-list img, .bh-nothumb { width: 64px; height: 96px; object-fit: cover; border-radius: 3px; flex: none; background: #6B1A2B; box-shadow: 0 4px 18px rgba(0,0,0,.45); }
+.bh-li-title { font-family: var(--bh-display), sans-serif; font-weight: 800; font-size: 1.7rem; line-height: 1; margin: 0; }
+.bh-li-meta { margin: .3rem 0 0; color: #E9D3AE; }
+@media (max-width: 767px) {
+  .bh-parts { top: auto; bottom: clamp(70px, 14vh, 130px); right: auto; left: clamp(20px, 5vw, 72px); transform: none; display: block; }
+  .bh-parts li { display: none; }
+  .bh-parts li.cur { display: grid; opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .bh-wrap { height: 100dvh; } .bh-hint, .bh-parts { display: none; } .bh-cap { opacity: 1; transition: none; } }

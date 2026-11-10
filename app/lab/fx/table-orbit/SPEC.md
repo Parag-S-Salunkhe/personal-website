@@ -1,0 +1,8 @@
+# Table orbit (`/lab/fx/table-orbit`)
+- Technique: R3F procedural dinner table for eight (lathe plates/chargers/glasses, merged cutlery, chairs, drapes, dishes, 5 candles with a custom additive flame shader and flickering point lights). Camera rides two CatmullRom curves (position and look-at) through 10 stops: overhead, 8 seats once round the table, pull-back. A dwell plateau at each stop plus breathing push; candles burn down with progress.
+- Scroll: window only. Sticky 100dvh stage in a 500vh server-rendered wrapper; one GSAP ScrollTrigger (scrub) writes progress, the rig damps it. Place-card DOM overlay (Pinyon Script / Gilda) and hero title are driven per frame from the camera stop; seat cards show the latest real item from `getLabData()`. 3D place cards use canvas textures with the same fonts.
+- Libs: three, @react-three/fiber, drei (AccumulativeShadows, ContactShadows, Environment/Lightformer), @react-three/postprocessing (DepthOfField, Bloom, ToneMapping, Vignette, Noise), gsap + ScrollTrigger + useGSAP, Lenis (shared kit).
+- Post: Bloom on HDR emissives (threshold 1), ACES via effect, vignette, noise; DoF follows the look-at point (full tier only).
+- Reduced motion: no ScrollTrigger; the 3/4 pull-back pose is held as a still (frames run ~3s so shadows settle, then demand), wrapper height auto, names listed in HTML, full list below.
+- Light tier (<768px / low power): portrait path (overhead rolled so the table runs up the screen, closer seat cameras, pull-back from the table end), dpr 1-1.5, ContactShadows frame once, 2 real candle lights, no DoF, fewer bulbs.
+- Perf (record.mjs): 1440 fps avg 59 / p5 60; 390 fps avg 59 / p5 60; no console errors. Page height 5.5-6 viewports incl. readable section.
