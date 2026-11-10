@@ -102,6 +102,9 @@ These were written for code-rendered *films*, so adapt the look to real-time and
   - It uses real GPU Chrome and a scripted wheel scroll top to bottom with holds.
   - It writes `videos/<id>__<w>.mp4`, `stills/<id>__poster.png`, `sheets/<id>__<w>.png` (3×3 contact sheet) and `metrics/<id>.json` (FPS avg/p5, long tasks, JS KB, LCP).
   - `--reduced` records the reduced-motion version.
+  - The pointer drifts on a loop the whole time, so hover, cursor and tilt effects show.
+  - For click, drag or toss, the page defines `window.__labDemoSteps` (real mouse steps, x/y as 0–1 fractions) or `window.__labDemo` (async; lab pages only), and the recorder plays it before scrolling.
+  - **Pages must scroll the window.** drei `<ScrollControls>` and inner scrollers record as nearly static, and they also break normal scrolling.
 - **Review:** you can't watch video, so read the **contact sheet**. Ask:
   - Does every frame show something new?
   - Is anything blank, broken, unlit or off-screen?
