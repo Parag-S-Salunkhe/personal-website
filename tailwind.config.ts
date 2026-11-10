@@ -1,202 +1,35 @@
 import type { Config } from 'tailwindcss'
 
+// House Zine tokens. Hex values mirror the CSS variables in app/globals.css
+// (hex here so Tailwind opacity modifiers like bg-riso-yellow/50 work).
 const config: Config = {
-  darkMode: 'class', // CRITICAL - Enable dark mode
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      screens: {
-        xs: '475px',
+      colors: {
+        paper: '#F1F1EC',
+        slip: '#FAFAF7',
+        'riso-blue': '#2F4FA2',
+        'riso-pink': '#FF4FA3',
+        'riso-yellow': '#FFE14A',
+        ink: '#1B2350',
+        // Errors on paper: the blue ink's warm sibling (about 9:1 on paper).
+        'riso-red': '#B3203E',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Georgia', 'serif'],
+        display: ['var(--font-anybody)', 'Impact', 'sans-serif'],
+        body: ['var(--font-literata)', 'Georgia', 'serif'],
+        hand: ['var(--font-reenie)', 'cursive'],
       },
-      animation: {
-        'marquee': 'marquee 32s linear infinite',
-        'wiggle': 'wiggle 0.5s ease-in-out',
-        'flicker': 'flicker 4s ease-in-out infinite',
-        'drift': 'drift 14s ease-in-out infinite',
-        'drift-slow': 'drift 22s ease-in-out infinite reverse',
-        'sway': 'sway 7s ease-in-out infinite',
-        'spin-slow': 'spin 8s linear infinite',
-        'gradient': 'gradient 8s ease infinite',
-        'float-slow': 'float 20s ease-in-out infinite',
-        'float-slower': 'float 25s ease-in-out infinite',
-        'float-reverse': 'float 22s ease-in-out infinite reverse',
-        'fadeInUp': 'fadeInUp 0.6s ease-out forwards',
-        'bounce-slow': 'bounce 3s ease-in-out infinite',
-        'gridMove': 'gridMove 20s linear infinite',
-        'floatRandom': 'floatRandom 20s ease-in-out infinite',
+      transitionTimingFunction: {
+        zine: 'cubic-bezier(0.22,1,0.36,1)',
       },
-      keyframes: {
-        marquee: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-4deg)' },
-          '50%': { transform: 'rotate(4deg)' },
-        },
-        flicker: {
-          '0%, 100%': { opacity: '0.55', transform: 'scale(1)' },
-          '30%': { opacity: '0.85', transform: 'scale(1.06)' },
-          '60%': { opacity: '0.65', transform: 'scale(0.97)' },
-          '80%': { opacity: '0.9', transform: 'scale(1.03)' },
-        },
-        sway: {
-          '0%, 100%': { transform: 'rotate(-1.4deg)' },
-          '50%': { transform: 'rotate(1.4deg)' },
-        },
-        drift: {
-          '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
-          '25%': { transform: 'translate(24px, -30px) rotate(4deg)' },
-          '50%': { transform: 'translate(-16px, -12px) rotate(-3deg)' },
-          '75%': { transform: 'translate(12px, 18px) rotate(2deg)' },
-        },
-        gradient: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
-          '33%': { transform: 'translate(30px, -30px) rotate(5deg)' },
-          '66%': { transform: 'translate(-20px, 20px) rotate(-5deg)' },
-        },
-        fadeInUp: {
-          from: {
-            opacity: '0',
-            transform: 'translateY(30px)',
-          },
-          to: {
-            opacity: '1',
-            transform: 'translateY(0)',
-          },
-        },
-        gridMove: {
-          '0%': { transform: 'translate(0, 0)' },
-          '100%': { transform: 'translate(50px, 50px)' },
-        },
-        floatRandom: {
-          '0%, 100%': { transform: 'translate(0, 0)' },
-          '25%': { transform: 'translate(20px, -20px)' },
-          '50%': { transform: 'translate(-15px, 15px)' },
-          '75%': { transform: 'translate(15px, 10px)' },
-        },
-      },
-      colors: {
-        // Warm "dinner party" palette for the homepage redesign
-        ember: {
-          50: '#FEF4EE',
-          100: '#FDE4D7',
-          200: '#FAC6AB',
-          300: '#F5A07B',
-          400: '#EF7B52',
-          500: '#E85A38',
-          600: '#D3441F',
-          700: '#A93619',
-          800: '#7E2A15',
-          900: '#571E10',
-        },
-        saffron: {
-          50: '#FEF8EC',
-          100: '#FCEECB',
-          200: '#F9DC94',
-          300: '#F5C55C',
-          400: '#F2AF3B',
-          500: '#EB9420',
-          600: '#CF7317',
-          700: '#AC5416',
-          800: '#8C4118',
-          900: '#733617',
-        },
-        berry: {
-          50: '#FDF2F5',
-          100: '#FBE6EC',
-          200: '#F7CDDA',
-          300: '#F0A3BC',
-          400: '#E56F96',
-          500: '#D94F70',
-          600: '#C22D58',
-          700: '#A32048',
-          800: '#881D40',
-          900: '#721C3A',
-        },
-        sage: {
-          50: '#F5F7EE',
-          100: '#E8EDDA',
-          200: '#D2DCB9',
-          300: '#B4C48F',
-          400: '#97AC6A',
-          500: '#7A914D',
-          600: '#5F733A',
-          700: '#4A5930',
-          800: '#3D4829',
-          900: '#343E25',
-        },
-        plum: {
-          50: '#FAF5FA',
-          100: '#F5EAF4',
-          200: '#EBD5EA',
-          300: '#DBB3D9',
-          400: '#C487C1',
-          500: '#AB63A6',
-          600: '#8E4788',
-          700: '#763A6F',
-          800: '#62325C',
-          900: '#532E4E',
-        },
-        night: {
-          DEFAULT: '#1B1310',
-          soft: '#241913',
-          card: '#2B1E17',
-          line: '#3E2C21',
-        },
-        cream: {
-          DEFAULT: '#FFF6EB',
-          soft: '#FBEEDD',
-          card: '#FFFBF4',
-          line: '#EFDFC9',
-        },
-        elegant: {
-          50: '#f8f9fa',
-          100: '#e9ecef',
-          200: '#dee2e6',
-          300: '#ced4da',
-          400: '#adb5bd',
-          500: '#6c757d',
-          600: '#495057',
-          700: '#343a40',
-          800: '#212529',
-          900: '#1a1a1a',
-        },
-        cinema: {
-          bg: '#0a0a0a',
-          accent: '#e50914',
-          gold: '#ffd700',
-        },
-        editorial: {
-          bg: '#ffffff',
-          text: '#1a1a1a',
-          accent: '#2563eb',
-        },
-        terminal: {
-          bg: '#0d1117',
-          green: '#00ff41',
-          blue: '#58a6ff',
-          purple: '#bc8cff',
-        },
-        journal: {
-          bg: '#fef6e4',
-          accent: '#f582ae',
-          text: '#001858',
-        },
+      maxWidth: {
+        read: '68ch',
       },
     },
   },
   plugins: [],
 }
+
 export default config

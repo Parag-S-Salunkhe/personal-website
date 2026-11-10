@@ -2,84 +2,131 @@
 @tailwind components;
 @tailwind utilities;
 
+/* House Zine: two riso inks on cool paper. Variables live on :root; everything
+   that styles elements is scoped to .zine so the /lab prototypes stay untouched. */
+:root {
+  --paper: #F1F1EC;
+  --slip: #FAFAF7;
+  --riso-blue: #2F4FA2;
+  --riso-pink: #FF4FA3;
+  --riso-yellow: #FFE14A;
+  --ink: #1B2350;
+  --riso-red: #B3203E;
+  --ease-zine: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 @layer base {
-  :root {
-    --background: 255 255 255;
-    --foreground: 15 15 20;
-    --card: 250 250 254;
-    --accent: 120 120 120;
-  }
-  
-  .dark {
-    --background: 15 15 20;
-    --foreground: 250 250 254;
-    --card: 30 30 40;
-    --accent: 160 160 160;
-  }
-
   html {
-    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
-  
-  body {
-    @apply antialiased bg-white dark:bg-[#0F0F14] text-gray-900 dark:text-gray-100;
-  }
-}
 
-@layer utilities {
-  .animate-spin-slow {
-    animation: spin 8s linear infinite;
-  }
-  
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
+  @media (prefers-reduced-motion: no-preference) {
+    html:has(.zine) {
+      scroll-behavior: smooth;
     }
   }
 
-  .animate-fadeIn {
-    animation: fadeIn 0.2s ease-out;
+  .zine {
+    background-color: var(--paper);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .18  0 0 0 0 .3  0 0 0 0 .64  0 0 0 .07 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+    color: var(--riso-blue);
+    font-family: var(--font-literata), Georgia, serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    min-height: 100dvh;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  .zine ::selection { background: var(--riso-yellow); color: var(--ink); }
+  .zine * { caret-color: var(--riso-pink); }
+  .zine a { text-underline-offset: 4px; }
+  .zine :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+  .zine h1, .zine h2, .zine h3 { text-wrap: balance; }
+  .zine p { text-wrap: pretty; }
+  .zine { scrollbar-color: var(--riso-blue) var(--paper); }
 }
 
-/* Hide scrollbar for carousel */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+@layer components {
+  /* Type */
+  .t-display { font-family: var(--font-anybody), Impact, sans-serif; font-weight: 900; font-variation-settings: 'wdth' 150; letter-spacing: -0.02em; line-height: 0.95; }
+  .t-title { font-family: var(--font-anybody), Impact, sans-serif; font-weight: 800; font-variation-settings: 'wdth' 100; letter-spacing: -0.01em; line-height: 1.05; }
+  .t-label { font-family: var(--font-anybody), Impact, sans-serif; font-weight: 700; font-variation-settings: 'wdth' 60; letter-spacing: 0.01em; line-height: 1.25; }
+  .t-hand { font-family: var(--font-reenie), cursive; line-height: 1; }
+  .nums { font-variant-numeric: tabular-nums; }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+  /* Riso misregistration on display headings */
+  .mis { text-shadow: 3px 2px 0 var(--riso-pink); }
 
-/* Glassmorphism utilities */
-@layer utilities {
-  .glass {
-    @apply bg-white/10 dark:bg-black/10 backdrop-blur-lg border border-white/20 dark:border-white/10;
+  /* Halftone dot fields */
+  .halftone {
+    background-image: radial-gradient(circle at center, var(--riso-pink) 1.6px, transparent 2.2px);
+    background-size: 9px 9px;
+    -webkit-mask-image: linear-gradient(115deg, #000 0%, transparent 70%);
+    mask-image: linear-gradient(115deg, #000 0%, transparent 70%);
   }
-  
-  /* 3D Card Perspective */
-  .rotate-y-2 {
-    transform: perspective(1000px) rotateY(2deg);
+  .halftone-blue {
+    background-image: radial-gradient(circle at center, var(--riso-blue) 1.4px, transparent 2px);
+    background-size: 8px 8px;
   }
+
+  /* Pink/blue duotone for posters and photos */
+  .duo { position: relative; isolation: isolate; background: var(--riso-pink); overflow: hidden; }
+  .duo img { filter: grayscale(1) contrast(1.2) brightness(1.05); mix-blend-mode: multiply; object-fit: cover; }
+  .duo::after { content: ''; position: absolute; inset: 0; background: var(--riso-blue); mix-blend-mode: lighten; pointer-events: none; }
+
+  /* Paper objects */
+  .tape {
+    position: absolute; width: 64px; height: 24px; z-index: 2;
+    background: color-mix(in srgb, var(--riso-yellow) 82%, transparent);
+    clip-path: polygon(0 8%, 4% 0, 8% 12%, 12% 0, 100% 0, 96% 20%, 100% 40%, 96% 60%, 100% 80%, 96% 100%, 8% 100%, 4% 88%, 0 100%, 3% 55%);
+  }
+  .tape-pink { background: color-mix(in srgb, var(--riso-pink) 60%, transparent); }
+  .torn {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), 96% calc(100% - 4px), 92% calc(100% - 12px), 88% calc(100% - 4px), 84% calc(100% - 10px), 80% calc(100% - 2px), 76% calc(100% - 10px), 72% calc(100% - 4px), 68% calc(100% - 12px), 64% calc(100% - 4px), 60% calc(100% - 10px), 56% calc(100% - 2px), 52% calc(100% - 10px), 48% calc(100% - 4px), 44% calc(100% - 12px), 40% calc(100% - 4px), 36% calc(100% - 10px), 32% calc(100% - 2px), 28% calc(100% - 10px), 24% calc(100% - 4px), 20% calc(100% - 12px), 16% calc(100% - 4px), 12% calc(100% - 10px), 8% calc(100% - 2px), 4% calc(100% - 10px), 0 calc(100% - 4px));
+  }
+  .cut { border: 2px dashed var(--riso-blue); }
+  .staple { position: absolute; width: 20px; height: 4px; background: #8b94b8; border-radius: 1px; }
+
+  /* Buttons: blue fill, pink on hover; or the outline variant */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; padding: 0 1.5rem;
+    font-family: var(--font-anybody), Impact, sans-serif; font-weight: 700; font-variation-settings: 'wdth' 60; font-size: 1.125rem; letter-spacing: 0.01em;
+    background: var(--riso-blue); color: var(--paper); border: 2px solid var(--riso-blue);
+    transition: transform 200ms var(--ease-zine), background-color 200ms var(--ease-zine), color 200ms var(--ease-zine), border-color 200ms var(--ease-zine);
+  }
+  .btn:hover { background: var(--riso-pink); border-color: var(--riso-pink); color: var(--ink); }
+  .btn:active { transform: translateY(1px) scale(0.98); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-line { background: transparent; color: var(--riso-blue); padding: 0 1rem; }
+  .btn-line:hover { background: var(--riso-yellow); border-color: var(--riso-blue); color: var(--ink); }
+
+  /* Links: pink underline that floods on hover */
+  .ink-link {
+    background-image: linear-gradient(var(--riso-pink), var(--riso-pink));
+    background-size: 100% 3px; background-position: 0 100%; background-repeat: no-repeat;
+    transition: background-size 200ms var(--ease-zine), color 200ms var(--ease-zine);
+  }
+  .ink-link:hover { background-size: 100% 100%; color: var(--ink); }
+
+  .scroller { scrollbar-width: thin; scrollbar-color: var(--riso-blue) transparent; }
+
+  /* Form fields on slips */
+  .field {
+    display: block; width: 100%; border: 2px solid var(--riso-blue); background: rgb(255 255 255 / 0.7);
+    padding: 0.5rem 0.75rem; color: var(--ink); font-size: 1rem; border-radius: 0;
+  }
+  .field::placeholder { color: rgb(47 79 162 / 0.7); }
+  .field:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  /* The reading column */
+  .prose-zine { max-width: 68ch; font-size: 1.125rem; line-height: 1.7; color: var(--ink); }
+  .prose-zine p + p { margin-top: 1.25em; }
+  .prose-zine a { color: var(--riso-blue); text-decoration: underline; text-decoration-color: var(--riso-pink); text-decoration-thickness: 3px; }
 }
 
-/* Smooth 3D transforms */
-[style*="transform-style: preserve-3d"] {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+@media (prefers-reduced-motion: reduce) {
+  .zine *, .zine *::before, .zine *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
