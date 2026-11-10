@@ -14,7 +14,7 @@ export default function PageViewCounter() {
   }, [])
 
   return (
-    <div className="text-center text-sm text-purple-600 dark:text-purple-400 flex items-center gap-2">
+    <div className="text-center text-sm text-ember-600 dark:text-ember-400 flex items-center gap-2">
       <Eye className="w-4 h-4" />
       <span className="font-medium">
         {pageViews !== null ? pageViews.toLocaleString() : '...'} visitors

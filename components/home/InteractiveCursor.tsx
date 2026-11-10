@@ -13,8 +13,8 @@ export default function InteractiveCursor() {
   const [particles, setParticles] = useState<Particle[]>([])
   const [isMobile, setIsMobile] = useState(false)
   
-  const cursorX = useMotionValue(0)
-  const cursorY = useMotionValue(0)
+  const cursorX = useMotionValue(-100)
+  const cursorY = useMotionValue(-100)
   
   const springConfig = { damping: 25, stiffness: 700 }
   const cursorXSpring = useSpring(cursorX, springConfig)
@@ -58,7 +58,7 @@ export default function InteractiveCursor() {
     <>
       {/* Cursor dot */}
       <motion.div
-        className="fixed top-0 left-0 w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 pointer-events-none z-50 mix-blend-difference"
+        className="fixed top-0 left-0 w-4 h-4 rounded-full bg-gradient-to-r from-ember-400 to-saffron-400 pointer-events-none z-50 mix-blend-difference"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -71,7 +71,7 @@ export default function InteractiveCursor() {
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="fixed top-0 left-0 w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-blue-400 pointer-events-none z-40"
+          className="fixed top-0 left-0 w-2 h-2 rounded-full bg-gradient-to-r from-saffron-400 to-berry-400 pointer-events-none z-40"
           initial={{
             x: particle.x,
             y: particle.y,
