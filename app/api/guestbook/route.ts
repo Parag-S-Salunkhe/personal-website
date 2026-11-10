@@ -2,11 +2,13 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getHashedClientIP } from '@/lib/rateLimit'
 import { sanitizeMessage, validateMessage, containsProfanity } from '@/lib/security'
+import { requireAdmin } from '@/lib/auth'
 
 // GET - Fetch all guestbook messages
 export async function GET() {
   try {
     const messages = await prisma.guestbookMessage.findMany({
+      select: { id: true, message: true, emoji: true, createdAt: true },
       orderBy: { createdAt: 'desc' },
       take: 50, // Limit to most recent 50 messages
     })
@@ -84,7 +86,8 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json(newMessage, { status: 201 })
+    const { ipHash: _omit, ...publicMessage } = newMessage
+    return NextResponse.json(publicMessage, { status: 201 })
   } catch (error) {
     console.error('Error creating guestbook message:', error)
     return NextResponse.json(
@@ -96,6 +99,9 @@ export async function POST(request: Request) {
 
 // DELETE - Delete a guestbook message (optional, for admin use)
 export async function DELETE(request: Request) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')

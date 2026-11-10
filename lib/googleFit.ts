@@ -7,8 +7,9 @@ const SCOPES = [
   'https://www.googleapis.com/auth/fitness.body.read',
 ].join(' ');
 
-export function getAuthUrl() {
+export function getAuthUrl(state: string) {
   const params = new URLSearchParams({
+    state,
     client_id: GOOGLE_CLIENT_ID!,
     redirect_uri: GOOGLE_REDIRECT_URI!,
     response_type: 'code',

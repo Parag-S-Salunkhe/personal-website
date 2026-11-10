@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Code, ExternalLink, Github, Terminal } from 'lucide-react'
 import Image from 'next/image'
 import SearchBar from '@/components/shared/SearchBar'
+import { safeHttpUrl } from '@/lib/url'
 
 interface Project {
   id: string
@@ -155,9 +156,9 @@ export default function ProjectsContent({ projects }: { projects: Project[] }) {
                     </h3>
                   </div>
                   <div className="flex space-x-2">
-                    {project.githubUrl && (
+                    {safeHttpUrl(project.githubUrl) && (
                       <a
-                        href={project.githubUrl}
+                        href={safeHttpUrl(project.githubUrl)!}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-green-400 transition-colors"
@@ -166,9 +167,9 @@ export default function ProjectsContent({ projects }: { projects: Project[] }) {
                         <Github className="w-5 h-5" />
                       </a>
                     )}
-                    {project.projectUrl && (
+                    {safeHttpUrl(project.projectUrl) && (
                       <a
-                        href={project.projectUrl}
+                        href={safeHttpUrl(project.projectUrl)!}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-green-400 transition-colors"

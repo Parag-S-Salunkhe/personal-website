@@ -1,14 +1,23 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getStepsAndCalories, refreshAccessToken } from '@/lib/googleFit';
+import crypto from 'crypto';
+
+function sameSecret(a: string, b: string): boolean {
+  const da = crypto.createHash('sha256').update(a).digest();
+  const db = crypto.createHash('sha256').update(b).digest();
+  return crypto.timingSafeEqual(da, db);
+}
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
     // Verify cron secret
-    const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    // Fail closed: with CRON_SECRET unset, the old check accepted "Bearer undefined".
+    const cronSecret = process.env.CRON_SECRET;
+    const authHeader = request.headers.get('authorization') ?? '';
+    if (!cronSecret || !sameSecret(authHeader, `Bearer ${cronSecret}`)) {
       console.error('Unauthorized cron request');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -99,7 +108,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('❌ Cron job failed:', error);
     return NextResponse.json(
-      { error: 'Cron job failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Cron job failed' },
       { status: 500 }
     );
   }

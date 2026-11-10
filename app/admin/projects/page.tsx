@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { safeHttpUrl } from '@/lib/url'
 
 interface Project {
   id: string
@@ -275,12 +276,12 @@ export default function ProjectsAdminPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <div className="flex gap-2">
                           {project.projectUrl && (
-                            <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-900 dark:text-green-400">
+                            <a href={safeHttpUrl(project.projectUrl) ?? undefined} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-900 dark:text-green-400">
                               🔗
                             </a>
                           )}
                           {project.githubUrl && (
-                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900 dark:text-gray-400">
+                            <a href={safeHttpUrl(project.githubUrl) ?? undefined} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900 dark:text-gray-400">
                               💻
                             </a>
                           )}

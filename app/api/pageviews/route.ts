@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/auth'
 
 // GET - Fetch current page view count
 export async function GET() {
@@ -69,6 +70,9 @@ export async function POST() {
 
 // PUT - Reset page view count (admin only - you may want to add authentication)
 export async function PUT() {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   try {
     const pageView = await prisma.pageView.findFirst()
 
