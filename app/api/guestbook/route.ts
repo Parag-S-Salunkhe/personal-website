@@ -29,6 +29,13 @@ export async function POST(request: Request) {
     const body = await request.json()
     let { message, emoji } = body
 
+    // The mark is optional: one emoji (a pictograph plus variation selectors / joiners), nothing else.
+    if (emoji === undefined || emoji === null || emoji === '') {
+      emoji = null
+    } else if (typeof emoji !== 'string' || emoji.length > 16 || !/^\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic}|\p{Emoji_Modifier})*$/u.test(emoji)) {
+      return NextResponse.json({ error: 'Pick one of the marks, or leave it empty.' }, { status: 400 })
+    }
+
     // Basic validation
     if (!message || typeof message !== 'string') {
       return NextResponse.json(

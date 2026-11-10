@@ -37,9 +37,6 @@ export default function BlogAdminPage() {
     publishDate: new Date().toISOString().split('T')[0]
   })
 
-  useEffect(() => {
-    fetchPosts()
-  }, [])
 
   const fetchPosts = async () => {
     setIsLoading(true)
@@ -55,6 +52,10 @@ export default function BlogAdminPage() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchPosts()
+  }, [])
 
   const applyFilters = (searchQuery: string, filterType: string, postsList = posts) => {
     let filtered = [...postsList]

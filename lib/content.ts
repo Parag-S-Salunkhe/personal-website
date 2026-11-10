@@ -3,6 +3,7 @@
 import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { idFromSlug, itemSlug } from '@/lib/slug'
+import { safeHttpUrl } from '@/lib/url'
 
 export type Movie = { id: string; slug: string; title: string; type: 'MOVIE' | 'SERIES'; rating: number; review: string; watchDate: string; posterUrl: string | null }
 export type Dish = { id: string; slug: string; dishName: string; category: string; rating: number; review: string; imageUrl: string | null; videoUrl: string | null; ingredients: string[]; cookDate: string }
@@ -21,9 +22,9 @@ type DishRow = Awaited<ReturnType<typeof prisma.cooking.findFirst>> & {}
 type PostRow = Awaited<ReturnType<typeof prisma.blog.findFirst>> & {}
 type NoteRow = Awaited<ReturnType<typeof prisma.note.findFirst>> & {}
 
-const toMovie = (m: MovieRow): Movie => ({ id: m.id, slug: itemSlug(m.title, m.id), title: m.title, type: m.type, rating: m.rating, review: m.review, watchDate: m.watchDate.toISOString(), posterUrl: m.posterUrl })
-const toDish = (d: DishRow): Dish => ({ id: d.id, slug: itemSlug(d.dishName, d.id), dishName: d.dishName, category: d.category, rating: d.rating, review: d.review, imageUrl: d.imageUrl, videoUrl: d.videoUrl, ingredients: d.ingredients, cookDate: d.cookDate.toISOString() })
-const toPost = (p: PostRow): Post => ({ id: p.id, slug: itemSlug(p.title, p.id), title: p.title, content: p.content, excerpt: excerpt(p.content), blogType: p.blogType, imageUrl: p.imageUrl, publishDate: p.publishDate.toISOString(), updatedAt: p.updatedAt.toISOString() })
+const toMovie = (m: MovieRow): Movie => ({ id: m.id, slug: itemSlug(m.title, m.id), title: m.title, type: m.type, rating: m.rating, review: m.review, watchDate: m.watchDate.toISOString(), posterUrl: safeHttpUrl(m.posterUrl) })
+const toDish = (d: DishRow): Dish => ({ id: d.id, slug: itemSlug(d.dishName, d.id), dishName: d.dishName, category: d.category, rating: d.rating, review: d.review, imageUrl: safeHttpUrl(d.imageUrl), videoUrl: safeHttpUrl(d.videoUrl), ingredients: d.ingredients, cookDate: d.cookDate.toISOString() })
+const toPost = (p: PostRow): Post => ({ id: p.id, slug: itemSlug(p.title, p.id), title: p.title, content: p.content, excerpt: excerpt(p.content), blogType: p.blogType, imageUrl: safeHttpUrl(p.imageUrl), publishDate: p.publishDate.toISOString(), updatedAt: p.updatedAt.toISOString() })
 const toNote = (n: NoteRow): Note => ({ id: n.id, slug: itemSlug(n.title, n.id), title: n.title, content: n.content, excerpt: excerpt(n.content, 140), category: n.category, createdAt: n.createdAt.toISOString(), updatedAt: n.updatedAt.toISOString() })
 
 export const getMovies = cache(async () => (await prisma.movie.findMany({ orderBy: { watchDate: 'desc' } })).map(toMovie))
@@ -33,7 +34,7 @@ export const getNotes = cache(async () => (await prisma.note.findMany({ orderBy:
 export const getProjects = cache(async (): Promise<Project[]> =>
   (await prisma.project.findMany({ orderBy: { createdAt: 'desc' } })).map((p) => ({
     id: p.id, title: p.title, description: p.description, techStack: p.techStack,
-    projectUrl: p.projectUrl, githubUrl: p.githubUrl, imageUrl: p.imageUrl, createdAt: p.createdAt.toISOString(),
+    projectUrl: safeHttpUrl(p.projectUrl), githubUrl: safeHttpUrl(p.githubUrl), imageUrl: safeHttpUrl(p.imageUrl), createdAt: p.createdAt.toISOString(),
   })))
 export const getGuestNotes = cache(async (take = 12): Promise<GuestNote[]> =>
   (await prisma.guestbookMessage.findMany({ orderBy: { createdAt: 'desc' }, take, select: { id: true, message: true, emoji: true, createdAt: true } }))

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
 import { revalidateSection } from '@/lib/revalidate'
+import { optionalHttpUrl } from '@/lib/url'
 
 // GET single movie
 export async function GET(
@@ -35,6 +36,10 @@ export async function PUT(
   try {
     const body = await request.json()
     const { title, type, rating, review, watchDate, posterUrl } = body
+    const posterUrlUrl = optionalHttpUrl(body.posterUrl)
+    if (!posterUrlUrl.ok) {
+      return NextResponse.json({ error: 'Links must start with http:// or https://' }, { status: 400 })
+    }
 
     const movie = await prisma.movie.update({
       where: { id: (await params).id },
@@ -44,7 +49,7 @@ export async function PUT(
         rating: parseInt(rating),
         review,
         watchDate: new Date(watchDate),
-        posterUrl: posterUrl || null,
+        posterUrl: posterUrlUrl.value,
       },
     })
     revalidateSection('movies')

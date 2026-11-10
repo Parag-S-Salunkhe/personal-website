@@ -111,7 +111,7 @@ export async function POST(request: Request) {
     }, {} as Record<Mood, number>)
 
     return NextResponse.json({
-      vote: newVote,
+      vote: { id: newVote.id, mood: newVote.mood, createdAt: newVote.createdAt },
       stats,
       percentages,
       total,

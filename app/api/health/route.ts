@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
 
 export async function GET(request: Request) {
+  // Personal health data: admin only (the public pages no longer show it).
+  const denied = await requireAdmin()
+  if (denied) return denied
   try {
     const { searchParams } = new URL(request.url)
     const daysParam = searchParams.get('days')

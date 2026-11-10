@@ -29,9 +29,6 @@ export default function HealthAdmin() {
   const [isGoogleFitConnected, setIsGoogleFitConnected] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
 
-  useEffect(() => {
-    fetchEntries()
-  }, [])
 
   // Check if Google Fit is connected
   useEffect(() => {
@@ -69,6 +66,10 @@ export default function HealthAdmin() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchEntries()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

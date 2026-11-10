@@ -12,3 +12,6 @@ export const NAV = [
   { label: 'Notes', href: '/notes' },
   { label: 'Projects', href: '/projects' },
 ] as const
+
+/** Spread into a page's openGraph: page-level openGraph replaces the layout's, so these must be repeated. */
+export const ogBase = { siteName, locale: 'en_IE' } as const

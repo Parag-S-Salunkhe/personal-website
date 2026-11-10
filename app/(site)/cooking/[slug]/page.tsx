@@ -12,6 +12,7 @@ import Settle from '@/components/zine/Settle'
 import { Plate, Rated, Tape } from '@/components/zine/Marks'
 import { SectionHead } from '@/components/zine/SectionHead'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: dish.dishName,
     description,
     alternates: { canonical: `/cooking/${dish.slug}` },
-    openGraph: { type: 'article', url: `/cooking/${dish.slug}`, title: `${dish.dishName}, rated ${fmtRating(dish.rating)}/5` },
+    openGraph: { ...ogBase, type: 'article', url: `/cooking/${dish.slug}`, title: `${dish.dishName}, rated ${fmtRating(dish.rating)}/5` },
   }
 }
 
@@ -95,7 +96,7 @@ export default async function DishPage({ params }: Props) {
           <figure className="relative mt-8 md:hidden">
             {dish.imageUrl ? (
               <div className="relative aspect-[4/3] overflow-hidden">
-                <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill priority sizes="90vw" className="object-cover" />
+                <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="90vw" className="object-cover" />
               </div>
             ) : (
               <Plate variant={variant} className="mx-auto h-auto w-full max-w-xs" />

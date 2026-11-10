@@ -46,9 +46,6 @@ export default function CookingAdminPage() {
   })
 
   // Fetch all dishes on page load
-  useEffect(() => {
-    fetchDishes()
-  }, [])
 
   const fetchDishes = async () => {
     setIsLoading(true)
@@ -64,6 +61,10 @@ export default function CookingAdminPage() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchDishes()
+  }, [])
 
   // Apply filters (search + category)
   const applyFilters = (searchQuery: string, filterType: string, dishesList = dishes) => {

@@ -106,7 +106,7 @@ export default function GuestForm({ idPrefix = 'note' }: { idPrefix?: string }) 
       </div>
       <p
         id={ids.status}
-        role={state === 'error' ? 'alert' : undefined}
+        role="alert"
         className={`min-h-6 pt-2 text-sm font-semibold text-riso-red ${state === 'error' ? '' : 'sr-only'}`}
       >
         {state === 'error' ? error : ''}

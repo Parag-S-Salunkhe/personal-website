@@ -3,6 +3,7 @@ import { getPosts } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import BlogContent from './BlogContent'
 import { JsonLd, collection } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Blog',
   description: 'Longer pieces from Parag: hosting, cooking, movie nights and whatever else needed more than a note.',
   alternates: { canonical: '/blog' },
-  openGraph: { url: '/blog' },
+  openGraph: { ...ogBase, url: '/blog' },
 }
 
 export default async function BlogPage() {

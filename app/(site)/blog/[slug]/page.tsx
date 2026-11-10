@@ -10,6 +10,7 @@ import PrintTitle from '@/components/zine/PrintTitle'
 import { CutLine, Staple } from '@/components/zine/Marks'
 import { isVideo } from '@/components/zine/PostSpread'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -24,6 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.excerpt.slice(0, 160),
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
+      ...ogBase,
       type: 'article',
       url: `/blog/${post.slug}`,
       publishedTime: post.publishDate,

@@ -6,6 +6,7 @@ import Settle from '@/components/zine/Settle'
 import { Empty } from '@/components/zine/SectionHead'
 import { tilt } from '@/lib/format'
 import { JsonLd, collection } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   title: 'Projects',
   description: 'Things Parag is building and tinkering with between dinners, with what each one is made of and where to see it.',
   alternates: { canonical: '/projects' },
-  openGraph: { url: '/projects' },
+  openGraph: { ...ogBase, url: '/projects' },
 }
 
 export default async function ProjectsPage() {

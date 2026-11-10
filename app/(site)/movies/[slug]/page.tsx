@@ -12,6 +12,7 @@ import { NoPoster, Rated, Tape } from '@/components/zine/Marks'
 import { SectionHead } from '@/components/zine/SectionHead'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
 import { isOptimizable } from '@/lib/url'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${movie.title}: ${kind} review`,
     description,
     alternates: { canonical: `/movies/${movie.slug}` },
-    openGraph: { type: 'article', url: `/movies/${movie.slug}`, title: `${movie.title}, rated ${fmtRating(movie.rating)}/5` },
+    openGraph: { ...ogBase, type: 'article', url: `/movies/${movie.slug}`, title: `${movie.title}, rated ${fmtRating(movie.rating)}/5` },
   }
 }
 

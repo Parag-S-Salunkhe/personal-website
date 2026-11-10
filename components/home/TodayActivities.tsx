@@ -24,9 +24,6 @@ export default function TodayActivities() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   
-  useEffect(() => {
-    fetchTodayActivities();
-  }, []);
   
   const fetchTodayActivities = async () => {
     try {
@@ -38,6 +35,10 @@ export default function TodayActivities() {
       console.error('Error fetching activities:', error);
     }
   };
+
+  useEffect(() => {
+    fetchTodayActivities();
+  }, []);
   
   const getActivityCard = (type: keyof typeof activityConfig) => {
     const config = activityConfig[type];

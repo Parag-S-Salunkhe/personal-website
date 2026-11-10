@@ -3,6 +3,7 @@ import { getMovies } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import MoviesContent from './MoviesContent'
 import { JsonLd, collection } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Movies',
   description: 'Every film and series from movie night, with a score out of five and a few honest lines on each.',
   alternates: { canonical: '/movies' },
-  openGraph: { url: '/movies' },
+  openGraph: { ...ogBase, url: '/movies' },
 }
 
 export default async function MoviesPage() {

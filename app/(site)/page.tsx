@@ -12,13 +12,13 @@ import DishCard from '@/components/zine/DishCard'
 import PostSpread from '@/components/zine/PostSpread'
 import NoteScrap from '@/components/zine/NoteScrap'
 import { JsonLd, author, person } from '@/lib/jsonld'
-import { siteName, siteUrl } from '@/lib/site'
+import { siteName, siteUrl, ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
-  openGraph: { url: '/' },
+  openGraph: { ...ogBase, url: '/' },
 }
 
 // On phones each row is a swipeable strip; from lg up it's a four-column spread.

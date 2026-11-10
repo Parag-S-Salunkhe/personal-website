@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
 import { revalidateSection } from '@/lib/revalidate'
+import { optionalHttpUrl } from '@/lib/url'
 
 export async function GET() {
   try {
@@ -21,12 +22,16 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { title, content, imageUrl, blogType, publishDate } = body
+    const imageUrlUrl = optionalHttpUrl(body.imageUrl)
+    if (!imageUrlUrl.ok) {
+      return NextResponse.json({ error: 'Links must start with http:// or https://' }, { status: 400 })
+    }
 
     const blog = await prisma.blog.create({
       data: {
         title,
         content,
-        imageUrl: imageUrl || null,
+        imageUrl: imageUrlUrl.value,
         blogType: blogType || null,
         publishDate: new Date(publishDate),
       },

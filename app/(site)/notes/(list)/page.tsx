@@ -3,6 +3,7 @@ import { getNotes } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import NotesContent from './NotesContent'
 import { JsonLd, collection } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Notes',
   description: 'Short notes from Parag: ideas, lists, things learned and things to try at the next dinner.',
   alternates: { canonical: '/notes' },
-  openGraph: { url: '/notes' },
+  openGraph: { ...ogBase, url: '/notes' },
 }
 
 export default async function NotesPage() {

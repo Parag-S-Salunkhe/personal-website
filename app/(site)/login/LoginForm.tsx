@@ -52,7 +52,7 @@ export default function LoginForm() {
         className="field mt-1 min-h-[48px]"
         required
       />
-      <p id="login-error" role={error ? 'alert' : undefined} className={`min-h-6 pt-2 text-sm font-semibold text-riso-red ${error ? '' : 'sr-only'}`}>
+      <p id="login-error" role="alert" className={`min-h-6 pt-2 text-sm font-semibold text-riso-red ${error ? '' : 'sr-only'}`}>
         {error}
       </p>
       <button type="submit" disabled={loading} className="btn mt-2 w-full">

@@ -3,6 +3,7 @@ import { getDishes } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import CookingContent from './CookingContent'
 import { JsonLd, collection } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Cooking',
   description: 'What came out of the kitchen for supper club and Sunday lunch: the dish, what went into it, a score out of five and how it went.',
   alternates: { canonical: '/cooking' },
-  openGraph: { url: '/cooking' },
+  openGraph: { ...ogBase, url: '/cooking' },
 }
 
 export default async function CookingPage() {

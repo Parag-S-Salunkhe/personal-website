@@ -13,7 +13,7 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
 
 export const personId = `${siteUrl}/#parag`
 export const person = { '@type': 'Person', '@id': personId, name: siteName, url: `${siteUrl}/`, sameAs: [socials.linkedin, socials.github] }
-export const author = { '@id': personId }
+export const author = { '@type': 'Person', '@id': personId, name: siteName, url: `${siteUrl}/` }
 export const abs = (path: string) => `${siteUrl}${path}`
 
 export const breadcrumbs = (trail: [string, string][]) => ({

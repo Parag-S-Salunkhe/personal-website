@@ -31,9 +31,6 @@ export default function NotesAdminPage() {
     category: 'Personal'
   })
 
-  useEffect(() => {
-    fetchNotes()
-  }, [])
 
   const fetchNotes = async () => {
     setIsLoading(true)
@@ -49,6 +46,10 @@ export default function NotesAdminPage() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchNotes()
+  }, [])
 
   const applyFilters = (searchQuery: string, filterType: string, notesList = notes) => {
     let filtered = [...notesList]

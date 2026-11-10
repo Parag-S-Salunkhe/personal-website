@@ -10,6 +10,7 @@ import Settle from '@/components/zine/Settle'
 import { Tape } from '@/components/zine/Marks'
 import { SectionHead } from '@/components/zine/SectionHead'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
+import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: note.title,
     description: note.excerpt.slice(0, 160),
     alternates: { canonical: `/notes/${note.slug}` },
-    openGraph: { type: 'article', url: `/notes/${note.slug}`, publishedTime: note.createdAt, modifiedTime: note.updatedAt },
+    openGraph: { ...ogBase, type: 'article', url: `/notes/${note.slug}`, publishedTime: note.createdAt, modifiedTime: note.updatedAt },
   }
 }
 

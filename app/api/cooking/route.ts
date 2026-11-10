@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
 import { revalidateSection } from '@/lib/revalidate'
+import { optionalHttpUrl } from '@/lib/url'
 
 // GET - Fetch all cooking entries
 export async function GET() {
@@ -27,6 +28,11 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { dishName, category, rating, review, imageUrl, videoUrl, ingredients, cookDate } = body
+    const imageUrlUrl = optionalHttpUrl(body.imageUrl)
+    const videoUrlUrl = optionalHttpUrl(body.videoUrl)
+    if (!imageUrlUrl.ok || !videoUrlUrl.ok) {
+      return NextResponse.json({ error: 'Links must start with http:// or https://' }, { status: 400 })
+    }
 
     // Ensure ingredients is always an array (even if empty)
     const ingredientsArray = ingredients 
@@ -39,8 +45,8 @@ export async function POST(request: Request) {
         category,
         rating: parseInt(rating),
         review,
-        imageUrl: imageUrl?.trim() || null,
-        videoUrl: videoUrl?.trim() || null,
+        imageUrl: imageUrlUrl.value,
+        videoUrl: videoUrlUrl.value,
         ingredients: ingredientsArray,
         cookDate: cookDate ? new Date(cookDate) : new Date(),
       },

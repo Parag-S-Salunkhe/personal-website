@@ -28,9 +28,6 @@ export default function AdminDashboard() {
   const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    fetchDashboardData()
-  }, [])
 
   const fetchDashboardData = async () => {
     setIsLoading(true)
@@ -123,6 +120,10 @@ export default function AdminDashboard() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchDashboardData()
+  }, [])
 
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString)

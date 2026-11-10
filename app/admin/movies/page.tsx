@@ -45,9 +45,6 @@ export default function MoviesAdminPage() {
   const [isSearching, setIsSearching] = useState(false)
 
   // Fetch all movies on page load
-  useEffect(() => {
-    fetchMovies()
-  }, [])
 
   const fetchMovies = async () => {
     setIsLoading(true)
@@ -63,6 +60,10 @@ export default function MoviesAdminPage() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchMovies()
+  }, [])
 
   // Apply filters (search + type)
   const applyFilters = (searchQuery: string, filterType: string, moviesList = movies) => {

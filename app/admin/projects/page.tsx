@@ -39,9 +39,6 @@ export default function ProjectsAdminPage() {
     imageUrl: ''
   })
 
-  useEffect(() => {
-    fetchProjects()
-  }, [])
 
   const fetchProjects = async () => {
     setIsLoading(true)
@@ -57,6 +54,10 @@ export default function ProjectsAdminPage() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchProjects()
+  }, [])
 
   const applyFilters = (searchQuery: string, projectsList = projects) => {
     let filtered = [...projectsList]
