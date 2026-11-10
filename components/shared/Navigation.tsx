@@ -19,6 +19,9 @@ export default function Navigation() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  // Design-lab prototypes render their own chrome.
+  if (pathname?.startsWith('/lab')) return null
+
   return (
     <nav className="sticky top-0 left-0 right-0 z-50 bg-cream/85 dark:bg-night/85 backdrop-blur-xl border-b border-cream-line/80 dark:border-night-line/80 shadow-sm shadow-ember-900/5 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
