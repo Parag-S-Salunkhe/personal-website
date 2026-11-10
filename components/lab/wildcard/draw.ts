@@ -33,8 +33,8 @@ function wrap(c: Ctx, text: string, maxW: number, maxLines: number): string[] {
   for (let i = 0; i < words.length; i++) {
     const t = cur ? cur + ' ' + words[i] : words[i]
     if (c.measureText(t).width <= maxW || !cur) { cur = t; continue }
+    if (lines.length === maxLines - 1) { cur = cur + ' ' + words.slice(i).join(' '); break }
     lines.push(cur); cur = words[i]
-    if (lines.length === maxLines - 1) { cur = words.slice(i).join(' '); break }
   }
   if (cur) lines.push(cur)
   const last = lines.length - 1

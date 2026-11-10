@@ -123,7 +123,7 @@ export default function FlapBoard({ rows }: { rows: BoardRow[] }) {
     const tl = gsap.timeline({ paused: true })
     tl.to(st, { t: total, duration: total, ease: 'none', onUpdate: () => render(st.t) })
     ScrollTrigger.create({
-      trigger: root.current, start: 'top 72%', end: 'bottom 12%',
+      trigger: root.current, start: 'top 98%', end: 'bottom 12%',
       onEnter: () => tl.restart(), onEnterBack: () => tl.restart(),
       onLeave: () => { tl.pause(0); st.t = 0; render(0) }, onLeaveBack: () => { tl.pause(0); st.t = 0; render(0) },
     })
