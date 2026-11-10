@@ -1,0 +1,146 @@
+---
+name: site-design
+description: "Design system and design process for Parag's personal site (paragsalunkhe.me, Next.js 14 + Tailwind + framer-motion). Use whenever building, restyling, prototyping, reviewing or writing copy for ANY page, component or section of this site (home, movies, cooking, blog, notes, projects, login, admin, /lab prototypes), and before choosing colours, fonts, type sizes, spacing, radii, icons, illustrations, motion or animation. Covers the anti-AI-slop rules, the lab scoring rubric, and (once chosen) the site's committed visual system."
+---
+
+# Site design: paragsalunkhe.me
+
+The goal is a site people remember. Parag's brief: "the design must be amazing". Completely new visuals; real animation and graphics. The old purple UI and the July 2026 cream/Fraunces/terracotta homepage are retired; both read as AI-generated.
+
+**Authority.** This file decides. Parag's own words beat this file. The files in `references/` are inspiration and checklists. They were written for other briefs (landing-page-design is for single-offer SaaS pages), so their hard bans (font lists, "no italics", "one CTA", "mandatory tagline section", "gradient hero text") apply **only where this file adopts them**.
+
+Brand, audience, voice, routes and data: `.claude/skills/seo-nextjs/references/site-context.md`. Read it first.
+
+## 1. Process for every new surface
+
+1. **Ground it in the subject's world.** Supper clubs, movie nights, home cooking, a host's table, a cinema programme, menus, recipe cards, tickets, guest notes. Distinctive choices come from that world's materials and vernacular, not from web-design defaults. (`references/frontend-design.md`)
+2. **Write a plan before code.** Put it in the decisions ledger or `.claude/redesign/design/`:
+   - palette: 4–6 named hex values
+   - type: families and roles
+   - layout: ASCII wireframe for desktop and mobile
+   - the **one signature moment** (the memorable thing)
+   - principles: 2–3 lines
+3. **Slop check the plan** against §3. Anything you would have produced for any similar site gets revised; write down what changed and why.
+4. **Build mobile-first**, section by section. Real content from the local DB, never lorem ipsum.
+5. **Look at it.**
+   - Run `node .claude/redesign/tools/shoot.mjs --out <dir> --widths 1440,390 --themes <dark|light> <routes>`.
+   - Read the PNGs (first viewport plus mobile is enough).
+   - Critique against §5–§8, then "take one accessory off". Fix and re-shoot. A picture is worth 1000 tokens.
+
+## 2. Page modes
+
+| Mode | Pages | What wins |
+|---|---|---|
+| Experience / persuade | `/` | The world at full volume: signature moment, big type, graphics. One clear next step (guestbook note) plus the way into each section. |
+| Browse | `/movies`, `/cooking`, `/projects` | Scanability. Each item is an artifact of the world (ticket, poster, menu card, recipe card), but title, rating and date read in under a second. Filters and search are fast and obvious. |
+| Read | `/blog/[slug]`, `/notes/[slug]`, item detail pages | The world owns the frame (masthead, title opener, margins); the reading column stays calm. About 65–75ch, 16–18px body, real contrast, nothing animating behind the text. (`references/impeccable-mode-read.md`) |
+| Operate | `/login`, `/admin/*` | Clarity and states over flair. Same tokens, quieter. |
+
+## 3. AI defaults to refuse (when the axis is free)
+
+These are the clusters generated design falls into (from frontend-design and impeccable). Every prototype and page is checked against them.
+1. Cream background (~#F4F1EA) + high-contrast serif + terracotta/clay accent (~#D97757). That's the retired July look.
+2. Near-black background + a single acid-green or vermilion accent. **Late Show must not land here**: find a cinema palette with more than one note (velvet, brass, projector-beam light, tungsten, marquee colours).
+3. Broadsheet: hairline rules, zero radius, dense newspaper columns. **Bold Kitchen must not land here**: Swiss means grid, scale and colour fields, not newspaper.
+4. The SaaS card kit: identical rounded cards, one radius everywhere, the same rgba(0,0,0,.1) shadow, gradient washes.
+5. Template chrome:
+   - ALL-CAPS tracked eyebrow labels above headings (banned outright)
+   - "A · B · C" meta strings and "WORD — fragment" labels
+   - #0B0B0B / #111 standing in for black
+   - monospace as a "technical" costume
+   - "→" appended to every link
+6. Also refuse:
+   - accenting a single word in a headline
+   - 01/02/03 numbering unless it's a real sequence
+   - the hero-metric template (big number, small label)
+   - gradient text
+   - decorative glass/blur
+   - coloured side borders on cards
+   - hard offset shadows outside a world that chose neo-brutalism
+   - emoji or unicode standing in for icons
+   - the same fade-up on every section
+   - purple/violet as a default accent
+
+The brief can earn any of these except the eyebrow ban. If you use one, write the reason in the ledger.
+
+## 4. Visual system rules (adapted from landing-page-design)
+
+- **Type scale:** sizes land on Tailwind steps (`text-xs` … `text-9xl`) or a `clamp()` built from them for display. No stray `text-[19px]`. Display type max about 6rem on desktop (more only for a deliberate poster moment); tracking floor -0.04em.
+- **Named text styles:** define once and reuse instead of loose utilities. Use Tailwind `@layer components` classes or `tailwind.config` plugin utilities: `display-1/2`, `heading-1…6`, `title-1…4`, `body-1…4`, `caption-1…3`, `button-lg/md/sm`. Headings get `text-wrap: balance`, body `text-wrap: pretty`.
+- **Fonts:** one or two families, clearly distinct, loaded with `next/font/google` or `next/font/local` (self-hosted, `display: swap`). Choose them for the world, not by habit. Avoid as the display voice, because they're overused: Inter, Roboto, Arial, Open Sans, Helvetica, Poppins, DM Sans, Fraunces, Playfair. Italics are allowed when the world wants them.
+- **Spacing:** use only 0, 2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96 px (Tailwind 0, 0.5, 1, 2, 3, 4, 6, 8, 10, 12, 16, 20, 24), plus 128/160 for section rhythm. More space above a heading than below it.
+- **Radius:** pick per hierarchy, not one radius for everything. Nested radius: inner = outer − gap when the gap < 32px and the result > 2.
+- **Colour:**
+  - tokens as CSS variables plus Tailwind colours
+  - body text ≥ 4.5:1 contrast, large text ≥ 3:1
+  - secondary text on a coloured surface is tinted from that hue, never grey
+  - backgrounds may use texture, grain, illustration or colour fields; avoid generic gradient washes
+- **Icons:** one consistent set: lucide-react (already installed) or Phosphor (`@phosphor-icons/react`, run the npm safety check first), or authored SVG in the world's stroke.
+- **Browser surfaces:** theme `::selection`, `caret-color`, the scrollbar, `:focus-visible` rings, link `text-underline-offset`, and `font-variant-numeric: tabular-nums` for ratings and dates.
+
+## 5. Motion and graphics
+
+Parag wants real animation and graphics; earn them.
+- **One signature moment per page** (the hero sequence, a scroll-driven scene, a page-load reveal). Everything else is quiet. Motion that **answers the visitor** (hover, open, filter, submit, tilt) is welcome when it shows what changed.
+- **Curve:** `cubic-bezier(0.22,1,0.36,1)` (Tailwind `ease-[cubic-bezier(0.22,1,0.36,1)]`). Use 500ms for layout and position, 200–300ms for colour and opacity. Never the browser `ease`/`linear` defaults for UI motion.
+- **What to animate:** prefer `transform` and `opacity`; `clip-path`, `mask`, `filter` and `backdrop-filter` are fine when smooth. Never animate `top`, `left`, `width` or `height`.
+- **Triggers:** framer-motion `whileInView` with `once: true`, or IntersectionObserver. Never an unthrottled `scroll` listener; use `useScroll` / rAF.
+- **Reduced motion:** `prefers-reduced-motion` → final state immediately (opacity-only at most). Disable cursor and tilt effects on touch.
+- **Graphics:** hand-authored SVG (illustration, patterns, tickets, plates, film strips, doodles), CSS texture and grain, `next/image` for photos, and `next/og` for share images. No three.js / react-three, no Lottie, no heavy canvas loops. A canvas effect must cap its particle count, pause offscreen (IntersectionObserver), and drop to a static frame on mobile and under reduced motion.
+- **Performance budget:** LCP ≤ 2.5s, CLS ≤ 0.1, INP ≤ 200ms. Lighthouse targets: performance ≥ 85 desktop and ≥ 70 mobile; accessibility, SEO and best practices ≥ 90. Lazy-load below-the-fold motion components with `next/dynamic` when heavy.
+
+## 6. Content-type treatments
+
+Each type is an artifact of the world, but the data stays legible:
+- **Movie:** ticket stub, poster or programme entry. Poster from TMDB (`next/image`, `image.tmdb.org`), rating, type, watch date, a review excerpt.
+- **Dish:** menu line or recipe card. Photo, category, rating, cook date, ingredients as a real list.
+- **Post:** article opener. Title, date, type (video posts show the player affordance), excerpt.
+- **Note:** scrap, card or margin note. Title, category, date.
+- **Project:** a "build sheet" in the world's language. Tech stack, project and GitHub links (validated `http(s)` only).
+- **Guestbook note:** the visitor's handwriting moment. Name, message, emoji; calm success and error messages.
+
+## 7. States and ship checklist (adapted from landing-page-design B9/B10)
+
+- Every interactive element has hover, active (`scale(.98)` or `translateY(1px)`), `:focus-visible` ring, disabled, loading (a skeleton shaped like the layout, not a spinner), empty (a composed invitation, never a blank panel), and error (inline and specific, never `alert()`).
+- No dead links; the current page is marked in the nav; there's a way back from every page.
+- Skip-to-content link; semantic `header/nav/main/article/section/footer`; alt text on meaningful images; a custom branded 404; a favicon.
+- Checked at 390px wide: no horizontal overflow, buttons keep their text, and the primary action is visible in the first screen. Use `100dvh`, not `100vh`.
+- Metadata, OG and JSON-LD: follow the `seo-nextjs` skill.
+
+## 8. Copy
+
+Plain verbs, sentence case, the host's voice (see site context). Controls name their action ("Leave a note", not "Submit"). Errors name the problem and the fix ("Note not sent. Keep it under 280 characters."). No filler: revolutionize, supercharge, cutting-edge, effortless, elevate, seamless, unleash, world-class, "take it to the next level". Avoid the AI tells in `references/ai-tells.md` ("it's not X, it's Y", "no X, no Y, no Z", triplets). Never invent facts (see site context).
+
+## 9. Design lab (`/lab`) rules and scoring
+
+- Each prototype lives in `app/lab/<slug>/` and `components/lab/<slug>/` only, with its own `layout.tsx` (fonts via `next/font`, tokens as CSS variables on a wrapper or a CSS module).
+- **Never edit shared files from a prototype:** `tailwind.config.ts`, `app/layout.tsx`, `app/globals.css`, `components/shared/*`. They collide, and Tailwind config changes need a dev-server restart.
+- Content: hero, a movies row, a cooking row and a blog row from the local DB (server component with Prisma, dates serialised to ISO strings), at 1440 and 390.
+- Each prototype ships with a short `SPEC.md` beside it: palette, type, signature moment, motif, light/dark stance, and which §3 traps it avoided.
+- **Score** each 1–5 on:
+  - **distinctiveness (×2):** cover the name; could this be anyone's site?
+  - **brand fit:** host, warmth, wit
+  - **readability:** read mode survives
+  - **mobile**
+  - **motion quality:** one authored moment
+  - **performance cost**
+  - **accessibility and contrast**
+- Record scores and the winner's reasoning in the decisions ledger. The runner-up stays live under `/lab` for Parag.
+
+## 10. Chosen system
+
+_Not chosen yet. Filled in after the design lab: palette tokens (hex + CSS var + Tailwind name), fonts and text-style classes, radius scale, motion primitives (file paths), signature motifs and graphics (file paths), per-content-type card components, nav/footer patterns, and light/dark stance._
+
+## References (open only when needed)
+| File | Use it for |
+|---|---|
+| `references/frontend-design.md` | Direction from the subject's world; the plan → critique loop; AI-default clusters; restraint (Anthropic, Apache-2.0) |
+| `references/impeccable-craft-floor.md` | The final craft checks (contrast, measure, browser surfaces) and the refuse list (impeccable, Apache-2.0) |
+| `references/impeccable-mode-read.md` | Designing reading pages: blog posts, notes, item detail |
+| `references/landing-page-design.md` | The source of §4/§7: type scale, named styles, spacing, radius, motion curve, states, ship list, content realism (elayadesign, MIT) |
+| `references/redesign-existing-projects.md` | Audit order for upgrading existing pages: fonts → colour → states → layout → motion → components → states → copy |
+| `references/web-interface-guidelines.md` | Accessibility, focus, forms, animation and performance review checklist (`file:line` findings) (Vercel, MIT) |
+| `references/ui-ux-pro-max-quick-reference.md` | Broad UX rule list (touch targets, forms, navigation) to widen options (MIT) |
+| `references/copywriting.md`, `references/ai-tells.md` | Writing page copy without AI tells (marketingskills, MIT) |
+
+Licences and sources: `.claude/skills/THIRD_PARTY_NOTICES.md`.
