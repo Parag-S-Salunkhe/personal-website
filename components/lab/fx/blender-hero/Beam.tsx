@@ -50,6 +50,7 @@ uniform float uOn; varying float vTw;
 void main(){
   float d = length(gl_PointCoord - 0.5);
   float a = smoothstep(0.5, 0.0, d) * vTw * uOn;
+  a *= 0.55;
   gl_FragColor = vec4(vec3(1.0, 0.92, 0.75) * a, a);
 }`
 
@@ -77,7 +78,7 @@ export function Beam({ ctl, count }: { ctl: MutableRefObject<Ctl>; count: number
   }, [count])
   const moteMat = useMemo(() => new THREE.ShaderMaterial({
     vertexShader: moteVert, fragmentShader: moteFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    uniforms: { uTime: { value: 0 }, uOn: { value: 0 }, uSize: { value: 5 }, uPR: { value: 1 } },
+    uniforms: { uTime: { value: 0 }, uOn: { value: 0 }, uSize: { value: 2.2 }, uPR: { value: 1 } },
   }), [])
 
   useEffect(() => { grp.current?.lookAt(SCREEN) }, [])
@@ -86,7 +87,7 @@ export function Beam({ ctl, count }: { ctl: MutableRefObject<Ctl>; count: number
   useFrame((state) => {
     const c = ctl.current, t = state.clock.elapsedTime
     mat.uniforms.uTime.value = t; mat.uniforms.uOn.value = c.beam; mat.uniforms.uFlick.value = c.flick
-    moteMat.uniforms.uTime.value = t; moteMat.uniforms.uOn.value = c.beam * c.flick; moteMat.uniforms.uPR.value = state.gl.getPixelRatio() * 60
+    moteMat.uniforms.uTime.value = t; moteMat.uniforms.uOn.value = c.beam * c.flick; moteMat.uniforms.uPR.value = state.gl.getPixelRatio() * 7
     if (grp.current) grp.current.visible = c.beam > 0.003
   })
 
@@ -114,14 +115,14 @@ export function Screen({ films, ctl }: { films: Film[]; ctl: MutableRefObject<Ct
       st.last = bh.idx; st.shown = bh.idx
       mat.map = list[bh.idx] ?? list[0] ?? null; mat.needsUpdate = true
     }
-    let k = c.beam * 1.25 * c.flick
-    if (t < st.cutUntil) { const n = Math.floor(t * 24); k *= hash(n * 1.3) > 0.45 ? 1.6 : 0.05 }
+    let k = c.beam * 0.92 * c.flick
+    if (t < st.cutUntil) { const n = Math.floor(t * 24); k *= hash(n * 1.3) > 0.45 ? 1.15 : 0.05 }
     mat.color.setScalar(Math.max(0, k))
   })
 
   const w = SCREEN_H / 1.5
   return (
-    <group position={SCREEN}>
+    <group position={SCREEN} rotation={[0, Math.PI, 0]}>
       <mesh position={[0, 0, -0.03]}><boxGeometry args={[w + 0.14, SCREEN_H + 0.14, 0.04]} /><meshStandardMaterial color="#D8A84E" metalness={0.9} roughness={0.35} /></mesh>
       <mesh ref={mesh} material={mat}><planeGeometry args={[w, SCREEN_H]} /></mesh>
     </group>

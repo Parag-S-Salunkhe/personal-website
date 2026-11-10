@@ -66,11 +66,11 @@ function Rig({ ctl, prog, light }: { ctl: React.MutableRefObject<Ctl>; prog: Rea
     const k1 = smooth(0.04, 0.22, p)
     tmp.pos.lerpVectors(tmp.a, tmp.b, k1); tmp.look.lerpVectors(tmp.la, tmp.lb, k1)
     const k2 = smooth(0.38, 0.6, p)
-    tmp.a.set(0.55 * (light ? 0.5 : 1), 0.95, -1.7 * zoom); tmp.la.set(SCREEN.x, SCREEN.y - 0.1, SCREEN.z)
+    tmp.a.set(-1.35 * (light ? 0.6 : 1), 0.85, -0.95 * zoom); tmp.la.set(0, 0.75, 2.7)
     tmp.pos.lerp(tmp.a, k2); tmp.look.lerp(tmp.la, k2)
     // breathing push while the film plays
     const k3 = smooth(0.6, 1, p)
-    tmp.pos.z += k3 * 0.9; tmp.pos.y -= k3 * 0.15
+    tmp.pos.z += k3 * 1.6; tmp.pos.x += k3 * 0.5; tmp.pos.y += k3 * 0.1; tmp.look.z += k3 * 0.8; tmp.look.y += k3 * 0.15
     camera.position.copy(tmp.pos)
     camera.lookAt(tmp.look)
   })
@@ -158,7 +158,7 @@ export default function Scene({ films }: { films: Film[] }) {
         </mesh>
         <ContactShadows position={[0, -0.25, 0]} opacity={0.65} scale={3} blur={2.4} far={1} resolution={light ? 256 : 512} frames={1} />
         <EffectComposer multisampling={light ? 0 : 4} enableNormalPass={false}>
-          <Bloom intensity={light ? 0.7 : 1.1} luminanceThreshold={0.55} luminanceSmoothing={0.3} mipmapBlur />
+          <Bloom intensity={light ? 0.7 : 1.1} luminanceThreshold={0.78} luminanceSmoothing={0.3} mipmapBlur />
           <Noise opacity={0.07} premultiply />
           <Vignette offset={0.25} darkness={0.75} />
         </EffectComposer>
