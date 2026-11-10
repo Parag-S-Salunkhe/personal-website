@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
+import { revalidateSection } from '@/lib/revalidate'
 
 // GET single movie
 export async function GET(
@@ -46,6 +47,7 @@ export async function PUT(
         posterUrl: posterUrl || null,
       },
     })
+    revalidateSection('movies')
 
     return NextResponse.json(movie)
   } catch (error) {
@@ -66,6 +68,7 @@ export async function DELETE(
     await prisma.movie.delete({
       where: { id: params.id },
     })
+    revalidateSection('movies')
 
     return NextResponse.json({ message: 'Movie deleted successfully' })
   } catch (error) {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
 import { optionalHttpUrl } from '@/lib/url'
+import { revalidateSection } from '@/lib/revalidate'
 
 // GET single project
 export async function GET(
@@ -53,6 +54,7 @@ export async function PUT(
         imageUrl: imageUrl.value,
       },
     })
+    revalidateSection('projects')
 
     return NextResponse.json(project)
   } catch (error) {
@@ -73,6 +75,7 @@ export async function DELETE(
     await prisma.project.delete({
       where: { id: params.id },
     })
+    revalidateSection('projects')
 
     return NextResponse.json({ message: 'Project deleted successfully' })
   } catch (error) {

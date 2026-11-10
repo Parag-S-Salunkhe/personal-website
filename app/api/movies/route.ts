@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
+import { revalidateSection } from '@/lib/revalidate'
 
 export async function GET() {
   try {
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
         posterUrl,
       },
     })
+    revalidateSection('movies')
 
     return NextResponse.json(movie, { status: 201 })
   } catch (error) {

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getHashedClientIP } from '@/lib/rateLimit'
 import { sanitizeMessage, validateMessage, containsProfanity } from '@/lib/security'
 import { requireAdmin } from '@/lib/auth'
+import { revalidateSection } from '@/lib/revalidate'
 
 // GET - Fetch all guestbook messages
 export async function GET() {
@@ -85,6 +86,7 @@ export async function POST(request: Request) {
         ipHash,
       },
     })
+    revalidateSection('guestbook')
 
     const { ipHash: _omit, ...publicMessage } = newMessage
     return NextResponse.json(publicMessage, { status: 201 })
@@ -116,6 +118,7 @@ export async function DELETE(request: Request) {
     await prisma.guestbookMessage.delete({
       where: { id },
     })
+    revalidateSection('guestbook')
 
     return NextResponse.json({ success: true })
   } catch (error) {

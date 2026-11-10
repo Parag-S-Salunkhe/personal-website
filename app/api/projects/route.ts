@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
 import { optionalHttpUrl } from '@/lib/url'
+import { revalidateSection } from '@/lib/revalidate'
 
 export async function GET() {
   try {
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
         imageUrl: imageUrl.value,
       },
     })
+    revalidateSection('projects')
 
     return NextResponse.json(project, { status: 201 })
   } catch (error) {

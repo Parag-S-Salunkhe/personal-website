@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
+import { revalidateSection } from '@/lib/revalidate'
 
 // GET single dish
 export async function GET(
@@ -53,6 +54,7 @@ export async function PUT(
         cookDate: new Date(cookDate),
       },
     })
+    revalidateSection('cooking')
 
     return NextResponse.json(dish)
   } catch (error) {
@@ -76,6 +78,7 @@ export async function DELETE(
     await prisma.cooking.delete({
       where: { id: params.id },
     })
+    revalidateSection('cooking')
 
     return NextResponse.json({ message: 'Dish deleted successfully' })
   } catch (error) {

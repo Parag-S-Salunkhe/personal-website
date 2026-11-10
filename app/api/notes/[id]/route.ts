@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth'
+import { revalidateSection } from '@/lib/revalidate'
 
 // GET single note
 export async function GET(
@@ -43,6 +44,7 @@ export async function PUT(
         category: category || null,
       },
     })
+    revalidateSection('notes')
 
     return NextResponse.json(note)
   } catch (error) {
@@ -63,6 +65,7 @@ export async function DELETE(
     await prisma.note.delete({
       where: { id: params.id },
     })
+    revalidateSection('notes')
 
     return NextResponse.json({ message: 'Note deleted successfully' })
   } catch (error) {
