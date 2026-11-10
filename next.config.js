@@ -32,6 +32,8 @@ function cspReportOnly() {
 
 const nextConfig = {
   poweredByHeader: false,
+  // The Dockerfile sets STANDALONE=1 to get a self-contained server; Vercel builds ignore it.
+  output: process.env.STANDALONE === '1' ? 'standalone' : undefined,
   async headers() {
     const noindex = [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }]
     return [

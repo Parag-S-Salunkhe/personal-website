@@ -1,4 +1,5 @@
-FROM node:18-alpine AS base
+# Next 16 needs Node >= 20.9
+FROM node:22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -18,14 +19,16 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build Next.js
-RUN npm run build
+# Build Next.js. Not `npm run build`: that also runs `prisma migrate deploy`, which needs a
+# live database at image-build time. Run migrations as a separate deploy step instead.
+ENV STANDALONE=1
+RUN npx next build
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -44,7 +47,7 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

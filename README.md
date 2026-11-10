@@ -1,158 +1,50 @@
-# Premium Personal Website 🚀
+# paragsalunkhe.me
 
-A modern, multi-themed personal website built with Next.js 14, featuring unique designs for different content types. Each page has its own distinct visual identity and purpose, creating a cohesive yet diverse digital experience.
+Parag Salunkhe's corner of the internet: the movies from movie night, the dishes from the supper club table, and the things he wrote down. Visitors can leave a note in the guestbook.
 
-## Features
+The look is **House Zine**: a two-ink risograph zine (blue and fluorescent pink on cool paper) with tape, staples, halftone dots and handwriting in the margins. The design rules live in `.claude/skills/site-design/SKILL.md` (section 10, "Chosen system").
 
-- **Home Page**: 3D animated hero with Three.js and health tracking charts
-- **Movies Page**: Cinematic theme for movie reviews and ratings
-- **Blog Page**: Editorial theme for long-form content
-- **Projects Page**: Terminal-inspired theme for showcasing work
-- **Notes Page**: Journal-style theme for quick thoughts
-- **Database**: PostgreSQL with Prisma ORM
-- **Animations**: Framer Motion for smooth transitions
-- **Responsive**: Mobile-first design with Tailwind CSS
+## Stack
+- Next.js 16 (App Router) + React 19, TypeScript
+- Tailwind CSS 3, framer-motion, lucide-react
+- Prisma 5 + PostgreSQL
+- Hosted on Vercel (daily cron for the Google Fit sync in `vercel.json`)
 
-## Tech Stack
+## Pages
+| Route | What it is |
+|---|---|
+| `/` | Front page: guestbook note form and the latest of each section |
+| `/movies`, `/movies/[slug]` | Films and series with a score out of 5 |
+| `/cooking`, `/cooking/[slug]` | Dishes, ingredients, how it went |
+| `/blog`, `/blog/[slug]` | Longer posts (old `/blog/<id>` links redirect) |
+| `/notes`, `/notes/[slug]` | Short notes |
+| `/projects` | Build sheets for side projects |
+| `/login`, `/admin/*` | Admin (single password, JWT cookie), not indexed |
+| `/lab/*` | Design-lab prototypes from the redesign, not indexed; remove before going live |
 
-- Next.js 14 (App Router)
-- TypeScript
-- Tailwind CSS
-- Prisma + PostgreSQL
-- Three.js / React Three Fiber
-- Framer Motion
-- Recharts
-- Lucide Icons
+Item URLs are `<slugified-title>-<id>`; the id at the end is what's looked up, so renaming an item never breaks a link.
 
-## Getting Started
+## Run it locally
+Needs Node 22 and Docker.
 
-### Prerequisites
-
-- Node.js 18+ and npm
-- Docker (for PostgreSQL)
-
-### Installation
-
-1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd personal-website
-```
-
-2. Install dependencies:
-```bash
+docker compose up -d postgres        # local Postgres on :5432
+cp .env.example .env                 # then fill in the values
 npm install
+npx prisma migrate deploy            # local database only
+npm run dev                          # http://localhost:3000
 ```
 
-3. Set up environment variables:
+Environment variables (names only): `DATABASE_URL`, `JWT_SECRET`, `ADMIN_PASSWORD`, `CRON_SECRET`, `TMDB_API_KEY`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`, `NEXT_PUBLIC_SITE_URL` (optional, defaults to `https://www.paragsalunkhe.me`). The app fails closed without `JWT_SECRET`, `ADMIN_PASSWORD` and `CRON_SECRET`: admin login and the cron stay locked.
+
+## Checks
 ```bash
-cp .env.example .env
-# Edit .env with your database credentials
+npx tsc --noEmit
+npm run lint
+npx prisma generate && npx next build   # `npm run build` also runs migrations; use it only in deploys
 ```
 
-4. Start PostgreSQL with Docker:
-```bash
-docker-compose up -d
-```
-
-5. Run Prisma migrations:
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-
-6. Start the development server:
-```bash
-npm run dev
-```
-
-7. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Database Setup
-
-The project uses PostgreSQL with Prisma. The schema includes:
-
-- **HealthData**: Daily steps and calories tracking
-- **Movie**: Movie and series reviews with ratings
-- **Blog**: Long-form blog posts
-- **Project**: Portfolio projects with tech stack
-- **Note**: Quick journal entries
-
-### Seeding Data (Optional)
-
-You can add sample data through the API routes or directly via Prisma Studio:
-
-```bash
-npx prisma studio
-```
-
-## Project Structure
-
-```
-personal-website/
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes
-│   ├── blog/              # Blog pages
-│   ├── movies/            # Movies page
-│   ├── notes/             # Notes page
-│   ├── projects/          # Projects page
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── home/             # Home page components
-│   ├── movies/           # Movie components
-│   └── shared/           # Shared components
-├── lib/                  # Utility functions
-├── prisma/               # Database schema
-└── public/               # Static assets
-```
-
-## API Routes
-
-- `GET/POST /api/health` - Health data
-- `GET/POST /api/movies` - Movie reviews
-- `GET/POST /api/blog` - Blog posts
-- `GET/POST /api/projects` - Projects
-- `GET/POST /api/notes` - Notes
-
-## Customization
-
-### Theme Colors
-
-Edit `tailwind.config.ts` to customize the color schemes for each page:
-
-- `elegant`: Home page colors
-- `cinema`: Movies page colors
-- `editorial`: Blog page colors
-- `terminal`: Projects page colors
-- `journal`: Notes page colors
-
-### Adding Content
-
-Use the API routes to add content programmatically, or create an admin interface to manage content through the UI.
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import the project in Vercel
-3. Add environment variables
-4. Deploy
-
-### Docker
-
-Build and run with Docker:
-
-```bash
-docker build -t personal-website .
-docker run -p 3000:3000 personal-website
-```
-
-## License
-
-MIT
-
-## Author
-
-Your Name
+## Security notes
+- Every write API needs the admin cookie (`lib/auth.ts` `requireAdmin`); the guestbook, mood and page-view POSTs are public and rate-limited.
+- Links and images from the database are only rendered when they're `http(s)` (`lib/url.ts`).
+- Security headers and a report-only Content Security Policy are set in `next.config.js`.
