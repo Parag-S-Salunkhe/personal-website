@@ -26,5 +26,5 @@ export const DIRECTIONS: LabEntry[] = [
   { id: 'table-for-eight', title: 'A. Table for Eight', line: 'The supper club as a living table: eight seats, eight sections, candlelight.' },
   { id: 'late-show', title: 'B. Late Show', line: 'Curtain, marquee and projector beam; the posters come alive; dinner is the pre-show.' },
   { id: 'dinner-and-a-movie', title: 'C. Dinner & a Movie', line: 'Scrolling is the evening passing, 7pm to 1am: the table dims into the home cinema.' },
-  { id: 'wildcard', title: 'D. Wildcard', line: 'The most surprising experiment grown into a whole site.' },
+  { id: 'wildcard', title: 'D. Further in (wildcard)', line: 'One endless zoom: street, window, room, table, plate, film frame and back to the street.' },
 ]
