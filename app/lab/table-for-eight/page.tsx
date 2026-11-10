@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Linkedin, Github } from 'lucide-react'
+import { Linkedin, Github } from '@/components/icons/Brand'
 import { getLabData } from '@/components/lab/data'
 import Table, { type TablePlace } from '@/components/lab/table-for-eight/Table'
 import NoteForm from '@/components/lab/table-for-eight/NoteForm'

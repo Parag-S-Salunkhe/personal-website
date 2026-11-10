@@ -6,11 +6,11 @@ import { revalidateSection } from '@/lib/revalidate'
 // GET single blog post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const post = await prisma.blog.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
 
     if (!post) {
@@ -27,7 +27,7 @@ export async function GET(
 // UPDATE blog post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
@@ -37,7 +37,7 @@ export async function PUT(
     const { title, content, imageUrl, blogType, publishDate } = body
 
     const post = await prisma.blog.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         title,
         content,
@@ -58,14 +58,14 @@ export async function PUT(
 // DELETE blog post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
 
   try {
     await prisma.blog.delete({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
     revalidateSection('blog')
 

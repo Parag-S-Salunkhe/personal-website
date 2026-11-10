@@ -11,8 +11,8 @@ export function hashIP(ip: string): string {
 /**
  * Get the client IP address from request headers
  */
-export function getClientIP(): string {
-  const headersList = headers()
+export async function getClientIP(): Promise<string> {
+  const headersList = await headers()
   const forwarded = headersList.get('x-forwarded-for')
   const realIP = headersList.get('x-real-ip')
   
@@ -28,7 +28,7 @@ export function getClientIP(): string {
 /**
  * Get hashed client IP for rate limiting
  */
-export function getHashedClientIP(): string {
-  const ip = getClientIP()
+export async function getHashedClientIP(): Promise<string> {
+  const ip = await getClientIP()
   return hashIP(ip)
 }

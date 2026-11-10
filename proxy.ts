@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { ADMIN_COOKIE, verifyAdminToken } from '@/lib/auth-token'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   if (pathname.startsWith('/admin')) {

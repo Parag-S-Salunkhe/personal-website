@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import type { CSSProperties, ReactNode } from 'react'
-import { Big_Shoulders_Display, Instrument_Sans } from 'next/font/google'
+import { Big_Shoulders, Instrument_Sans } from 'next/font/google'
 import s from '@/components/lab/late-show/styles.module.css'
 
-const display = Big_Shoulders_Display({ subsets: ['latin'], weight: ['800', '900'], display: 'swap', variable: '--font-display' })
+const display = Big_Shoulders({ subsets: ['latin'], weight: ['800', '900'], display: 'swap', variable: '--font-display' })
 const body = Instrument_Sans({ subsets: ['latin'], display: 'swap', variable: '--font-body' })
 
 export const metadata: Metadata = { title: "Late Show: tonight at Parag's", robots: { index: false, follow: false } }

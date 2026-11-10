@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const state = searchParams.get('state');
-  const expectedState = cookies().get(OAUTH_STATE_COOKIE)?.value;
+  const expectedState = (await cookies()).get(OAUTH_STATE_COOKIE)?.value;
 
   if (!state || !expectedState || !sameState(state, expectedState)) {
     const res = NextResponse.redirect(new URL('/admin/health?error=oauth_state', request.url));

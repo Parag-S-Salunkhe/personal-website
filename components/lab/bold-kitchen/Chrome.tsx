@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Github, Linkedin } from 'lucide-react'
+import { Github, Linkedin } from '@/components/icons/Brand'
 import type { LabGuestNote } from '../data'
 import { fmtDate } from './util'
 import s from './styles.module.css'

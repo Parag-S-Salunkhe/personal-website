@@ -64,7 +64,7 @@ export async function POST(request: Request) {
     }
 
     // Get and hash IP for rate limiting
-    const ipHash = getHashedClientIP()
+    const ipHash = await getHashedClientIP()
 
     // Rate limiting: Check if user has voted in the last 24 hours
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)

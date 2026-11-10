@@ -7,11 +7,11 @@ import { revalidateSection } from '@/lib/revalidate'
 // GET single project
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const project = await prisma.project.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
 
     if (!project) {
@@ -28,7 +28,7 @@ export async function GET(
 // UPDATE project
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
@@ -44,7 +44,7 @@ export async function PUT(
     }
 
     const project = await prisma.project.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         title,
         description,
@@ -66,14 +66,14 @@ export async function PUT(
 // DELETE project
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
 
   try {
     await prisma.project.delete({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
     revalidateSection('projects')
 

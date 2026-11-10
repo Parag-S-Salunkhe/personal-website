@@ -6,11 +6,11 @@ import { revalidateSection } from '@/lib/revalidate'
 // GET single dish
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const dish = await prisma.cooking.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
 
     if (!dish) {
@@ -27,7 +27,7 @@ export async function GET(
 // UPDATE dish
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
@@ -42,7 +42,7 @@ export async function PUT(
       : []
 
     const dish = await prisma.cooking.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         dishName,
         category,
@@ -69,14 +69,14 @@ export async function PUT(
 // DELETE dish
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
 
   try {
     await prisma.cooking.delete({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
     revalidateSection('cooking')
 

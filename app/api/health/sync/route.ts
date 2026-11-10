@@ -11,7 +11,7 @@ export async function GET() {
   if (denied) return denied
 
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     let accessToken = cookieStore.get('google_access_token')?.value;
     const refreshToken = cookieStore.get('google_refresh_token')?.value;
 

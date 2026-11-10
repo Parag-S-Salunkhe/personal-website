@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Code, ExternalLink, Github, Terminal } from 'lucide-react'
+import { Code, ExternalLink, Terminal } from 'lucide-react'
+import { Github } from '@/components/icons/Brand'
 import Image from 'next/image'
 import SearchBar from '@/components/shared/SearchBar'
 import { safeHttpUrl } from '@/lib/url'

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { Github, Linkedin } from 'lucide-react'
+import { Github, Linkedin } from '@/components/icons/Brand'
 import GuestForm from './GuestForm'
 import { HalfDisc, Mug, Quarter, Stripes } from './Shapes'
 import s from './styles.module.css'

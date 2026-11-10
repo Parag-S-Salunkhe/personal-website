@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     message = sanitizeMessage(message)
 
     // Get and hash IP for rate limiting
-    const ipHash = getHashedClientIP()
+    const ipHash = await getHashedClientIP()
 
     // Rate limiting: Check if user has posted in the last 5 minutes
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)

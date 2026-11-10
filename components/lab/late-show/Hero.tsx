@@ -2,7 +2,7 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { Linkedin, Github } from 'lucide-react'
+import { Linkedin, Github } from '@/components/icons/Brand'
 import type { LabGuestNote } from '@/components/lab/data'
 import s from './styles.module.css'
 import GuestbookForm from './GuestbookForm'

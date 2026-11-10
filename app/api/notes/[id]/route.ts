@@ -6,11 +6,11 @@ import { revalidateSection } from '@/lib/revalidate'
 // GET single note
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const note = await prisma.note.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
 
     if (!note) {
@@ -27,7 +27,7 @@ export async function GET(
 // UPDATE note
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
@@ -37,7 +37,7 @@ export async function PUT(
     const { title, content, category } = body
 
     const note = await prisma.note.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         title,
         content,
@@ -56,14 +56,14 @@ export async function PUT(
 // DELETE note
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
 
   try {
     await prisma.note.delete({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
     revalidateSection('notes')
 

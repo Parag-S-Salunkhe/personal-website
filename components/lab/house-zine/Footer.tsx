@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Github, Linkedin } from 'lucide-react'
+import { Github, Linkedin } from '@/components/icons/Brand'
 import s from './styles.module.css'
 
 export default function Footer() {

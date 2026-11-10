@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Login is not configured on the server' }, { status: 500 })
   }
 
-  const ip = getClientIP()
+  const ip = await getClientIP()
   const now = Date.now()
   if (isLocked(ip, now)) {
     return NextResponse.json(

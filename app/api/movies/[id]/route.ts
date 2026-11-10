@@ -6,11 +6,11 @@ import { revalidateSection } from '@/lib/revalidate'
 // GET single movie
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const movie = await prisma.movie.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
 
     if (!movie) {
@@ -27,7 +27,7 @@ export async function GET(
 // UPDATE movie
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
@@ -37,7 +37,7 @@ export async function PUT(
     const { title, type, rating, review, watchDate, posterUrl } = body
 
     const movie = await prisma.movie.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         title,
         type,
@@ -59,14 +59,14 @@ export async function PUT(
 // DELETE movie
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const denied = await requireAdmin()
   if (denied) return denied
 
   try {
     await prisma.movie.delete({
-      where: { id: params.id },
+      where: { id: (await params).id },
     })
     revalidateSection('movies')
 

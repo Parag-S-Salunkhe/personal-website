@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import { ADMIN_COOKIE, verifyAdminToken } from '@/lib/auth-token'
 
 export async function isAdmin(): Promise<boolean> {
-  return verifyAdminToken(cookies().get(ADMIN_COOKIE)?.value)
+  return verifyAdminToken((await cookies()).get(ADMIN_COOKIE)?.value)
 }
 
 /**
