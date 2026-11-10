@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { BookOpen, ChefHat, Code, Film, HeartPulse, StickyNote, type LucideIcon } from 'lucide-react'
+
+const TYPE_ICON: Record<string, LucideIcon> = { movie: Film, cooking: ChefHat, blog: BookOpen, project: Code, note: StickyNote }
 
 interface ActivityItem {
   id: string
@@ -67,7 +70,7 @@ export default function AdminDashboard() {
           title: m.title,
           createdAt: m.createdAt,
           icon: '🎬',
-          color: 'bg-red-500',
+          color: 'border border-riso-blue bg-paper',
           link: '/admin/movies',
         })),
         ...(cooking.dishes || []).map((c: any) => ({
@@ -76,7 +79,7 @@ export default function AdminDashboard() {
           title: c.dishName,
           createdAt: c.createdAt,
           icon: '🍳',
-          color: 'bg-orange-500',
+          color: 'border border-riso-blue bg-paper',
           link: '/admin/cooking',
         })),
         ...(blog.posts || []).map((b: any) => ({
@@ -85,7 +88,7 @@ export default function AdminDashboard() {
           title: b.title,
           createdAt: b.createdAt,
           icon: '📝',
-          color: 'bg-purple-500',
+          color: 'border border-riso-blue bg-paper',
           link: '/admin/blog',
         })),
         ...(projects.projects || []).map((p: any) => ({
@@ -94,7 +97,7 @@ export default function AdminDashboard() {
           title: p.title,
           createdAt: p.createdAt,
           icon: '💼',
-          color: 'bg-green-500',
+          color: 'border border-riso-blue bg-paper',
           link: '/admin/projects',
         })),
         ...(notes.notes || []).map((n: any) => ({
@@ -103,7 +106,7 @@ export default function AdminDashboard() {
           title: n.title,
           createdAt: n.createdAt,
           icon: '📔',
-          color: 'bg-blue-500',
+          color: 'border border-riso-blue bg-paper',
           link: '/admin/notes',
         })),
       ]
@@ -134,38 +137,38 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="p-8">
+    <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          📊 Dashboard
+        <h1 className="t-display mis text-4xl md:text-5xl mb-2">
+          Dashboard
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-riso-blue">
           Overview of your content
         </p>
       </div>
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+          <div className="animate-spin h-12 w-12 border-b-2 border-riso-blue"></div>
         </div>
       ) : (
         <>
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
             {/* Movies */}
             <Link href="/admin/movies">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border-l-4 border-red-500">
+              <div className="bg-slip p-4 sm:p-6 cursor-pointer border-2 border-riso-blue hover:bg-riso-yellow transition-colors">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">🎬</span>
-                  <span className="text-xs font-semibold text-red-500 bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded-full">
+                  <Film className="h-8 w-8" aria-hidden="true" />
+                  <span className="t-label text-sm text-riso-blue">
                     Movies
                   </span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="t-display nums text-4xl text-ink">
                   {stats.movies}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <div className="text-sm text-riso-blue mt-1">
                   Total watched
                 </div>
               </div>
@@ -173,17 +176,17 @@ export default function AdminDashboard() {
 
             {/* Cooking */}
             <Link href="/admin/cooking">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border-l-4 border-orange-500">
+              <div className="bg-slip p-4 sm:p-6 cursor-pointer border-2 border-riso-blue hover:bg-riso-yellow transition-colors">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">🍳</span>
-                  <span className="text-xs font-semibold text-orange-500 bg-orange-100 dark:bg-orange-900/30 px-2 py-1 rounded-full">
+                  <ChefHat className="h-8 w-8" aria-hidden="true" />
+                  <span className="t-label text-sm text-riso-blue">
                     Cooking
                   </span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="t-display nums text-4xl text-ink">
                   {stats.cooking}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <div className="text-sm text-riso-blue mt-1">
                   Dishes made
                 </div>
               </div>
@@ -191,17 +194,17 @@ export default function AdminDashboard() {
 
             {/* Blog */}
             <Link href="/admin/blog">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border-l-4 border-purple-500">
+              <div className="bg-slip p-4 sm:p-6 cursor-pointer border-2 border-riso-blue hover:bg-riso-yellow transition-colors">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">📝</span>
-                  <span className="text-xs font-semibold text-purple-500 bg-purple-100 dark:bg-purple-900/30 px-2 py-1 rounded-full">
+                  <BookOpen className="h-8 w-8" aria-hidden="true" />
+                  <span className="t-label text-sm text-riso-blue">
                     Blog
                   </span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="t-display nums text-4xl text-ink">
                   {stats.blog}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <div className="text-sm text-riso-blue mt-1">
                   Posts written
                 </div>
               </div>
@@ -209,17 +212,17 @@ export default function AdminDashboard() {
 
             {/* Projects */}
             <Link href="/admin/projects">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border-l-4 border-green-500">
+              <div className="bg-slip p-4 sm:p-6 cursor-pointer border-2 border-riso-blue hover:bg-riso-yellow transition-colors">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">💼</span>
-                  <span className="text-xs font-semibold text-green-500 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded-full">
+                  <Code className="h-8 w-8" aria-hidden="true" />
+                  <span className="t-label text-sm text-riso-blue">
                     Projects
                   </span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="t-display nums text-4xl text-ink">
                   {stats.projects}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <div className="text-sm text-riso-blue mt-1">
                   Total projects
                 </div>
               </div>
@@ -227,17 +230,17 @@ export default function AdminDashboard() {
 
             {/* Notes */}
             <Link href="/admin/notes">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border-l-4 border-blue-500">
+              <div className="bg-slip p-4 sm:p-6 cursor-pointer border-2 border-riso-blue hover:bg-riso-yellow transition-colors">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">📔</span>
-                  <span className="text-xs font-semibold text-blue-500 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-full">
+                  <StickyNote className="h-8 w-8" aria-hidden="true" />
+                  <span className="t-label text-sm text-riso-blue">
                     Notes
                   </span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="t-display nums text-4xl text-ink">
                   {stats.notes}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <div className="text-sm text-riso-blue mt-1">
                   Quick notes
                 </div>
               </div>
@@ -245,17 +248,17 @@ export default function AdminDashboard() {
 
             {/* Health */}
             <Link href="/admin/health">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border-l-4 border-pink-500">
+              <div className="bg-slip p-4 sm:p-6 cursor-pointer border-2 border-riso-blue hover:bg-riso-yellow transition-colors">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">❤️</span>
-                  <span className="text-xs font-semibold text-pink-500 bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded-full">
+                  <HeartPulse className="h-8 w-8" aria-hidden="true" />
+                  <span className="t-label text-sm text-riso-blue">
                     Health
                   </span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="t-display nums text-4xl text-ink">
                   {stats.health}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <div className="text-sm text-riso-blue mt-1">
                   Data entries
                 </div>
               </div>
@@ -263,53 +266,53 @@ export default function AdminDashboard() {
           </div>
 
           {/* Recent Activity */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+          <div className="bg-slip border-2 border-riso-blue p-4 sm:p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h2 className="t-title text-2xl text-ink">
                 Recent Activity
               </h2>
               <button
                 onClick={fetchDashboardData}
-                className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                className="t-label text-sm ink-link min-h-[44px] px-2"
               >
                 Refresh
               </button>
             </div>
 
             {recentActivity.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              <div className="text-center py-12 text-riso-blue">
                 <div className="text-5xl mb-4">📭</div>
                 <p>No activity yet. Start creating content!</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="divide-y divide-dashed divide-riso-blue/40">
                 {recentActivity.map((activity) => (
                   <Link key={activity.id} href={activity.link}>
-                    <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer group">
+                    <div className="flex items-start gap-4 p-4 min-h-[44px] hover:bg-riso-yellow transition-colors cursor-pointer group">
                       {/* Icon */}
                       <div
-                        className={`${activity.color} w-12 h-12 rounded-full flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform`}
+                        className={`${activity.color} w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0`}
                       >
-                        {activity.icon}
+                        {(() => { const Icon = TYPE_ICON[activity.type]; return Icon ? <Icon className="h-6 w-6" aria-hidden="true" /> : null })()}
                       </div>
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+                          <span className="t-label text-sm text-riso-blue">
                             {activity.type}
                           </span>
-                          <span className="text-xs text-gray-400 dark:text-gray-500">
+                          <span className="nums text-sm text-riso-blue">
                             {getTimeAgo(activity.createdAt)}
                           </span>
                         </div>
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        <p className="text-sm font-medium text-ink truncate group-hover:text-ink transition-colors">
                           {activity.title}
                         </p>
                       </div>
 
                       {/* Arrow */}
-                      <div className="text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transform group-hover:translate-x-1 transition-all">
+                      <div className="text-riso-blue/70 group-hover:text-ink">
                         →
                       </div>
                     </div>

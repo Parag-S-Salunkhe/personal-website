@@ -89,7 +89,7 @@
 
   /* Buttons: blue fill, pink on hover; or the outline variant */
   .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; padding: 0 1.5rem;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; padding: 0 1.5rem; white-space: nowrap; flex-shrink: 0;
     font-family: var(--font-anybody), Impact, sans-serif; font-weight: 700; font-variation-settings: 'wdth' 60; font-size: 1.125rem; letter-spacing: 0.01em;
     background: var(--riso-blue); color: var(--paper); border: 2px solid var(--riso-blue);
     transition: transform 200ms var(--ease-zine), background-color 200ms var(--ease-zine), color 200ms var(--ease-zine), border-color 200ms var(--ease-zine);

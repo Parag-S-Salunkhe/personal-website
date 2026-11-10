@@ -177,13 +177,13 @@ export default function BlogAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0F0F14] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div>
+      <div>
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            📝 Blog Management
+          <h1 className="t-display mis text-4xl md:text-5xl mb-2">
+            Blog
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-riso-blue">
             Manage your blog posts and articles
           </p>
         </div>
@@ -194,14 +194,11 @@ export default function BlogAdminPage() {
             placeholder="Search blog posts..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg 
-                       bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                       focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="field"
           />
           <button
             onClick={handleAddNew}
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg
-                       transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+            className="btn"
           >
             <span>+</span> Write New Post
           </button>
@@ -210,10 +207,10 @@ export default function BlogAdminPage() {
         <div className="flex gap-3 mb-6 flex-wrap">
           <button
             onClick={() => handleFilter('ALL')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`t-label min-h-[44px] border-2 border-riso-blue px-4 text-lg transition-colors ${
               activeFilter === 'ALL'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                ? 'bg-riso-yellow text-ink'
+                : 'bg-slip text-riso-blue hover:bg-riso-yellow hover:text-ink'
             }`}
           >
             All ({posts.length})
@@ -222,10 +219,10 @@ export default function BlogAdminPage() {
             <button
               key={type}
               onClick={() => handleFilter(type)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`t-label min-h-[44px] border-2 border-riso-blue px-4 text-lg transition-colors ${
                 activeFilter === type
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  ? 'bg-riso-yellow text-ink'
+                  : 'bg-slip text-riso-blue hover:bg-riso-yellow hover:text-ink'
               }`}
             >
               {type} ({posts.filter(p => p.blogType === type).length})
@@ -235,12 +232,12 @@ export default function BlogAdminPage() {
 
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading posts...</p>
+            <div className="animate-spin h-12 w-12 border-b-2 border-riso-blue mx-auto"></div>
+            <p className="mt-4 text-riso-blue">Loading posts...</p>
           </div>
         ) : filteredPosts.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <p className="text-gray-600 dark:text-gray-400 text-lg">
+          <div className="text-center py-12 bg-slip border-2 border-dashed border-riso-blue/40">
+            <p className="text-riso-blue text-lg">
               {searchQuery && activeFilter !== 'ALL' 
                 ? `No ${activeFilter.toLowerCase()} posts found matching "${searchQuery}".` 
                 : searchQuery
@@ -251,63 +248,63 @@ export default function BlogAdminPage() {
             </p>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden">
+          <div className="bg-slip border-2 border-riso-blue overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-800">
+              <table className="min-w-full divide-y divide-dashed divide-riso-blue/40">
+                <thead className="bg-paper border-b-2 border-riso-blue">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-base text-riso-blue t-label">
                       Featured Image
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-base text-riso-blue t-label">
                       Title
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-base text-riso-blue t-label">
                       Type
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-base text-riso-blue t-label">
                       Publish Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-base text-riso-blue t-label">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-slip divide-y divide-dashed divide-riso-blue/40">
                   {filteredPosts.map((post) => (
-                    <tr key={post.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                    <tr key={post.id} className="hover:bg-riso-yellow transition-colors">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         {post.imageUrl ? (
-                          <img src={post.imageUrl} alt={post.title} className="w-16 h-16 object-cover rounded" />
+                          <img src={post.imageUrl} alt={post.title} className="w-16 h-16 object-cover" />
                         ) : (
-                          <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900 rounded flex items-center justify-center text-2xl">
+                          <div className="w-16 h-16 bg-paper flex items-center justify-center text-2xl">
                             📝
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white max-w-md truncate">
+                      <td className="px-4 py-4">
+                        <div className="t-label text-base text-ink max-w-md truncate">
                           {post.title}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <span className="border border-riso-blue px-2 py-0.5 text-sm text-riso-blue">
                           {post.blogType || 'Other'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-riso-blue">
                         {new Date(post.publishDate).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-4 py-4 whitespace-nowrap text-sm">
                         <button
                           onClick={() => handleEdit(post)}
-                          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-4"
+                          className="inline-flex min-h-[44px] items-center px-3 mr-2 t-label text-lg text-riso-blue hover:bg-riso-yellow hover:text-ink"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(post.id, post.title)}
-                          className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                          className="inline-flex min-h-[44px] items-center px-3 t-label text-lg border-2 border-riso-red text-riso-red hover:bg-riso-red hover:text-paper"
                         >
                           Delete
                         </button>
@@ -321,16 +318,16 @@ export default function BlogAdminPage() {
         )}
 
         {isFormOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-ink/40 flex items-center justify-center z-50 p-4">
+            <div className="bg-slip border-2 border-riso-blue max-w-3xl w-full max-h-[90dvh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="t-title text-2xl text-ink">
                     {editingPost ? 'Edit Post' : 'Write New Post'}
                   </h2>
                   <button
                     onClick={() => setIsFormOpen(false)}
-                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-2xl text-riso-blue hover:bg-riso-yellow hover:text-ink"
                   >
                     ✕
                   </button>
@@ -338,7 +335,7 @@ export default function BlogAdminPage() {
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Title *
                     </label>
                     <input
@@ -346,15 +343,13 @@ export default function BlogAdminPage() {
                       required
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="field"
                       placeholder="Enter post title"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Content *
                     </label>
                     <textarea
@@ -362,23 +357,19 @@ export default function BlogAdminPage() {
                       value={formData.content}
                       onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                       rows={12}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="field"
                       placeholder="Write your blog post content here..."
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Blog Type *
                     </label>
                     <select
                       value={formData.blogType}
                       onChange={(e) => setFormData({ ...formData, blogType: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="field"
                     >
                       <option value="Tutorial">Tutorial</option>
                       <option value="Personal">Personal</option>
@@ -390,23 +381,21 @@ export default function BlogAdminPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Featured Image URL (optional)
                     </label>
                     <input
                       type="text"
                       value={formData.imageUrl}
                       onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="field"
                       placeholder="https://example.com/image.jpg"
                     />
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Right-click on any image → Copy Image Address</p>
+                    <p className="mt-1 text-sm text-riso-blue">Right-click on any image → Copy Image Address</p>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Publish Date *
                     </label>
                     <input
@@ -414,25 +403,22 @@ export default function BlogAdminPage() {
                       required
                       value={formData.publishDate}
                       onChange={(e) => setFormData({ ...formData, publishDate: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="field"
                     />
                   </div>
                   
                   <div className="flex gap-3 pt-4">
                     <button
                       type="submit"
-                      className="flex-1 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg
-                                 transition-colors"
+                      className="btn flex-1"
                     >
                       {editingPost ? 'Update Post' : 'Publish Post'}
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsFormOpen(false)}
-                      className="px-6 py-3 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300
-                                 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                      className="px-6 py-3 border border-riso-blue text-ink
+                                 hover:bg-riso-yellow transition-colors"
                     >
                       Cancel
                     </button>

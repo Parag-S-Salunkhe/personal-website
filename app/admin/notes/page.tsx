@@ -166,13 +166,13 @@ export default function NotesAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0F0F14] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div>
+      <div>
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            📔 Notes Management
+          <h1 className="t-display mis text-4xl md:text-5xl mb-2">
+            Notes
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-riso-blue">
             Manage your personal notes and ideas
           </p>
         </div>
@@ -183,14 +183,11 @@ export default function NotesAdminPage() {
             placeholder="Search notes..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg 
-                       bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                       focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="field"
           />
           <button
             onClick={handleAddNew}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg
-                       transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+            className="btn"
           >
             <span>+</span> Quick Add Note
           </button>
@@ -199,10 +196,10 @@ export default function NotesAdminPage() {
         <div className="flex gap-3 mb-6 flex-wrap">
           <button
             onClick={() => handleFilter('ALL')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`t-label min-h-[44px] border-2 border-riso-blue px-4 text-lg transition-colors ${
               activeFilter === 'ALL'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                ? 'bg-riso-yellow text-ink'
+                : 'bg-slip text-riso-blue hover:bg-riso-yellow hover:text-ink'
             }`}
           >
             All ({notes.length})
@@ -211,10 +208,10 @@ export default function NotesAdminPage() {
             <button
               key={category}
               onClick={() => handleFilter(category)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`t-label min-h-[44px] border-2 border-riso-blue px-4 text-lg transition-colors ${
                 activeFilter === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  ? 'bg-riso-yellow text-ink'
+                  : 'bg-slip text-riso-blue hover:bg-riso-yellow hover:text-ink'
               }`}
             >
               {category} ({notes.filter(n => n.category === category).length})
@@ -224,12 +221,12 @@ export default function NotesAdminPage() {
 
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading notes...</p>
+            <div className="animate-spin h-12 w-12 border-b-2 border-riso-blue mx-auto"></div>
+            <p className="mt-4 text-riso-blue">Loading notes...</p>
           </div>
         ) : filteredNotes.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <p className="text-gray-600 dark:text-gray-400 text-lg">
+          <div className="text-center py-12 bg-slip border-2 border-dashed border-riso-blue/40">
+            <p className="text-riso-blue text-lg">
               {searchQuery && activeFilter !== 'ALL' 
                 ? `No ${activeFilter.toLowerCase()} notes found matching "${searchQuery}".` 
                 : searchQuery
@@ -244,35 +241,35 @@ export default function NotesAdminPage() {
             {filteredNotes.map((note) => (
               <div
                 key={note.id}
-                className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-5 hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700"
+                className="bg-slip p-5 border-2 border-riso-blue"
               >
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-1">
+                  <h3 className="t-title text-lg text-ink line-clamp-1">
                     {note.title}
                   </h3>
-                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 whitespace-nowrap ml-2">
+                  <span className="border border-riso-blue px-2 py-0.5 text-sm text-riso-blue whitespace-nowrap ml-2">
                     {note.category || 'Other'}
                   </span>
                 </div>
                 
-                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4">
+                <p className="text-sm text-riso-blue line-clamp-3 mb-4">
                   {note.content}
                 </p>
                 
-                <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
-                  <span className="text-xs text-gray-500 dark:text-gray-500">
+                <div className="flex justify-between items-center pt-3 border-t border-riso-blue">
+                  <span className="text-sm text-riso-blue">
                     {new Date(note.createdAt).toLocaleDateString()}
                   </span>
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleEdit(note)}
-                      className="text-sm text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+                      className="inline-flex min-h-[44px] items-center px-3 t-label text-lg text-riso-blue hover:bg-riso-yellow hover:text-ink"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(note.id, note.title)}
-                      className="text-sm text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-medium"
+                      className="inline-flex min-h-[44px] items-center px-3 t-label text-lg border-2 border-riso-red text-riso-red hover:bg-riso-red hover:text-paper"
                     >
                       Delete
                     </button>
@@ -284,16 +281,16 @@ export default function NotesAdminPage() {
         )}
 
         {isFormOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-ink/40 flex items-center justify-center z-50 p-4">
+            <div className="bg-slip border-2 border-riso-blue max-w-2xl w-full max-h-[90dvh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="t-title text-2xl text-ink">
                     {editingNote ? 'Edit Note' : 'Add New Note'}
                   </h2>
                   <button
                     onClick={() => setIsFormOpen(false)}
-                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl"
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-2xl text-riso-blue hover:bg-riso-yellow hover:text-ink"
                   >
                     ✕
                   </button>
@@ -301,7 +298,7 @@ export default function NotesAdminPage() {
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Title *
                     </label>
                     <input
@@ -309,15 +306,13 @@ export default function NotesAdminPage() {
                       required
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="field"
                       placeholder="Note title"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Content *
                     </label>
                     <textarea
@@ -325,23 +320,19 @@ export default function NotesAdminPage() {
                       value={formData.content}
                       onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                       rows={8}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="field"
                       placeholder="Write your note here..."
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block t-label text-base text-ink mb-1">
                       Category
                     </label>
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg
-                                 bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                                 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="field"
                     >
                       <option value="Work">Work</option>
                       <option value="Personal">Personal</option>
@@ -354,16 +345,15 @@ export default function NotesAdminPage() {
                   <div className="flex gap-3 pt-4">
                     <button
                       type="submit"
-                      className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg
-                                 transition-colors"
+                      className="btn flex-1"
                     >
                       {editingNote ? 'Update Note' : 'Save Note'}
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsFormOpen(false)}
-                      className="px-6 py-3 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300
-                                 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                      className="px-6 py-3 border border-riso-blue text-ink
+                                 hover:bg-riso-yellow transition-colors"
                     >
                       Cancel
                     </button>

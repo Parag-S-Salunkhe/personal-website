@@ -1,7 +1,6 @@
 // Share images (next/og) in the House Zine look: paper, blue ink with a pink misregistration
 // layer, a halftone corner and a strip of tape. Fonts are static TTFs read from assets/og.
 import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
 
 export const ogSize = { width: 1200, height: 630 }
@@ -9,12 +8,13 @@ export const ogContentType = 'image/png'
 
 const C = { paper: '#F1F1EC', slip: '#FAFAF7', blue: '#2F4FA2', pink: '#FF4FA3', yellow: '#FFE14A', ink: '#1B2350' }
 
+// Static file URLs (not process.cwd()) so the bundler tracks exactly these three files.
+// A cwd-relative read made Turbopack watch the whole project and reload pages on every log write.
 async function fonts() {
-  const dir = join(process.cwd(), 'assets/og')
   const [display, label, hand] = await Promise.all([
-    readFile(join(dir, 'Anybody-ExpandedBlack.ttf')),
-    readFile(join(dir, 'Anybody-CondensedBold.ttf')),
-    readFile(join(dir, 'ReenieBeanie-Regular.ttf')),
+    readFile(new URL('../assets/og/Anybody-ExpandedBlack.ttf', import.meta.url)),
+    readFile(new URL('../assets/og/Anybody-CondensedBold.ttf', import.meta.url)),
+    readFile(new URL('../assets/og/ReenieBeanie-Regular.ttf', import.meta.url)),
   ])
   return [
     { name: 'Display', data: display, weight: 900 as const, style: 'normal' as const },

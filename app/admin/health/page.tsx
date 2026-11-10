@@ -153,14 +153,14 @@ export default function HealthAdmin() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Health Data</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Track your daily fitness metrics</p>
+          <h1 className="t-display mis text-4xl md:text-5xl mb-2">Health data</h1>
+          <p className="text-riso-blue mt-1">Track your daily fitness metrics</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+          className="btn"
         >
           <Plus className="w-5 h-5" />
           Add Entry
@@ -168,25 +168,25 @@ export default function HealthAdmin() {
       </div>
 
       {/* Google Fit Integration Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
+      <div className="bg-slip p-6 border-2 border-riso-blue">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              🏃‍♂️ Google Fit Integration
+            <h2 className="t-title text-2xl text-ink mb-2">
+              Google Fit integration
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+            <p className="text-riso-blue text-sm">
               Automatically sync your daily steps and calories from Google Fit
             </p>
           </div>
 
           {isGoogleFitConnected ? (
             <div className="flex items-center gap-2">
-              <span className="text-green-600 dark:text-green-400 text-sm font-medium">
+              <span className="text-riso-blue text-sm font-medium">
                 ✓ Connected
               </span>
             </div>
           ) : (
-            <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+            <span className="text-riso-blue text-sm font-medium">
               Not connected
             </span>
           )}
@@ -198,7 +198,7 @@ export default function HealthAdmin() {
               <button
                 onClick={syncGoogleFit}
                 disabled={isSyncing}
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="btn"
               >
                 {isSyncing ? (
                   <>
@@ -207,7 +207,7 @@ export default function HealthAdmin() {
                   </>
                 ) : (
                   <>
-                    🔄 Sync Now
+                    Sync now
                   </>
                 )}
               </button>
@@ -220,7 +220,7 @@ export default function HealthAdmin() {
                     alert('✅ Disconnected from Google Fit')
                   }
                 }}
-                className="px-6 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors"
+                className="btn btn-line"
               >
                 Disconnect
               </button>
@@ -228,17 +228,17 @@ export default function HealthAdmin() {
           ) : (
             <button
               onClick={connectGoogleFit}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+              className="btn"
             >
-              🔗 Connect Google Fit
+              Connect Google Fit
             </button>
           )}
         </div>
 
         {isGoogleFitConnected && (
-          <div className="mt-4 p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
-              💡 <strong>Tip:</strong> Click &quot;Sync Now&quot; to fetch today&apos;s data from Google Fit and automatically save it to your dashboard.
+          <div className="mt-4 p-4 border border-dashed border-riso-blue/40">
+            <p className="text-sm text-riso-blue">
+              <strong>Tip:</strong> Click &quot;Sync Now&quot; to fetch today&apos;s data from Google Fit and automatically save it to your dashboard.
             </p>
           </div>
         )}
@@ -251,13 +251,13 @@ export default function HealthAdmin() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-800"
+            className="bg-slip p-6 border-2 border-riso-blue"
           >
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Add Health Entry</h2>
+            <h2 className="t-title text-xl text-ink mb-4">Add Health Entry</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block t-label text-base text-ink mb-2">
                   Date *
                 </label>
                 <input
@@ -265,24 +265,24 @@ export default function HealthAdmin() {
                   required
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="field"
                 />
               </div>
 
               {/* Steps */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block t-label text-base text-ink mb-2">
                   Steps *
                 </label>
                 <div className="relative">
-                  <Activity className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Activity className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-riso-blue/70" />
                   <input
                     type="number"
                     required
                     min="0"
                     value={formData.steps}
                     onChange={(e) => setFormData({ ...formData, steps: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="field pl-10 pr-4"
                     placeholder="e.g., 10000"
                   />
                 </div>
@@ -290,18 +290,18 @@ export default function HealthAdmin() {
 
               {/* Calories */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block t-label text-base text-ink mb-2">
                   Calories Burned *
                 </label>
                 <div className="relative">
-                  <Flame className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Flame className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-riso-blue/70" />
                   <input
                     type="number"
                     required
                     min="0"
                     value={formData.calories}
                     onChange={(e) => setFormData({ ...formData, calories: e.target.value })}
-                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="field pl-10 pr-4"
                     placeholder="e.g., 500"
                   />
                 </div>
@@ -309,7 +309,7 @@ export default function HealthAdmin() {
 
               {/* Error */}
               {error && (
-                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-700 dark:text-red-300 text-sm">
+                <div className="p-3 bg-slip border border-riso-red text-riso-red text-sm">
                   {error}
                 </div>
               )}
@@ -319,14 +319,14 @@ export default function HealthAdmin() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                  className="btn flex-1"
                 >
                   {submitting ? 'Adding...' : 'Add Entry'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
+                  className="btn btn-line"
                 >
                   Cancel
                 </button>
@@ -338,10 +338,10 @@ export default function HealthAdmin() {
 
       {/* Entries List */}
       {loading ? (
-        <div className="text-center py-12 text-gray-600 dark:text-gray-400">Loading...</div>
+        <div className="text-center py-12 text-riso-blue">Loading...</div>
       ) : entries.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-          <p className="text-gray-600 dark:text-gray-400">No health data yet. Add your first entry!</p>
+        <div className="text-center py-12 bg-slip border border-riso-blue">
+          <p className="text-riso-blue">No health data yet. Add your first entry!</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -350,14 +350,14 @@ export default function HealthAdmin() {
               key={entry.id}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 hover:border-purple-500 dark:hover:border-purple-500 transition-all"
+              className="bg-slip p-4 border-2 border-riso-blue hover:border-riso-pink"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-6">
+                <div className="flex flex-wrap items-center gap-3">
                   {/* Date */}
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-gray-400" />
-                    <span className="font-medium text-gray-900 dark:text-white">
+                    <Calendar className="w-5 h-5 text-riso-blue/70" />
+                    <span className="font-medium text-ink">
                       {new Date(entry.date).toLocaleDateString('en-US', {
                         weekday: 'short',
                         month: 'short',
@@ -367,17 +367,17 @@ export default function HealthAdmin() {
                   </div>
 
                   {/* Steps */}
-                  <div className="flex items-center gap-2 px-3 py-1 bg-blue-500/10 rounded-lg">
-                    <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                  <div className="flex items-center gap-2 border border-riso-blue px-3 py-1">
+                    <Activity className="w-4 h-4 text-riso-blue" />
+                    <span className="text-sm font-medium text-riso-blue">
                       {entry.steps.toLocaleString()} steps
                     </span>
                   </div>
 
                   {/* Calories */}
-                  <div className="flex items-center gap-2 px-3 py-1 bg-orange-500/10 rounded-lg">
-                    <Flame className="w-4 h-4 text-orange-600 dark:text-orange-400" />
-                    <span className="text-sm font-medium text-orange-700 dark:text-orange-300">
+                  <div className="flex items-center gap-2 border border-riso-blue px-3 py-1">
+                    <Flame className="w-4 h-4 text-riso-blue" />
+                    <span className="text-sm font-medium text-riso-blue">
                       {entry.calories} cal
                     </span>
                   </div>
@@ -386,7 +386,7 @@ export default function HealthAdmin() {
                 {/* Delete Button */}
                 <button
                   onClick={() => handleDelete(entry.id)}
-                  className="p-2 text-red-600 hover:bg-red-500/10 rounded-lg transition-colors"
+                  className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center border-2 border-riso-red text-riso-red hover:bg-riso-red hover:text-paper transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

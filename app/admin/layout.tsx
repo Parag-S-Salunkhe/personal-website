@@ -21,7 +21,7 @@ const adminLinks = [
   { href: '/admin/blog', label: 'Blog', icon: BookOpen },
   { href: '/admin/projects', label: 'Projects', icon: Code },
   { href: '/admin/notes', label: 'Notes', icon: StickyNote },
-  { href: '/admin/health', label: 'Health Data', icon: Activity },
+  { href: '/admin/health', label: 'Health data', icon: Activity },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -36,63 +36,75 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }
 
+  const linkClass = (isActive: boolean) =>
+    `t-label flex min-h-[44px] shrink-0 items-center gap-2 px-3 text-lg whitespace-nowrap transition-colors ${
+      isActive
+        ? 'bg-riso-yellow text-ink underline decoration-riso-pink decoration-[3px] underline-offset-[6px]'
+        : 'text-riso-blue hover:bg-riso-yellow hover:text-ink'
+    }`
+
+  const logoutClass =
+    't-label flex min-h-[44px] shrink-0 items-center gap-2 border-2 border-riso-red px-3 text-lg text-riso-red transition-colors hover:bg-riso-red hover:text-paper'
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0F0F14] flex">
-      {/* Sidebar */}
-      <aside className="w-60 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 sticky top-0 h-screen flex flex-col">
-        {/* Logo */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-800">
-          <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
-            Admin Panel
-          </h1>
+    <div className="zine flex min-h-[100dvh] flex-col md:flex-row">
+      {/* Top bar (mobile) and sidebar (md and up) */}
+      <aside className="flex flex-col border-b-2 border-riso-blue bg-slip md:sticky md:top-0 md:h-[100dvh] md:w-60 md:shrink-0 md:border-b-0 md:border-r-2">
+        {/* Title */}
+        <div className="flex items-center justify-between gap-3 px-4 pt-3 md:block md:border-b-2 md:border-riso-blue md:p-6">
+          <p className="t-title whitespace-nowrap text-xl text-riso-blue md:text-2xl">Office copy</p>
+          <div className="flex items-center gap-2 md:hidden">
+            <Link href="/" className={linkClass(false)}>
+              <ArrowLeft className="h-4 w-4" />
+              <span>View site</span>
+            </Link>
+            <button onClick={handleLogout} className={logoutClass}>
+              <LogOut className="h-4 w-4" />
+              <span>Log out</span>
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-1">
+        <nav
+          aria-label="Admin"
+          className="scroller flex gap-1 overflow-x-auto p-2 md:flex-1 md:flex-col md:overflow-visible md:p-4"
+        >
           {adminLinks.map((link) => {
             const Icon = link.icon
             const isActive = pathname === link.href
-            
+
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 font-medium'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                aria-current={isActive ? 'page' : undefined}
+                className={linkClass(isActive)}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="h-5 w-5" />
                 <span>{link.label}</span>
               </Link>
             )
           })}
         </nav>
 
-        {/* Back to Site & Logout */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
-          <Link
-            href="/"
-            className="flex items-center gap-2 px-4 py-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>View Site</span>
+        {/* Back to site and log out (md and up) */}
+        <div className="hidden space-y-2 border-t-2 border-riso-blue p-4 md:block">
+          <Link href="/" className={linkClass(false)}>
+            <ArrowLeft className="h-4 w-4" />
+            <span>View site</span>
           </Link>
-          
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 transition-all font-medium"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Logout</span>
+
+          <button onClick={handleLogout} className={`${logoutClass} w-full`}>
+            <LogOut className="h-4 w-4" />
+            <span>Log out</span>
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="max-w-7xl mx-auto p-8">
+      {/* Main content */}
+      <main className="min-w-0 flex-1">
+        <div className="mx-auto max-w-7xl p-4 sm:p-6 md:p-8">
           {children}
         </div>
       </main>
