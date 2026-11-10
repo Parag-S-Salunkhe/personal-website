@@ -38,10 +38,13 @@ const nextConfig = {
     const noindex = [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }]
     return [
       { source: '/:path*', headers: securityHeaders },
-      // Private pages stay out of search even if a link to them leaks.
+      // Private and prototype pages stay out of search even if a link to them leaks.
       { source: '/admin/:path*', headers: noindex },
       { source: '/admin', headers: noindex },
       { source: '/login', headers: noindex },
+      // Motion lab (redesign/v3). Run 2 removes these with the lab.
+      { source: '/lab/:path*', headers: noindex },
+      { source: '/lab', headers: noindex },
     ]
   },
   images: {

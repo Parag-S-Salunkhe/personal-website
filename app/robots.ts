@@ -6,7 +6,7 @@ import { siteUrl } from '@/lib/site'
 // is Parag's call; everything is allowed until he decides.
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: '*', allow: '/', disallow: ['/admin', '/login', '/api/'] }],
+    rules: [{ userAgent: '*', allow: '/', disallow: ['/admin', '/login', '/lab', '/api/'] }],
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,
   }
