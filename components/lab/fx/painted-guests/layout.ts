@@ -37,8 +37,8 @@ export function layoutFor(tier: Tier): Layout {
 
 // Scroll story (progress 0..1)
 export const STORY = {
-  candle: [0.0, 0.1, 0.22],
-  course: [0.17, 0.31, 0.45, 0.59, 0.73],
+  candle: [0.0, 0.05, 0.12],
+  course: [0.1, 0.25, 0.4, 0.55, 0.72],
   courseLen: 0.07,
   leanFrom: 0.72,
   leanTo: 0.88,

@@ -439,7 +439,8 @@ export function paintTable(p: Pen, guests: number[], tier: 'full' | 'light', x0:
   // floor
   strip(drop, 960, '#2B1A14')
   for (let i = 0; i < 6; i++) p.line([[x0 - 20, drop + 14 + i * 16], [x1 + 20, drop + 12 + i * 16 + (i % 2) * 3]], '#150C09', 1.4, 'charcoal')
-  p.wc([[x0 - 20, drop - 4], [x1 + 20, drop - 4], [x1 + 20, drop + 26], [x0 - 20, drop + 26]], '#0A0605', 150, 0.3)
+  // chunked: p5.brush's bleeding fill mis-renders one ~1600x30 polygon as a huge pale tent
+  for (let xx = x0 - 20; xx < x1 + 20; xx += 160) p.wc([[xx, drop - 4], [xx + 162, drop - 4], [xx + 162, drop + 26], [xx, drop + 26]], '#0A0605', 150, 0.3)
   // place settings
   for (const gi of guests) {
     const x = GUEST_X[gi]

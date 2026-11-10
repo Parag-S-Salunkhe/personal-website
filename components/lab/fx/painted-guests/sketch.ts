@@ -182,6 +182,13 @@ export async function createSketch(host: HTMLElement, o: SketchOpts): Promise<Sk
         rot += st.lookX * 0.09
         hdx += st.lookX * 3
       } else if (gi === 4) { lookX = 0.2 }
+      // opening beat: everyone turns to the first candle as the scroll starts, then drifts back to chatting
+      if (!stillMode && gi !== 4) {
+        const turn = smooth(0, 0.06, p) * (1 - smooth(0.12, 0.22, p))
+        const dir = Math.sign(lay.candles[0].x - s.x) || 1
+        lookX = lookX * (1 - turn) + dir * 0.9 * turn
+        rot += dir * 0.07 * turn
+      }
       look = Math.max(-1, Math.min(1, Math.round(lookX * 1.4)))
       if (eyes === 'eo0') eyes = `eo${look}`
       // glass guest
@@ -255,6 +262,7 @@ export async function createSketch(host: HTMLElement, o: SketchOpts): Promise<Sk
         it.paint(new Pen(B, rng(queue.length * 7919 + 13)), atlas)
         atlas.pop()
       }
+      new Pen(B, rng(1)).flush()
       B.load()
       paintMs += performance.now() - t0
     }
@@ -274,6 +282,7 @@ export async function createSketch(host: HTMLElement, o: SketchOpts): Promise<Sk
       p.randomSeed(12)
       paintTable(new Pen(B, rng(777)), lay.guests, o.tier, crop.x, crop.x + crop.w)
       scene.pop()
+      pen.flush()
       B.load()
       paintMs += performance.now() - t0
     }

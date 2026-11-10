@@ -96,5 +96,14 @@ export class Pen {
     if (pts.length === 2) B.line(pts[0][0], pts[0][1], pts[1][0], pts[1][1])
     else B.spline(pts, curv)
   }
+  /** Force p5.brush to composite its pending mask into the CURRENT target (it defers until the next colour change
+   *  or the p5 post-draw hook, by which time B.load() has already pointed it at another canvas). */
+  flush() {
+    const B = this.B
+    B.noFill(); B.noStroke()
+    B.wash('#010203', 0)
+    B.polygon([[0, 0], [1, 0], [0, 1]])
+    B.noWash()
+  }
   poly(pts: Pt[], col: string, op = 255) { this.shape(pts, col, { ink: null, op, sm: false }) }
 }
