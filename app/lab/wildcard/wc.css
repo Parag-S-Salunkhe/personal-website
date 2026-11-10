@@ -1,0 +1,49 @@
+.wc-root { background: #1F4E4A; color: #F4EBDD; font-family: var(--wc-sans), system-ui, sans-serif; --brick: #B5533C; --lamp: #F3C969; --plum: #6E2340; --mint: #9CC3B0; --plate: #F4EBDD; --ink: #2A1E1A; }
+.wc-root a { color: inherit; }
+.wc-root :focus-visible { outline: 3px solid var(--lamp); outline-offset: 3px; }
+.wc-wrap { height: 800vh; position: relative; }
+.wc-stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: #27495a; }
+.wc-static { position: absolute; inset: 0; background: linear-gradient(#27495a, #6c7088 55%, #f0a566); display: grid; place-items: center; }
+.wc-static i { display: block; width: 26vmin; height: 26vmin; background: var(--lamp); border: 2.2vmin solid var(--plate); box-shadow: 0 0 0 4vmin var(--brick), 0 0 12vmin var(--lamp); }
+.wc-scene { position: absolute; inset: 0; }
+.wc-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.wc-intro { position: absolute; left: clamp(20px, 4vw, 64px); top: clamp(56px, 9vh, 96px); max-width: 27rem; pointer-events: none; background: var(--plate); color: var(--ink); padding: 1rem 1.3rem 1.2rem; border-radius: 6px; border-left: 7px solid var(--brick); box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+.wc-intro h1 { font-family: var(--wc-display), sans-serif; font-weight: 800; font-size: clamp(2.2rem, 5.4vw, 3.8rem); line-height: .92; margin: 0; letter-spacing: -.02em; }
+.wc-intro p { margin: .6rem 0 0; font-size: 1.02rem; line-height: 1.38; }
+.wc-hint { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); margin: 0; font-size: .95rem; background: var(--plate); color: var(--ink); padding: .3rem .9rem; border-radius: 99px; pointer-events: none; }
+.wc-caps { position: absolute; left: clamp(16px, 4vw, 64px); bottom: clamp(18px, 5vh, 56px); width: min(25rem, calc(100% - 32px)); height: 8rem; pointer-events: none; }
+.wc-cap { position: absolute; left: 0; bottom: 0; right: 0; background: var(--plate); color: var(--ink); padding: .8rem 1.1rem 1rem; border-radius: 6px; border-left: 7px solid var(--plum); box-shadow: 0 10px 36px rgba(0,0,0,.4); opacity: 0; }
+.wc-cap-h { font-family: var(--wc-display), sans-serif; font-weight: 800; font-size: clamp(1.5rem, 3.2vw, 2.2rem); line-height: 1.02; margin: 0; letter-spacing: -.015em; overflow: hidden; padding-bottom: .08em; }
+.wc-cap-h span { display: inline-block; white-space: pre; will-change: transform, opacity; }
+.wc-cap-p { margin: .3rem 0 0; font-size: 1rem; color: #4a3a33; }
+.wc-count { position: absolute; right: clamp(12px, 3vw, 40px); top: clamp(12px, 3vh, 32px); z-index: 5; margin: 0; background: var(--ink); color: var(--lamp); font-family: var(--wc-display), sans-serif; font-weight: 700; font-size: 1.05rem; padding: .3rem .8rem; border-radius: 99px; pointer-events: none; font-variant-numeric: tabular-nums; }
+.wc-count b { display: inline-block; min-width: 1ch; }
+.wc-door { position: absolute; right: clamp(16px, 5vw, 80px); bottom: clamp(24px, 8vh, 90px); width: min(23rem, calc(100% - 32px)); background: var(--plate); color: var(--ink); padding: 1.1rem 1.3rem 1.3rem; border-radius: 8px; border-bottom: 8px solid var(--brick); box-shadow: 0 0 80px rgba(243,201,105,.55), 0 14px 40px rgba(0,0,0,.4); opacity: 0; pointer-events: none; transform: translateY(24px) scale(.96); transform-origin: 50% 100%; }
+.wc-door h2 { font-family: var(--wc-display), sans-serif; font-weight: 800; font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: .98; margin: 0; letter-spacing: -.02em; }
+.wc-door p { margin: .5rem 0 .9rem; font-size: 1rem; line-height: 1.35; }
+.wc-door a { display: inline-block; background: var(--plum); color: var(--plate); padding: .6rem 1.1rem; border-radius: 99px; font-weight: 700; text-decoration: none; }
+.wc-door a:hover { background: #8a2f52; }
+.wc-rm-line, .wc-rm-heads { display: none; }
+.wc-after { max-width: 66rem; margin: 0 auto; padding: clamp(56px, 9vw, 110px) clamp(20px, 5vw, 64px) clamp(56px, 8vw, 100px); display: grid; gap: clamp(48px, 7vw, 88px); }
+.wc-after h2, .wc-h2 { font-family: var(--wc-display), sans-serif; font-weight: 800; font-size: clamp(2.2rem, 5.5vw, 3.8rem); line-height: .95; margin: 0 0 1.2rem; color: var(--lamp); letter-spacing: -.02em; }
+.wc-lede { margin: -.6rem 0 1.4rem; max-width: 36rem; color: #d7e4dc; font-size: 1.05rem; }
+.wc-list { list-style: none; margin: 0; padding: 0; }
+.wc-list li { display: grid; grid-template-columns: 1fr auto; gap: .15rem 1rem; padding: .85rem 0; border-top: 1px solid rgba(244,235,221,.25); }
+.wc-list b { font-family: var(--wc-display), sans-serif; font-weight: 700; font-size: 1.4rem; line-height: 1.1; }
+.wc-list span { color: #d7e4dc; text-align: right; font-variant-numeric: tabular-nums; }
+.wc-list em { grid-column: 1 / -1; font-style: normal; color: #b9cfc4; font-size: .95rem; }
+.wc-films { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.2rem; }
+.wc-films img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px; box-shadow: 0 6px 22px rgba(0,0,0,.45); background: var(--plum); display: block; }
+.wc-films p { margin: .5rem 0 0; font-size: .98rem; line-height: 1.25; }
+.wc-films small { display: block; color: #d7e4dc; margin-top: .15rem; }
+.wc-links { display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; font-weight: 600; }
+.wc-links a { color: var(--lamp); }
+@media (max-width: 767px) { .wc-intro { top: 52px; right: 16px; } .wc-caps { height: 7.4rem; } .wc-door { left: 16px; right: 16px; width: auto; bottom: 20px; } }
+@media (prefers-reduced-motion: reduce) {
+  .wc-wrap { height: 100dvh; }
+  .wc-hint, .wc-count, .wc-caps, .wc-door { display: none; }
+  .wc-rm-line { display: block; position: absolute; left: clamp(16px, 4vw, 64px); bottom: clamp(18px, 5vh, 48px); margin: 0; max-width: 24rem; background: var(--plate); color: var(--ink); padding: .7rem 1rem; border-radius: 6px; }
+  .wc-rm-heads { display: grid; gap: 1.2rem; max-width: 66rem; margin: 0 auto; padding: 48px clamp(20px, 5vw, 64px) 0; }
+  .wc-rm-heads h2 { font-family: var(--wc-display), sans-serif; font-weight: 800; font-size: 1.8rem; margin: 0; color: var(--lamp); }
+  .wc-rm-heads p { margin: .2rem 0 0; }
+}

@@ -1,0 +1,9 @@
+# Late Show, all out (/lab/late-show, /lab/late-show/film/[id])
+Palette: velvet #2B0B14, curtain #6B1A2B, brass #D8A84E, beam #FFF3D6, tungsten #FF9F43, seat #1F5C5A (+ programme-paper cream in the lit house). Type: Big Shoulders Display 800-900 + Instrument Sans.
+Signature: chasing-bulb marquee + split-flap board flip to tonight's real film, then the pleated velvet curtain parts (overshoot and settle), then the WebGL projector beam with posters cutting in on countdown leaders.
+Beats and moves: street (CSS bulb chase, neon flicker, split-flap GSAP), curtain (scrubbed scaleX back.out + skew sway + valance lift), feature (the one R3F Canvas, scrubbed dolly, leader cuts), intermission (letter tiles bounce.out stagger, GSAP popcorn burst, SVG steam), house lights (scrubbed colour flood + flash), programme leaflets / torn tickets / visitors' book stub (/#guest-note, no POST), Now showing wall (cursor torch dim + glare, drifting beam on touch).
+Reused by copy: deco-marquee (look, simplified to DOM), curtain (DOM drapes, not WebGL), projector-beam (Scene/Room/shaders), kinetic-type (FlapBoard), spotlight-wall (torch idea), poster-to-page (remembered rect), particle-name (popcorn, as DOM kernels).
+Film page: GSAP grow from remembered thumbnail rect (sessionStorage) or scale from centre, brass frame under a CSS beam, SVG ticket stub with rating punched via mask holes, still programme-notes column, iris-out (box-shadow circle) back to #wall, iris opens on the wall.
+Mobile: stacked marquee, compact board, narrower drapes, 2-col wall, canvas tier 'light'. Reduced motion: curtain open, bulbs steady, static composed frames, no scrub.
+Perf (scratch): home 59 fps avg 1440 / 60 at 390; inner 57 / 60; no console errors.
+Slop avoided: no eyebrow caps outside in-world signage, no gradient text, no glass, four-note palette.

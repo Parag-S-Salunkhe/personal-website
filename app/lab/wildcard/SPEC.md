@@ -1,0 +1,11 @@
+# D. Further in (/lab/wildcard, /lab/wildcard/movies)
+- Palette: brick #B5533C, dusk-teal #1F4E4A, lamplight #F3C969, plum #6E2340, mint #9CC3B0, plate #F4EBDD (objects only), ink #2A1E1A. Type: Bricolage Grotesque (opsz) + Figtree via next/font.
+- Signature: infinite zoom (canvas 2D, 5 nested painted levels). After the film frame the zoom exits onto the same street at night, every window lit, door ajar; "deeper: N" counter ticks at z=5; the guestbook card (link /#guest-note, no POST) fades in.
+- Real content drawn in: notes pinned on the wall, post titles on envelopes, dishes as drawn plates with name cards, latest dish set around the plate (name, category, rating, ingredients), poster strip (labImg) sliding past the film frame with title/rating/date.
+- Moves: scroll-scrubbed zoom, motion-blur ghost + radial streaks on speed, per-level kinetic captions (letters drop, slide-skew, scale punch, mask rise, split-flap, typewriter), counter back-ease pop, door card scale-in, candle/lamp flicker.
+- Exit: Movies, Cooking, Writing, Notes, Guestbook as readable lists; links to the reel.
+- Inner "The reel": canvas Droste of real posters on a vertical film strip (sprocket holes scroll), each poster holds the next; card with title, rating, date, review excerpt; back link to the street.
+- Reused: infinite-zoom (copied, repainted), kinetic-type letter moves.
+- Mobile: portrait layouts per level (fewer notes/plates, strip above portal, vertical-friendly), DPR 1.5, streaks/ghost off. Reduced motion: static composition at z=0.3, captions as headings, lists.
+- Perf: 60 fps avg 1440 and 390, no console errors, no long-task issues.
+- Slop avoided: no riso/halftone, no eyebrow caps, plate cream only on objects, four-note palette not accent on black, not one repeated fade.
