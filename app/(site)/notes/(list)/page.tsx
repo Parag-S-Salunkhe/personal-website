@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getNotes } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import NotesContent from './NotesContent'
+import { JsonLd, collection } from '@/lib/jsonld'
 
 export const revalidate = 3600
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
 export default async function NotesPage() {
   const notes = await getNotes()
   return (
+    <>
+      <JsonLd data={collection('Notes', '/notes', metadata.description as string, notes.map((n) => ({ name: n.title, path: `/notes/${n.slug}` })))} />
     <section aria-labelledby="notes-title" className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 lg:pt-14">
       <div className="mb-8">
         <PrintTitle id="notes-title" lines="Notes" className="text-[clamp(3rem,13vw,6rem)]" />
@@ -22,5 +25,6 @@ export default async function NotesPage() {
       </div>
       <NotesContent notes={notes} />
     </section>
+    </>
   )
 }

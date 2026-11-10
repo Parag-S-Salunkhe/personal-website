@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getPosts } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import BlogContent from './BlogContent'
+import { JsonLd, collection } from '@/lib/jsonld'
 
 export const revalidate = 3600
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
 export default async function BlogPage() {
   const posts = await getPosts()
   return (
+    <>
+      <JsonLd data={collection('Blog', '/blog', metadata.description as string, posts.map((p) => ({ name: p.title, path: `/blog/${p.slug}` })))} />
     <section aria-labelledby="blog-title" className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 lg:pt-14">
       <div className="mb-8">
         <PrintTitle id="blog-title" lines="Blog" className="text-[clamp(3rem,13vw,6rem)]" />
@@ -22,5 +25,6 @@ export default async function BlogPage() {
       </div>
       <BlogContent posts={posts} />
     </section>
+    </>
   )
 }

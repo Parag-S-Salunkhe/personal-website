@@ -11,6 +11,8 @@ import MovieCard from '@/components/zine/MovieCard'
 import DishCard from '@/components/zine/DishCard'
 import PostSpread from '@/components/zine/PostSpread'
 import NoteScrap from '@/components/zine/NoteScrap'
+import { JsonLd, author, person } from '@/lib/jsonld'
+import { siteName, siteUrl } from '@/lib/site'
 
 export const revalidate = 3600
 
@@ -30,6 +32,11 @@ export default async function HomePage() {
   return (
     <>
       <CountVisit />
+      <JsonLd data={{ '@graph': [
+        { '@type': 'WebSite', '@id': `${siteUrl}/#website`, url: `${siteUrl}/`, name: siteName, inLanguage: 'en-IE', publisher: author,
+          description: 'Supper clubs, movie nights and home cooking: what Parag watched, cooked and wrote down.' },
+        person,
+      ] }} />
       <HomeHero guest={guests[0] ?? null} />
 
       <CutLine />

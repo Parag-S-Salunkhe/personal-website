@@ -9,6 +9,7 @@ import { safeHttpUrl } from '@/lib/url'
 import PrintTitle from '@/components/zine/PrintTitle'
 import { CutLine, Staple } from '@/components/zine/Marks'
 import { isVideo } from '@/components/zine/PostSpread'
+import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -49,6 +50,23 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <article aria-labelledby="post-title">
+      <JsonLd data={{ '@graph': [
+        {
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.excerpt,
+          url: abs(`/blog/${post.slug}`),
+          mainEntityOfPage: abs(`/blog/${post.slug}`),
+          datePublished: post.publishDate,
+          dateModified: post.updatedAt,
+          author,
+          publisher: author,
+          image: image || undefined,
+          articleSection: post.blogType || undefined,
+          inLanguage: 'en-IE',
+        },
+        breadcrumbs([['Home', '/'], ['Blog', '/blog'], [post.title, `/blog/${post.slug}`]]),
+      ] }} />
       <header className="relative bg-riso-blue text-paper">
         <div className="halftone absolute inset-0 opacity-50" aria-hidden="true" />
         <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-8 sm:px-6 md:pb-16">

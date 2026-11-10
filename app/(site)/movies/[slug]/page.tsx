@@ -10,6 +10,7 @@ import MovieCard from '@/components/zine/MovieCard'
 import Settle from '@/components/zine/Settle'
 import { NoPoster, Rated, Tape } from '@/components/zine/Marks'
 import { SectionHead } from '@/components/zine/SectionHead'
+import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -20,9 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const movie = await getMovieBySlug((await params).slug)
   if (!movie) return { title: 'Movie not found', robots: { index: false } }
   const kind = movie.type === 'SERIES' ? 'series' : 'film'
-  const description = movie.review
-    ? excerpt(movie.review, 155)
-    : `Parag's notes on the ${kind} ${movie.title}, rated ${fmtRating(movie.rating)} out of 5.`
+  const base = `Parag's take on the ${kind} ${movie.title}, rated ${fmtRating(movie.rating)} out of 5`
+  const description = movie.review.length >= 70 ? excerpt(movie.review, 155) : movie.review ? excerpt(`${base}: "${movie.review.trim()}"`, 155) : `${base}.`
   return {
     title: `${movie.title}: ${kind} review`,
     description,
@@ -42,6 +42,20 @@ export default async function MoviePage({ params }: Props) {
 
   return (
     <article aria-labelledby="movie-title">
+      <JsonLd data={{ '@graph': [
+        {
+          '@type': 'Review',
+          '@id': abs(`/movies/${movie.slug}#review`),
+          url: abs(`/movies/${movie.slug}`),
+          name: `${movie.title}: review`,
+          author,
+          datePublished: movie.watchDate.slice(0, 10),
+          reviewBody: movie.review || undefined,
+          reviewRating: { '@type': 'Rating', ratingValue: movie.rating, bestRating: 5, worstRating: 1 },
+          itemReviewed: { '@type': movie.type === 'SERIES' ? 'TVSeries' : 'Movie', name: movie.title, image: movie.posterUrl || undefined },
+        },
+        breadcrumbs([['Home', '/'], ['Movies', '/movies'], [movie.title, `/movies/${movie.slug}`]]),
+      ] }} />
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <Link href="/movies" className="t-label ink-link inline-flex min-h-[44px] items-center gap-2 text-lg">
           <ArrowLeft className="h-5 w-5" aria-hidden="true" /> All the movies

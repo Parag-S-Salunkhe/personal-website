@@ -11,6 +11,7 @@ import DishCard from '@/components/zine/DishCard'
 import Settle from '@/components/zine/Settle'
 import { Plate, Rated, Tape } from '@/components/zine/Marks'
 import { SectionHead } from '@/components/zine/SectionHead'
+import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -20,9 +21,8 @@ type Props = { params: Promise<{ slug: string }> }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dish = await getDishBySlug((await params).slug)
   if (!dish) return { title: 'Dish not found', robots: { index: false } }
-  const description = dish.review
-    ? excerpt(dish.review, 155)
-    : `${dish.dishName}, a ${dish.category.toLowerCase()} from Parag's kitchen, rated ${fmtRating(dish.rating)} out of 5.`
+  const base = `${dish.dishName}, a ${dish.category.toLowerCase()} from Parag's kitchen, rated ${fmtRating(dish.rating)} out of 5`
+  const description = dish.review.length >= 70 ? excerpt(dish.review, 155) : dish.review ? excerpt(`${base}: "${dish.review.trim()}"`, 155) : `${base}.`
   return {
     title: dish.dishName,
     description,
@@ -45,6 +45,32 @@ export default async function DishPage({ params }: Props) {
 
   return (
     <article aria-labelledby="dish-title">
+      <JsonLd data={{ '@graph': [
+        dish.imageUrl && dish.ingredients.length > 0
+          ? {
+              '@type': 'Recipe',
+              name: dish.dishName,
+              url: abs(`/cooking/${dish.slug}`),
+              image: [dish.imageUrl],
+              recipeIngredient: dish.ingredients,
+              recipeCategory: dish.category,
+              author,
+              datePublished: dish.cookDate.slice(0, 10),
+              description: dish.review ? excerpt(dish.review, 300) : undefined,
+              review: { '@type': 'Review', author, reviewRating: { '@type': 'Rating', ratingValue: dish.rating, bestRating: 5, worstRating: 1 } },
+            }
+          : {
+              '@type': 'Article',
+              headline: dish.dishName,
+              url: abs(`/cooking/${dish.slug}`),
+              mainEntityOfPage: abs(`/cooking/${dish.slug}`),
+              articleSection: 'Cooking',
+              author,
+              datePublished: dish.cookDate.slice(0, 10),
+              description: dish.review ? excerpt(dish.review, 300) : undefined,
+            },
+        breadcrumbs([['Home', '/'], ['Cooking', '/cooking'], [dish.dishName, `/cooking/${dish.slug}`]]),
+      ] }} />
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <Link href="/cooking" className="t-label ink-link inline-flex min-h-[44px] items-center gap-2 text-lg">
           <ArrowLeft className="h-5 w-5" aria-hidden="true" /> All the dishes

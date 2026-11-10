@@ -5,6 +5,7 @@ import ProjectSheet from '@/components/zine/ProjectSheet'
 import Settle from '@/components/zine/Settle'
 import { Empty } from '@/components/zine/SectionHead'
 import { tilt } from '@/lib/format'
+import { JsonLd, collection } from '@/lib/jsonld'
 
 export const revalidate = 3600
 
@@ -18,6 +19,8 @@ export const metadata: Metadata = {
 export default async function ProjectsPage() {
   const projects = await getProjects()
   return (
+    <>
+      <JsonLd data={collection('Projects', '/projects', metadata.description as string, [])} />
     <section aria-labelledby="projects-title" className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 lg:pt-14">
       <div className="mb-10">
         <PrintTitle id="projects-title" lines="Projects" className="text-[clamp(3rem,13vw,6rem)]" />
@@ -37,5 +40,6 @@ export default async function ProjectsPage() {
         </ul>
       )}
     </section>
+    </>
   )
 }

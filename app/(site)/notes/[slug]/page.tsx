@@ -9,6 +9,7 @@ import NoteScrap from '@/components/zine/NoteScrap'
 import Settle from '@/components/zine/Settle'
 import { Tape } from '@/components/zine/Marks'
 import { SectionHead } from '@/components/zine/SectionHead'
+import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
 
 export const revalidate = 3600
 export const generateStaticParams = async () => [] as { slug: string }[]
@@ -39,6 +40,21 @@ export default async function NotePage({ params }: Props) {
 
   return (
     <article aria-labelledby="note-title">
+      <JsonLd data={{ '@graph': [
+        {
+          '@type': 'Article',
+          headline: note.title,
+          description: note.excerpt,
+          url: abs(`/notes/${note.slug}`),
+          mainEntityOfPage: abs(`/notes/${note.slug}`),
+          datePublished: note.createdAt,
+          dateModified: note.updatedAt,
+          articleSection: note.category || 'Notes',
+          author,
+          inLanguage: 'en-IE',
+        },
+        breadcrumbs([['Home', '/'], ['Notes', '/notes'], [note.title, `/notes/${note.slug}`]]),
+      ] }} />
       <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6">
         <Link href="/notes" className="t-label ink-link inline-flex min-h-[44px] items-center gap-2 text-lg">
           <ArrowLeft className="h-5 w-5" aria-hidden="true" /> All the notes

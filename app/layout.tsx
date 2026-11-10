@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: `${siteName}: supper clubs, movie nights and home cooking`, template: `%s | ${siteName}` },
   description:
-    "Parag Salunkhe's corner of the internet: the movies from movie night, the dishes from the supper club table, and the things he wrote down. Leave a note on the way out.",
+    "Parag's zine: the movies from movie night, the dishes from the supper club table, and the things he wrote down. Leave a note on the way out.",
   applicationName: siteName,
   authors: [{ name: siteName, url: siteUrl }],
   creator: siteName,

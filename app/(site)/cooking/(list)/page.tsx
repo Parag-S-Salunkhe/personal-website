@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getDishes } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import CookingContent from './CookingContent'
+import { JsonLd, collection } from '@/lib/jsonld'
 
 export const revalidate = 3600
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
 export default async function CookingPage() {
   const dishes = await getDishes()
   return (
+    <>
+      <JsonLd data={collection('Cooking', '/cooking', metadata.description as string, dishes.map((d) => ({ name: d.dishName, path: `/cooking/${d.slug}` })))} />
     <section aria-labelledby="cooking-title" className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 lg:pt-14">
       <div className="mb-8">
         <PrintTitle id="cooking-title" lines="Cooking" className="text-[clamp(3rem,13vw,6rem)]" />
@@ -22,5 +25,6 @@ export default async function CookingPage() {
       </div>
       <CookingContent dishes={dishes} />
     </section>
+    </>
   )
 }

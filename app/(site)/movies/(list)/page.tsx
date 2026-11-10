@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getMovies } from '@/lib/content'
 import PrintTitle from '@/components/zine/PrintTitle'
 import MoviesContent from './MoviesContent'
+import { JsonLd, collection } from '@/lib/jsonld'
 
 export const revalidate = 3600
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
 export default async function MoviesPage() {
   const movies = await getMovies()
   return (
+    <>
+      <JsonLd data={collection('Movies', '/movies', metadata.description as string, movies.map((m) => ({ name: m.title, path: `/movies/${m.slug}` })))} />
     <section aria-labelledby="movies-title" className="mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 lg:pt-14">
       <div className="mb-8">
         <PrintTitle id="movies-title" lines="Movies" className="text-[clamp(3rem,13vw,6rem)]" />
@@ -22,5 +25,6 @@ export default async function MoviesPage() {
       </div>
       <MoviesContent movies={movies} />
     </section>
+    </>
   )
 }
