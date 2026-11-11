@@ -24,8 +24,8 @@ export default function Wall({ items, children }: { items: WallItem[]; children?
   const tier = useTier()
   const stageRef = useRef<HTMLDivElement>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
-  const dim = useRef<HTMLDivElement>(null)
-  const pool = useRef<HTMLDivElement>(null)
+  const dim = useRef<HTMLCanvasElement>(null)
+  const pool = useRef<HTMLCanvasElement>(null)
   const dust = useRef<HTMLCanvasElement>(null)
   const list = items.length >= 10 ? items : [...items, ...items, ...items].slice(0, Math.max(10, items.length * 2))
   const n = list.length
@@ -34,6 +34,10 @@ export default function Wall({ items, children }: { items: WallItem[]; children?
     const stage = stageRef.current!, wrap = wrapRef.current!
     const dimEl = dim.current!, poolEl = pool.current!, cv = dust.current!
     const ctx = cv.getContext('2d')!
+    // the dark and the torch pool are smooth gradients: drawn at quarter resolution and scaled up, so a frame never repaints a full-screen layer
+    const dctx = dimEl.getContext('2d')!, pctx = poolEl.getContext('2d')!
+    const LO = 4
+    let onStage = true, drawn = false
     const cards = Array.from(stage.querySelectorAll<HTMLElement>('[data-card]'))
     const caps = cards.map((c) => c.querySelector<HTMLElement>('[data-cap]')!)
     const glares = cards.map((c) => c.querySelector<HTMLElement>('[data-glare]')!)
@@ -59,6 +63,7 @@ export default function Wall({ items, children }: { items: WallItem[]; children?
       step = cw + Math.round(cw * 0.12); setW = n * step
       cards.forEach((c) => { c.style.width = cw + 'px'; c.style.height = ch + 'px' })
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr)
+      dimEl.width = poolEl.width = Math.ceil(W / LO); dimEl.height = poolEl.height = Math.ceil(H / LO)
     }
 
     let last = performance.now()
@@ -84,8 +89,16 @@ export default function Wall({ items, children }: { items: WallItem[]; children?
       const R = base * (1 + 0.2 * Math.sin(p * Math.PI * 6)) * (1 + h * 3.2)
       const a = 0.86 * (1 - h)
 
-      dimEl.style.background = `radial-gradient(circle ${R}px at ${light.x}px ${light.y}px, rgba(5,9,18,0) 0%, rgba(5,9,18,${a * 0.12}) 30%, rgba(5,9,18,${a * 0.5}) 62%, rgba(5,9,18,${a}) 100%)`
-      poolEl.style.background = `radial-gradient(circle ${R * 0.95}px at ${light.x}px ${light.y}px, rgba(255,243,214,0.2) 0%, rgba(246,185,79,0.2) 35%, rgba(246,185,79,0.05) 70%, rgba(246,185,79,0) 100%)`
+      const lx = light.x / LO, ly = light.y / LO
+      const dg = dctx.createRadialGradient(lx, ly, 0, lx, ly, R / LO)
+      dg.addColorStop(0, 'rgba(5,9,18,0)'); dg.addColorStop(0.3, `rgba(5,9,18,${a * 0.12})`)
+      dg.addColorStop(0.62, `rgba(5,9,18,${a * 0.5})`); dg.addColorStop(1, `rgba(5,9,18,${a})`)
+      dctx.clearRect(0, 0, dimEl.width, dimEl.height); dctx.fillStyle = dg; dctx.fillRect(0, 0, dimEl.width, dimEl.height)
+      const pg = pctx.createRadialGradient(lx, ly, 0, lx, ly, (R * 0.95) / LO)
+      pg.addColorStop(0, 'rgba(255,243,214,0.2)'); pg.addColorStop(0.35, 'rgba(246,185,79,0.2)')
+      pg.addColorStop(0.7, 'rgba(246,185,79,0.05)'); pg.addColorStop(1, 'rgba(246,185,79,0)')
+      pctx.clearRect(0, 0, poolEl.width, poolEl.height); pctx.fillStyle = pg; pctx.fillRect(0, 0, poolEl.width, poolEl.height)
+      if (!drawn) { dimEl.style.background = 'transparent'; drawn = true } // the solid first-paint dark hands over to the drawn one
       poolEl.style.opacity = String(1 - h)
       if (intro) intro.style.opacity = reduced ? '1' : String(1 - smooth(0.08, 0.3, p))
 
@@ -130,9 +143,12 @@ export default function Wall({ items, children }: { items: WallItem[]; children?
           el.style.opacity = String(outside ? 1 - h : 1)
           caps[idx].style.opacity = String(h)
           const g = glares[idx]
-          g.style.setProperty('--gx', (((light.x - x) / cw) * 100).toFixed(1) + '%')
-          g.style.setProperty('--gy', (((light.y - y) / ch) * 100).toFixed(1) + '%')
-          g.style.opacity = String(Math.min(1, prox * 1.4))
+          const ga = Math.min(1, prox * 1.4)
+          if (ga > 0) { // only a lit glare moves; an unlit one is never repainted
+            g.style.setProperty('--gx', (((light.x - x) / cw) * 100).toFixed(1) + '%')
+            g.style.setProperty('--gy', (((light.y - y) / ch) * 100).toFixed(1) + '%')
+          }
+          g.style.opacity = String(ga)
         }
       }
       stage.dataset.ready = '1'
@@ -166,15 +182,20 @@ export default function Wall({ items, children }: { items: WallItem[]; children?
     }
     window.addEventListener('pointermove', onMove)
 
+    // the wall stops working once it has scrolled away (the lit grid below takes over)
+    const io = new IntersectionObserver(([e]) => { onStage = e.isIntersecting; last = performance.now() })
+    io.observe(stage)
+
     if (reduced) { frame(performance.now()) } else {
       st = ScrollTrigger.create({ trigger: wrap, start: 'top top', end: 'bottom bottom', scrub: true, onUpdate: (self) => { prog = self.progress } })
       prog = st.progress; p = prog
-      tick = () => frame(performance.now())
+      tick = () => { if (onStage) frame(performance.now()) }
       gsap.ticker.add(tick)
     }
 
     return () => {
       window.removeEventListener('resize', onResize); window.removeEventListener('pointermove', onMove)
+      io.disconnect()
       if (tick) gsap.ticker.remove(tick)
       st?.kill()
     }
@@ -224,8 +245,8 @@ export default function Wall({ items, children }: { items: WallItem[]; children?
             )
           }),
         )}
-        <div ref={dim} aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'rgba(5,9,18,.86)' }} />
-        <div ref={pool} aria-hidden className="pointer-events-none absolute inset-0" style={{ mixBlendMode: 'screen' }} />
+        <canvas ref={dim} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full" style={{ background: 'rgba(5,9,18,.86)' }} />
+        <canvas ref={pool} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full" style={{ mixBlendMode: 'screen' }} />
         <canvas ref={dust} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full" />
         <div className="sw-intro pointer-events-none absolute inset-x-0 bottom-0 z-10 px-4 pb-10 pt-32 sm:px-6 lg:pb-14" style={{ background: 'linear-gradient(to top, rgba(7,13,25,.92) 0%, rgba(7,13,25,.7) 55%, rgba(7,13,25,0) 100%)' }}>
           <div className="pointer-events-auto mx-auto max-w-6xl">{children}</div>
