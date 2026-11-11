@@ -1,17 +1,15 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
 import { excerpt, getMovieBySlug, getMovies } from '@/lib/content'
-import { fmtLongDate, fmtRating, paragraphs, tilt } from '@/lib/format'
-import PrintTitle from '@/components/zine/PrintTitle'
-import MovieCard from '@/components/zine/MovieCard'
-import Settle from '@/components/zine/Settle'
-import { NoPoster, Rated, Tape } from '@/components/zine/Marks'
-import { SectionHead } from '@/components/zine/SectionHead'
+import { fmtLongDate, fmtRating, paragraphs } from '@/lib/format'
+import BackLink from '@/components/site/BackLink'
+import PosterFrame from '@/components/site/PosterFrame'
+import Prose from '@/components/site/Prose'
+import Rating from '@/components/site/Rating'
+import { SectionHead } from '@/components/site/SectionHead'
+import Beam from '@/components/site/movies/Beam'
+import MovieTile from '@/components/site/movies/MovieTile'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
-import { isOptimizable } from '@/lib/url'
 import { ogBase } from '@/lib/site'
 
 export const revalidate = 3600
@@ -43,7 +41,7 @@ export default async function MoviePage({ params }: Props) {
   const body = paragraphs(movie.review)
 
   return (
-    <article aria-labelledby="movie-title">
+    <article aria-labelledby="movie-title" className="overflow-x-clip bg-[var(--night)]">
       <JsonLd data={{ '@graph': [
         {
           '@type': 'Review',
@@ -59,58 +57,46 @@ export default async function MoviePage({ params }: Props) {
         breadcrumbs([['Home', '/'], ['Movies', '/movies'], [movie.title, `/movies/${movie.slug}`]]),
       ] }} />
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
-        <Link href="/movies" className="t-label ink-link inline-flex min-h-[44px] items-center gap-2 text-lg">
-          <ArrowLeft className="h-5 w-5" aria-hidden="true" /> All the movies
-        </Link>
+        <BackLink href="/movies">All the movies</BackLink>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-12 pt-6 sm:px-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-14">
-        <figure className="relative mx-auto w-full max-w-[14rem] sm:max-w-xs md:max-w-none">
-          <div className="absolute inset-0 translate-x-3 translate-y-3 rotate-2 bg-riso-pink" aria-hidden="true" />
-          <div className="relative -rotate-1">
-            <Tape className="-top-3 left-1/2 -translate-x-1/2 rotate-3" />
-            <div className="relative aspect-[2/3] overflow-hidden bg-riso-blue">
-              {movie.posterUrl ? (
-                <Image unoptimized={!isOptimizable(movie.posterUrl)} src={movie.posterUrl} alt={`Poster for ${movie.title}`} fill priority sizes="(min-width: 768px) 420px, 80vw" className="object-cover" />
-              ) : (
-                <NoPoster label={`No poster for ${movie.title} yet: a clapperboard`} />
-              )}
-            </div>
-          </div>
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-8 sm:px-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-16">
+        <figure className="m-0 md:pt-4">
+          <Beam>
+            <PosterFrame src={movie.posterUrl} title={movie.title} priority sizes="(min-width: 768px) 420px, 16rem" />
+          </Beam>
         </figure>
 
         <div className="min-w-0">
-          <p className="t-label text-xl">{movie.type === 'SERIES' ? 'Series' : 'Film'}</p>
-          <PrintTitle id="movie-title" lines={movie.title} className="mt-1 text-[clamp(2.5rem,9vw,4.5rem)] [overflow-wrap:anywhere]" />
-          <dl className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 border-y-2 border-dashed border-riso-blue py-4">
+          <h1 id="movie-title" className="ev-h1 text-[var(--wax)] [overflow-wrap:anywhere]">{movie.title}</h1>
+          <dl className="ev-card mt-8 grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-3 px-8 py-6 sm:grid-cols-[auto_auto_auto] sm:justify-start sm:gap-x-10">
             <div>
-              <dt className="t-label text-base">Watched</dt>
-              <dd className="nums text-lg text-ink"><time dateTime={movie.watchDate}>{fmtLongDate(movie.watchDate)}</time></dd>
+              <dt className="ev-label ev-soft">Kind</dt>
+              <dd className="ev-meta text-base text-[var(--cloth)]">{movie.type === 'SERIES' ? 'Series' : 'Film'}</dd>
             </div>
-            <div className="flex items-center gap-3">
-              <dt className="t-label text-base">My score</dt>
-              <dd><Rated n={movie.rating} size="lg" /></dd>
+            <div>
+              <dt className="ev-label ev-soft">Watched</dt>
+              <dd className="ev-meta text-base text-[var(--cloth)]"><time dateTime={movie.watchDate}>{fmtLongDate(movie.watchDate)}</time></dd>
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <dt className="ev-label ev-soft">My score</dt>
+              <dd className="flex items-center gap-3 text-[var(--cloth)]">
+                <Rating n={movie.rating} size="lg" />
+                <span className="ev-meta text-base">{fmtRating(movie.rating)} / 5</span>
+              </dd>
             </div>
           </dl>
-          {body.length > 0 ? (
-            <div className="prose-zine mt-8">
-              {body.map((p, i) => <p key={i} className="whitespace-pre-line">{p}</p>)}
-            </div>
-          ) : (
-            <p className="t-hand mt-8 text-3xl">no write-up for this one yet</p>
-          )}
+          <Prose className="mt-8" paragraphs={body} empty="No write-up for this one yet." />
         </div>
       </div>
 
       {more.length > 0 && (
-        <section aria-labelledby="more-movies" className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        <section aria-labelledby="more-movies" className="mx-auto max-w-6xl px-4 pb-24 pt-8 sm:px-6">
           <SectionHead id="more-movies" title="Also on the projector" href="/movies" linkLabel="All the movies" />
           <ul className="grid grid-cols-2 gap-x-5 gap-y-12 sm:gap-x-8 lg:grid-cols-4">
-            {more.map((m, i) => (
+            {more.map((m) => (
               <li key={m.id}>
-                <Settle rotate={tilt(i + 1)} className="relative">
-                  <MovieCard movie={m} sizes="(min-width: 1024px) 270px, 45vw" />
-                </Settle>
+                <MovieTile movie={m} sizes="(min-width: 1024px) 270px, 45vw" />
               </li>
             ))}
           </ul>

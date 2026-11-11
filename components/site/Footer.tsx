@@ -25,7 +25,7 @@ export default function Footer() {
   const ref = useRef<HTMLElement>(null)
   const lit = useInView(ref, '-80px')
   return (
-    <footer ref={ref} className="mt-24 border-t border-[rgb(184_138_68/0.35)] bg-[var(--cloth-deep)]">
+    <footer ref={ref} className="border-t border-[rgb(184_138_68/0.35)] bg-[var(--cloth-deep)]">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-[1fr_auto] md:items-end">
         <div>
           <div className="flex items-end gap-3">

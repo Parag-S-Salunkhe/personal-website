@@ -1,12 +1,9 @@
 'use client'
 import { useMemo, useState } from 'react'
 import type { Movie } from '@/lib/content'
-import { tilt } from '@/lib/format'
-import Filters from '@/components/zine/Filters'
-import MovieCard from '@/components/zine/MovieCard'
-import Settle from '@/components/zine/Settle'
-import { Empty } from '@/components/zine/SectionHead'
-import { NoPoster } from '@/components/zine/Marks'
+import Filters from '@/components/site/Filters'
+import { Empty } from '@/components/site/SectionHead'
+import PosterGrid from '@/components/site/movies/PosterGrid'
 
 const CHIPS = [
   { value: 'ALL', label: 'Everything' },
@@ -43,7 +40,6 @@ export default function MoviesContent({ movies }: { movies: Movie[] }) {
         text="The first double bill will land here, with a score and a few lines on each."
         href="/"
         cta="Back to the front page"
-        art={<div className="relative aspect-[2/3]"><NoPoster /></div>}
       />
     )
   }
@@ -72,15 +68,7 @@ export default function MoviesContent({ movies }: { movies: Movie[] }) {
           text="Try a shorter search, or show everything again."
         />
       ) : (
-        <ul className="grid grid-cols-2 gap-x-5 gap-y-12 sm:grid-cols-3 sm:gap-x-8 lg:grid-cols-4">
-          {shown.map((m, i) => (
-            <li key={m.id}>
-              <Settle rotate={tilt(i)} delay={(i % 4) * 0.05} className="relative">
-                <MovieCard movie={m} headingLevel="h2" priority={i < 2} sizes="(min-width: 1024px) 270px, (min-width: 640px) 30vw, 45vw" />
-              </Settle>
-            </li>
-          ))}
-        </ul>
+        <PosterGrid movies={shown} />
       )}
     </>
   )

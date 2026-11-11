@@ -1,5 +1,9 @@
-import { CardGridSkeleton } from '@/components/zine/Skeleton'
+import Skeleton from '@/components/site/Skeleton'
 
 export default function Loading() {
-  return <CardGridSkeleton shape="poster" />
+  return (
+    <div className="min-h-[100dvh] bg-[var(--night)]">
+      <Skeleton shape="poster" />
+    </div>
+  )
 }
