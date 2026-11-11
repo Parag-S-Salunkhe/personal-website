@@ -1,10 +1,9 @@
 'use client'
 import { useMemo, useState } from 'react'
 import type { Post } from '@/lib/content'
-import Filters from '@/components/zine/Filters'
-import PostSpread from '@/components/zine/PostSpread'
-import Settle from '@/components/zine/Settle'
-import { Empty } from '@/components/zine/SectionHead'
+import Filters from '@/components/site/Filters'
+import { Empty } from '@/components/site/SectionHead'
+import InviteGrid from '@/components/site/writing/InviteGrid'
 
 export default function BlogContent({ posts }: { posts: Post[] }) {
   const [query, setQuery] = useState('')
@@ -23,7 +22,7 @@ export default function BlogContent({ posts }: { posts: Post[] }) {
   }, [posts, query, type])
 
   if (posts.length === 0) {
-    return <Empty title="No pages written yet" text="The first spread goes here." href="/" cta="Back to the front page" />
+    return <Empty title="No pages written yet" text="The first letter goes here." href="/" cta="Back to the front page" />
   }
 
   return (
@@ -44,15 +43,7 @@ export default function BlogContent({ posts }: { posts: Post[] }) {
       {shown.length === 0 ? (
         <Empty title="Nothing matches that" text="Try a shorter search, or show everything again." />
       ) : (
-        <ul className="grid gap-10 md:grid-cols-2">
-          {shown.map((p, i) => (
-            <li key={p.id}>
-              <Settle rotate={i % 2 ? 0.6 : -0.6}>
-                <PostSpread post={p} headingLevel="h2" />
-              </Settle>
-            </li>
-          ))}
-        </ul>
+        <InviteGrid posts={shown} />
       )}
     </>
   )

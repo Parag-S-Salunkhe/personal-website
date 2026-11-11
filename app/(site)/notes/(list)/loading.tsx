@@ -1,5 +1,5 @@
-import { CardGridSkeleton } from '@/components/zine/Skeleton'
+import Skeleton from '@/components/site/Skeleton'
 
 export default function Loading() {
-  return <CardGridSkeleton shape="scrap" />
+  return <Skeleton shape="card" />
 }

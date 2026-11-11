@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
-import { ArrowLeft, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { getPostBySlug, getPosts } from '@/lib/content'
-import { fmtDate, fmtLongDate, paragraphs, readingMinutes } from '@/lib/format'
+import { fmtLongDate, paragraphs, readingMinutes } from '@/lib/format'
 import { safeHttpUrl, isOptimizable } from '@/lib/url'
-import PrintTitle from '@/components/zine/PrintTitle'
-import { CutLine, Staple } from '@/components/zine/Marks'
-import { isVideo } from '@/components/zine/PostSpread'
+import BackLink from '@/components/site/BackLink'
+import Prose from '@/components/site/Prose'
+import RiseTitle from '@/components/site/writing/RiseTitle'
+import Envelope from '@/components/site/writing/Envelope'
+import { isVideo } from '@/components/site/writing/isVideo'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
 import { ogBase } from '@/lib/site'
 
@@ -35,8 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-// Read mode: the zine owns the frame, the column stays calm. Old /blog/<id> links land here
-// too (the id is the slug's last segment) and get a permanent redirect to the full slug.
+// Read mode: the letter. Old /blog/<id> links land here too (the id is the slug's last segment)
+// and get a permanent redirect to the full slug.
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const post = await getPostBySlug(slug)
@@ -69,71 +70,44 @@ export default async function PostPage({ params }: Props) {
         },
         breadcrumbs([['Home', '/'], ['Blog', '/blog'], [post.title, `/blog/${post.slug}`]]),
       ] }} />
-      <header className="relative bg-riso-blue text-paper">
-        <div className="halftone absolute inset-0 opacity-50" aria-hidden="true" />
-        <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-8 sm:px-6 md:pb-16">
-          <Link href="/blog" className="t-label inline-flex min-h-[44px] items-center gap-2 text-lg underline decoration-riso-pink decoration-[3px] underline-offset-4 hover:text-riso-yellow">
-            <ArrowLeft className="h-5 w-5" aria-hidden="true" /> All the posts
-          </Link>
-          <p className="t-label nums mt-6 text-xl">
+      <header>
+        <div className="mx-auto max-w-4xl px-4 pb-10 pt-8 sm:px-6 md:pb-12">
+          <BackLink href="/blog">All the posts</BackLink>
+          <p className="ev-meta mt-6 text-base text-[var(--sage)]">
             <time dateTime={post.publishDate}>{fmtLongDate(post.publishDate)}</time>
             <span>, {readingMinutes(post.content)} min read</span>
           </p>
-          <h1 id="post-title" className="t-display mt-3 text-[clamp(2.25rem,8vw,4.5rem)] [overflow-wrap:anywhere]" style={{ textShadow: '3px 2px 0 var(--riso-pink)' }}>
-            {post.title}
+          <h1 id="post-title" className="ev-h1 mt-3 text-[var(--wax)] [overflow-wrap:anywhere]">
+            <RiseTitle text={post.title} />
           </h1>
           {post.blogType && (
-            <p className="t-label mt-5 inline-flex items-center gap-1 bg-riso-yellow px-2 py-0.5 text-lg text-ink">
+            <p className="ev-label mt-5 inline-flex min-h-[32px] items-center gap-1.5 rounded-[3px] border border-[var(--candle)] px-3 text-[var(--candle)]">
               {isVideo(post) && <Play className="h-4 w-4" aria-hidden="true" />} {post.blogType}
             </p>
           )}
         </div>
-        <Staple className="bottom-[-2px] left-1/2 -translate-x-1/2" />
       </header>
 
       {image && (
-        <figure className="mx-auto -mt-6 max-w-3xl px-4 sm:px-6">
-          <div className="relative aspect-[16/9] overflow-hidden border-4 border-slip">
+        <figure className="mx-auto mb-8 max-w-3xl px-4 sm:px-6">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-[3px] outline outline-1 -outline-offset-1 outline-[var(--brass)]">
             <Image unoptimized={!isOptimizable(image)} src={image} alt="" fill priority sizes="(min-width: 768px) 720px, 92vw" className="object-cover" />
           </div>
         </figure>
       )}
 
-      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 md:py-16">
-        {body.length > 0 ? (
-          <div className="prose-zine mx-auto">
-            {body.map((p, i) => (
-              <p key={i} className={`whitespace-pre-line ${i === 0 ? 'text-xl' : ''}`}>
-                {p}
-              </p>
-            ))}
-          </div>
-        ) : (
-          <p className="t-hand text-center text-3xl">this page is still blank</p>
-        )}
-        <p className="t-hand mx-auto mt-12 max-w-[68ch] -rotate-1 text-right text-3xl">thanks for reading, P.</p>
+      <div className="mx-auto max-w-4xl px-4 pb-12 sm:px-6 md:pb-16">
+        <Prose paragraphs={body} lead empty="This page is still blank." />
+        <p className="mx-auto mt-10 max-w-[68ch] text-right text-xl text-[var(--wax)]">
+          Thanks for reading, <span className="ev-name align-middle text-5xl text-[var(--candle)]">P.</span>
+        </p>
       </div>
 
       {(newer || older) && (
-        <>
-          <CutLine />
-          <nav aria-label="More posts" className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 md:grid-cols-2">
-            {older ? (
-              <Link href={`/blog/${older.slug}`} className="group cut block bg-slip p-5 transition-transform duration-300 ease-zine hover:-translate-y-1">
-                <span className="t-label text-lg">Older post</span>
-                <span className="t-title mt-1 block text-2xl group-hover:underline group-hover:decoration-riso-pink group-hover:decoration-[3px] group-hover:underline-offset-4">{older.title}</span>
-                <span className="nums mt-1 block text-sm">{fmtDate(older.publishDate)}</span>
-              </Link>
-            ) : <span className="hidden md:block" />}
-            {newer && (
-              <Link href={`/blog/${newer.slug}`} className="group cut block bg-slip p-5 text-right transition-transform duration-300 ease-zine hover:-translate-y-1">
-                <span className="t-label text-lg">Newer post</span>
-                <span className="t-title mt-1 block text-2xl group-hover:underline group-hover:decoration-riso-pink group-hover:decoration-[3px] group-hover:underline-offset-4">{newer.title}</span>
-                <span className="nums mt-1 block text-sm">{fmtDate(newer.publishDate)}</span>
-              </Link>
-            )}
-          </nav>
-        </>
+        <nav aria-label="More posts" className="mx-auto grid max-w-6xl gap-6 px-4 pb-16 sm:px-6 md:grid-cols-2">
+          {older ? <Envelope href={`/blog/${older.slug}`} kicker="Older post" title={older.title} date={older.publishDate} /> : <span className="hidden md:block" />}
+          {newer && <Envelope href={`/blog/${newer.slug}`} kicker="Newer post" title={newer.title} date={newer.publishDate} align="right" />}
+        </nav>
       )}
     </article>
   )

@@ -222,6 +222,7 @@
 
   .ev-prose { max-width: 68ch; font-size: 1.125rem; line-height: 1.75; color: var(--cloth); }
   .ev-prose p + p { margin-top: 1.25em; }
+  .ev-prose h2 + p, .ev-prose h3 + p { margin-top: 0.6em; }
   .ev-prose a { color: var(--claret); text-decoration: underline; }
 
   /* a flame glyph's soft glow (rating flames, footer candles) */

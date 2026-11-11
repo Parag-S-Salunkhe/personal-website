@@ -1,11 +1,9 @@
 'use client'
 import { useMemo, useState } from 'react'
 import type { Note } from '@/lib/content'
-import { tilt } from '@/lib/format'
-import Filters from '@/components/zine/Filters'
-import NoteScrap from '@/components/zine/NoteScrap'
-import Settle from '@/components/zine/Settle'
-import { Empty } from '@/components/zine/SectionHead'
+import Filters from '@/components/site/Filters'
+import { Empty } from '@/components/site/SectionHead'
+import NoteGrid from '@/components/site/writing/NoteGrid'
 
 export default function NotesContent({ notes }: { notes: Note[] }) {
   const [query, setQuery] = useState('')
@@ -24,7 +22,7 @@ export default function NotesContent({ notes }: { notes: Note[] }) {
   }, [notes, query, category])
 
   if (notes.length === 0) {
-    return <Empty title="No notes on the fridge yet" text="Short thoughts and lists will get stuck up here." href="/" cta="Back to the front page" />
+    return <Empty title="No notes on the table yet" text="Short thoughts and lists will be set out here." href="/" cta="Back to the front page" />
   }
 
   return (
@@ -45,15 +43,7 @@ export default function NotesContent({ notes }: { notes: Note[] }) {
       {shown.length === 0 ? (
         <Empty title="Nothing matches that" text="Try a shorter search, or show everything again." />
       ) : (
-        <ul className="grid grid-cols-1 gap-8 min-[420px]:grid-cols-2 lg:grid-cols-4">
-          {shown.map((n, i) => (
-            <li key={n.id}>
-              <Settle rotate={tilt(i * 3)} delay={(i % 4) * 0.05} className="h-full">
-                <NoteScrap note={n} headingLevel="h2" />
-              </Settle>
-            </li>
-          ))}
-        </ul>
+        <NoteGrid notes={shown} />
       )}
     </>
   )
