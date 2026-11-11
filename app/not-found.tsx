@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
-import Masthead from '@/components/zine/Masthead'
-import Footer from '@/components/zine/Footer'
-import NotFoundBody from '@/components/zine/NotFoundBody'
+import Nav from '@/components/site/Nav'
+import Footer from '@/components/site/Footer'
+import NotFoundBody from '@/components/site/NotFoundBody'
 
 export const metadata: Metadata = { title: 'Page not found', robots: { index: false, follow: true } }
 
-// Unmatched URLs render here, outside the (site) layout, so this one brings its own masthead and footer.
+// Unmatched URLs render here, outside the (site) layout, so this one brings its own chrome
+// (the run 2 evening look; see .claude/redesign-v3/run2/design/SITE.md §8).
 export default function NotFound() {
   return (
-    <div className="zine flex flex-col">
-      <Masthead />
+    <div className="evening flex flex-col">
+      <Nav />
       <main id="main" className="flex flex-1">
         <NotFoundBody />
       </main>

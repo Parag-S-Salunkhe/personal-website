@@ -1,11 +1,15 @@
 import type { Metadata, Viewport } from 'next'
-import { Anybody, Literata, Reenie_Beanie } from 'next/font/google'
+import { Anybody, Gilda_Display, Hanken_Grotesk, Literata, Pinyon_Script, Reenie_Beanie } from 'next/font/google'
 import './globals.css'
 import { siteName, siteUrl } from '@/lib/site'
 
 const anybody = Anybody({ subsets: ['latin'], axes: ['wdth'], display: 'swap', variable: '--font-anybody' })
 const literata = Literata({ subsets: ['latin'], style: ['normal', 'italic'], display: 'swap', variable: '--font-literata' })
 const reenie = Reenie_Beanie({ subsets: ['latin'], weight: '400', display: 'swap', variable: '--font-reenie', preload: false })
+// The site's look (run 2, "one evening at Parag's"); the zine fonts above stay for /admin.
+const gilda = Gilda_Display({ subsets: ['latin'], weight: '400', display: 'swap', variable: '--font-gilda' })
+const hanken = Hanken_Grotesk({ subsets: ['latin'], display: 'swap', variable: '--font-hanken' })
+const pinyon = Pinyon_Script({ subsets: ['latin'], weight: '400', display: 'swap', variable: '--font-pinyon', preload: false })
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -23,12 +27,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#F1F1EC',
+  themeColor: '#17352A',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IE" className={`${anybody.variable} ${literata.variable} ${reenie.variable}`}>
+    <html lang="en-IE" className={`${anybody.variable} ${literata.variable} ${reenie.variable} ${gilda.variable} ${hanken.variable} ${pinyon.variable}`}>
       <body>{children}</body>
     </html>
   )

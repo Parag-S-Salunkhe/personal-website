@@ -1,17 +1,12 @@
-'use client'
-import { motion, useReducedMotion } from 'framer-motion'
+import Dim from '@/components/site/Dim'
 
-// Page transition: the new page slides up a few pixels like a fresh sheet laid on the pile.
-// Transform only (no opacity), so content is visible from the first paint.
+// Page transition: the room lights come back up over the new page (an overlay fades; the page itself
+// never moves, so position: fixed and ScrollTrigger measurements stay correct).
 export default function Template({ children }: { children: React.ReactNode }) {
-  const reduce = useReducedMotion()
   return (
-    <motion.div
-      initial={reduce ? false : { y: 14, rotate: -0.25 }}
-      animate={{ y: 0, rotate: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <>
+      <Dim />
       {children}
-    </motion.div>
+    </>
   )
 }

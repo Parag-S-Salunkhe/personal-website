@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import NotFoundBody from '@/components/zine/NotFoundBody'
+import NotFoundBody from '@/components/site/NotFoundBody'
 
 export const metadata: Metadata = { title: 'Page not found', robots: { index: false, follow: true } }
 

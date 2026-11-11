@@ -130,3 +130,107 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   One evening at Parag's (run 2): A's candle-lit table. Everything is scoped to
+   .evening so the zine classes /admin still uses keep working unchanged.
+   Spec: .claude/redesign-v3/run2/design/SITE.md
+   ─────────────────────────────────────────────────────────────────────────── */
+.evening {
+  --cloth: #17352A;
+  --cloth-deep: #10281F;
+  --night: #0F1A2E;
+  --linen: #F1EEE6;
+  --wax: #FFF8EA;
+  --sage: #A9C3AE;
+  --candle: #F6B94F;
+  --claret: #7C2236;
+  --brass: #B88A44;
+  --dusk: #E9A66B;
+  --ease-ev: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html:has(.evening) { background-color: #17352A; }
+  .evening {
+    background-color: var(--cloth);
+    color: var(--wax);
+    font-family: var(--font-hanken), system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    min-height: 100dvh;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    scrollbar-color: var(--candle) var(--cloth-deep);
+  }
+  .evening ::selection { background: var(--candle); color: var(--cloth); }
+  .evening * { caret-color: var(--candle); }
+  .evening a { text-underline-offset: 4px; }
+  .evening :focus-visible { outline: 2px solid var(--candle); outline-offset: 3px; border-radius: 3px; }
+  .evening h1, .evening h2, .evening h3 { text-wrap: balance; }
+  .evening p { text-wrap: pretty; }
+}
+
+@layer components {
+  .ev-display { font-family: var(--font-gilda), Georgia, serif; font-weight: 400; font-size: clamp(2.75rem, 7vw, 6rem); line-height: 1.02; letter-spacing: -0.01em; }
+  .ev-h1 { font-family: var(--font-gilda), Georgia, serif; font-weight: 400; font-size: clamp(2.25rem, 5.5vw, 4.5rem); line-height: 1.05; letter-spacing: -0.01em; }
+  .ev-h2 { font-family: var(--font-gilda), Georgia, serif; font-weight: 400; font-size: clamp(1.875rem, 3.6vw, 3rem); line-height: 1.1; }
+  .ev-title { font-family: var(--font-gilda), Georgia, serif; font-weight: 400; font-size: 1.5rem; line-height: 1.2; }
+  .ev-name { font-family: var(--font-pinyon), cursive; font-weight: 400; line-height: 1; }
+  .ev-label { font-family: var(--font-hanken), system-ui, sans-serif; font-weight: 600; font-size: 0.9375rem; line-height: 1.3; }
+  .ev-meta { font-family: var(--font-hanken), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.4; font-variant-numeric: tabular-nums; }
+  .ev-serif { font-family: var(--font-gilda), Georgia, serif; font-weight: 400; }
+
+  .ev-card {
+    background: var(--linen); color: var(--cloth); border-radius: 3px;
+    outline: 1px solid var(--brass); outline-offset: -7px;
+    box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
+  }
+  .ev-card :focus-visible, .ev-on-linen :focus-visible { outline-color: var(--claret); }
+  .ev-on-linen { color: var(--cloth); }
+  .ev-soft { color: rgb(23 53 42 / 0.75); }
+
+  .ev-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; padding: 0 1.5rem;
+    white-space: nowrap; flex-shrink: 0; border-radius: 3px; font-weight: 600; font-size: 1rem;
+    background: var(--claret); color: var(--wax); border: 1px solid var(--claret);
+    transition: transform 200ms var(--ease-ev), background-color 200ms var(--ease-ev), color 200ms var(--ease-ev), border-color 200ms var(--ease-ev), box-shadow 300ms var(--ease-ev);
+  }
+  .ev-btn:hover { background: var(--candle); border-color: var(--candle); color: var(--cloth); box-shadow: 0 0 24px rgb(246 185 79 / 0.45); }
+  .ev-btn:active { transform: translateY(1px) scale(0.98); }
+  .ev-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .ev-btn-line { background: transparent; color: var(--candle); border-color: rgb(246 185 79 / 0.7); padding: 0 1.125rem; }
+  .ev-btn-line:hover { background: rgb(246 185 79 / 0.12); color: var(--wax); border-color: var(--candle); box-shadow: none; }
+
+  .ev-link {
+    color: var(--candle); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px;
+    transition: color 200ms var(--ease-ev), text-decoration-thickness 200ms var(--ease-ev);
+  }
+  .ev-link:hover { color: var(--wax); text-decoration-thickness: 2px; }
+  .ev-on-linen .ev-link, .ev-card .ev-link { color: var(--claret); }
+  .ev-on-linen .ev-link:hover, .ev-card .ev-link:hover { color: var(--cloth); }
+
+  .ev-field {
+    display: block; width: 100%; border: 1px solid var(--brass); background: #FBF9F4; border-radius: 3px;
+    padding: 0.625rem 0.875rem; color: var(--cloth); font-size: 1rem;
+  }
+  .ev-field::placeholder { color: rgb(23 53 42 / 0.6); }
+  .ev-field:focus-visible { outline: 2px solid var(--claret); outline-offset: 2px; }
+  .ev-field-dark { background: rgb(16 40 31 / 0.85); color: var(--wax); border-color: rgb(184 138 68 / 0.8); }
+  .ev-field-dark::placeholder { color: rgb(169 195 174 / 0.85); }
+  .ev-field-dark:focus-visible { outline-color: var(--candle); }
+
+  .ev-prose { max-width: 68ch; font-size: 1.125rem; line-height: 1.75; color: var(--cloth); }
+  .ev-prose p + p { margin-top: 1.25em; }
+  .ev-prose a { color: var(--claret); text-decoration: underline; }
+
+  /* a flame glyph's soft glow (rating flames, footer candles) */
+  .ev-glow { filter: drop-shadow(0 0 6px rgb(246 185 79 / 0.75)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .evening *, .evening *::before, .evening *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
