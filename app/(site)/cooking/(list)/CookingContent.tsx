@@ -1,12 +1,15 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import type { Dish } from '@/lib/content'
-import { tilt } from '@/lib/format'
-import Filters from '@/components/zine/Filters'
-import DishCard from '@/components/zine/DishCard'
-import Settle from '@/components/zine/Settle'
-import { Empty } from '@/components/zine/SectionHead'
-import { Plate } from '@/components/zine/Marks'
+import Filters from '@/components/site/Filters'
+import { Empty } from '@/components/site/SectionHead'
+import { useReducedMotion } from '@/components/site/hooks'
+import DishCard from '@/components/site/cooking/DishCard'
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const SORTS = [
   { value: 'date', label: 'Latest cooked' },
@@ -18,6 +21,8 @@ export default function CookingContent({ dishes }: { dishes: Dish[] }) {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('ALL')
   const [sort, setSort] = useState('date')
+  const reduced = useReducedMotion()
+  const grid = useRef<HTMLUListElement>(null)
 
   const chips = useMemo(() => {
     const cats = Array.from(new Set(dishes.map((d) => d.category).filter(Boolean))).sort()
@@ -38,16 +43,24 @@ export default function CookingContent({ dishes }: { dishes: Dish[] }) {
     )
   }, [dishes, query, category, sort])
 
+  // Cards stand up like pop-up pages: hinged at the bottom edge, rotateX(-80deg) to 0 with a spring overshoot.
+  const key = shown.map((d) => d.id).join('|')
+  useGSAP(() => {
+    const el = grid.current
+    if (!el || reduced) return
+    const items = gsap.utils.toArray<HTMLElement>(el.querySelectorAll('[data-pop]'))
+    if (!items.length) return
+    gsap.set(items, { rotateX: -80, transformOrigin: '50% 100%', opacity: 0.001 })
+    const triggers = ScrollTrigger.batch(items, {
+      start: 'top 92%',
+      once: true,
+      onEnter: (batch) => gsap.to(batch, { rotateX: 0, opacity: 1, duration: 0.9, ease: 'back.out(1.7)', stagger: 0.12, overwrite: true, clearProps: 'transform,opacity' }),
+    })
+    return () => { triggers.forEach((t) => t.kill()); gsap.set(items, { clearProps: 'transform,opacity' }) }
+  }, { scope: grid, dependencies: [key, reduced] })
+
   if (dishes.length === 0) {
-    return (
-      <Empty
-        title="The kitchen is quiet"
-        text="The first recipe clipping goes here: the dish, what went into it, and how it went."
-        href="/"
-        cta="Back to the front page"
-        art={<Plate />}
-      />
-    )
+    return <Empty title="The kitchen is quiet" text="The first recipe goes here: the dish, what went into it, and how it went." href="/" cta="Back to the front page" />
   }
 
   return (
@@ -71,12 +84,10 @@ export default function CookingContent({ dishes }: { dishes: Dish[] }) {
       {shown.length === 0 ? (
         <Empty title="Nothing matches that" text="Try one ingredient, or show everything again." />
       ) : (
-        <ul className="grid items-start gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {shown.map((d, i) => (
-            <li key={d.id}>
-              <Settle rotate={tilt(i + 3, 0.5)} delay={(i % 3) * 0.05}>
-                <DishCard dish={d} index={i} headingLevel="h2" />
-              </Settle>
+        <ul ref={grid} className="grid items-stretch gap-8 [perspective:1400px] sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map((d) => (
+            <li key={d.id} data-pop className="will-change-transform">
+              <DishCard dish={d} />
             </li>
           ))}
         </ul>

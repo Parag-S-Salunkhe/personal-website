@@ -8,7 +8,7 @@ export default function Rating({ n, size = 'md', className = '' }: { n: number; 
     <span role="img" aria-label={`Rated ${fmtRating(n)} of 5`} className={`inline-flex items-end gap-1 ${className}`}>
       {[0, 1, 2, 3, 4].map((i) => (
         <svg key={i} viewBox="0 0 12 20" className={`${h} w-auto ${i < lit ? 'ev-glow' : ''}`} aria-hidden="true">
-          <path d="M6 1 C9 6 10 10 6 14 C2 10 3 6 6 1 Z" fill={i < lit ? 'var(--candle)' : 'none'} stroke={i < lit ? 'none' : 'currentColor'} strokeOpacity=".55" strokeWidth="1" />
+          <path d="M6 1 C9 6 10 10 6 14 C2 10 3 6 6 1 Z" fill={i < lit ? 'var(--candle)' : 'none'} stroke={i < lit ? '#7C2236' : 'currentColor'} strokeOpacity={i < lit ? 0.45 : 0.55} strokeWidth="1" />
           <rect x="5.4" y="14" width="1.2" height="5" fill="currentColor" opacity=".5" />
         </svg>
       ))}

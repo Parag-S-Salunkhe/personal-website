@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
-import { ArrowLeft, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { excerpt, getDishBySlug, getDishes } from '@/lib/content'
-import { fmtLongDate, fmtRating, paragraphs, tilt } from '@/lib/format'
+import { fmtLongDate, fmtRating, paragraphs } from '@/lib/format'
 import { safeHttpUrl, isOptimizable } from '@/lib/url'
-import PrintTitle from '@/components/zine/PrintTitle'
-import DishCard from '@/components/zine/DishCard'
-import Settle from '@/components/zine/Settle'
-import { Plate, Rated, Tape } from '@/components/zine/Marks'
-import { SectionHead } from '@/components/zine/SectionHead'
+import Plate from '@/components/site/Plate'
+import Rating from '@/components/site/Rating'
+import Prose from '@/components/site/Prose'
+import BackLink from '@/components/site/BackLink'
+import { SectionHead } from '@/components/site/SectionHead'
+import DishCard from '@/components/site/cooking/DishCard'
+import TurnIn from '@/components/site/cooking/TurnIn'
 import { JsonLd, abs, author, breadcrumbs } from '@/lib/jsonld'
 import { ogBase } from '@/lib/site'
 
@@ -40,7 +41,6 @@ export default async function DishPage({ params }: Props) {
 
   const all = await getDishes()
   const more = all.filter((d) => d.id !== dish.id).slice(0, 3)
-  const variant = Math.max(0, all.findIndex((d) => d.id === dish.id))
   const body = paragraphs(dish.review)
   const video = safeHttpUrl(dish.videoUrl)
 
@@ -72,96 +72,86 @@ export default async function DishPage({ params }: Props) {
             },
         breadcrumbs([['Home', '/'], ['Cooking', '/cooking'], [dish.dishName, `/cooking/${dish.slug}`]]),
       ] }} />
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
-        <Link href="/cooking" className="t-label ink-link inline-flex min-h-[44px] items-center gap-2 text-lg">
-          <ArrowLeft className="h-5 w-5" aria-hidden="true" /> All the dishes
-        </Link>
+      <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6">
+        <BackLink href="/cooking">All the dishes</BackLink>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-12 pt-6 sm:px-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-14">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-16 pt-4 sm:px-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-14">
         <div className="min-w-0">
-          <p className="t-label text-xl">{dish.category}</p>
-          <PrintTitle id="dish-title" lines={dish.dishName} className="mt-1 text-[clamp(2.5rem,9vw,4.5rem)] [overflow-wrap:anywhere]" />
-          <dl className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 border-y-2 border-dashed border-riso-blue py-4">
+          <figure className="mb-8 md:hidden">
+            <TurnIn kind={dish.imageUrl ? 'photo' : 'plate'}>
+              {dish.imageUrl ? (
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[3px]">
+                  <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="90vw" priority className="object-cover" />
+                </div>
+              ) : (
+                <Plate name={dish.dishName} className="mx-auto h-auto w-full max-w-[18rem]" />
+              )}
+            </TurnIn>
+          </figure>
+
+          <p className="ev-label text-[var(--candle)]">{dish.category}</p>
+          <h1 id="dish-title" className="ev-h1 mt-1 text-[var(--wax)] [overflow-wrap:anywhere]">{dish.dishName}</h1>
+          <dl className="mt-6 flex flex-wrap items-center gap-x-10 gap-y-4 border-y border-[rgb(184_138_68/0.4)] py-4">
             <div>
-              <dt className="t-label text-base">Cooked</dt>
-              <dd className="nums text-lg text-ink"><time dateTime={dish.cookDate}>{fmtLongDate(dish.cookDate)}</time></dd>
+              <dt className="ev-label text-[var(--sage)]">Cooked</dt>
+              <dd className="ev-meta mt-0.5 text-base text-[var(--wax)]"><time dateTime={dish.cookDate}>{fmtLongDate(dish.cookDate)}</time></dd>
             </div>
-            <div className="flex items-center gap-3">
-              <dt className="t-label text-base">How it went</dt>
-              <dd><Rated n={dish.rating} size="lg" /></dd>
+            <div>
+              <dt className="ev-label text-[var(--sage)]">How it went</dt>
+              <dd className="mt-0.5 text-[var(--wax)]"><Rating n={dish.rating} size="lg" /></dd>
             </div>
           </dl>
 
-          <figure className="relative mt-8 md:hidden">
-            {dish.imageUrl ? (
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="90vw" className="object-cover" />
-              </div>
-            ) : (
-              <Plate variant={variant} className="mx-auto h-auto w-full max-w-xs" />
-            )}
-          </figure>
-
-          {body.length > 0 ? (
-            <div className="prose-zine mt-8">
-              {body.map((p, i) => <p key={i} className="whitespace-pre-line">{p}</p>)}
-            </div>
-          ) : (
-            <p className="t-hand mt-8 text-3xl">no notes on this one yet</p>
-          )}
+          <Prose paragraphs={body} empty="No notes on this one yet." className="mt-8" />
 
           {video && (
-            <a href={video} target="_blank" rel="noopener noreferrer" className="btn mt-8">
+            <a href={video} target="_blank" rel="noopener noreferrer" className="ev-btn mt-8 inline-flex items-center gap-2">
               <Play className="h-5 w-5" aria-hidden="true" /> Watch it being made
             </a>
           )}
         </div>
 
         <aside aria-label="Recipe card" className="relative">
-          <div className="relative rotate-1 md:sticky md:top-8">
-            <Tape className="-top-3 left-8 -rotate-6" />
-            <Tape pink className="-top-3 right-8 rotate-6" />
-            <div className="cut bg-slip px-5 pb-6 pt-7">
-              <figure className="hidden md:block">
+          <div className="ev-card ev-on-linen px-6 pb-8 pt-6 md:sticky md:top-24">
+            <figure className="hidden md:block">
+              <TurnIn kind={dish.imageUrl ? 'photo' : 'plate'}>
                 {dish.imageUrl ? (
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[3px]">
                     <Image unoptimized={!isOptimizable(dish.imageUrl)} src={dish.imageUrl} alt={`Photo of ${dish.dishName}`} fill sizes="400px" className="object-cover" />
                   </div>
                 ) : (
-                  <Plate variant={variant} className="h-auto w-full" />
+                  <Plate name={dish.dishName} className="mx-auto h-auto w-full max-w-[16rem]" />
                 )}
-              </figure>
-              <h2 className="t-title mt-4 text-2xl">What went in</h2>
-              {dish.ingredients.length > 0 ? (
-                <ul className="mt-3 grid gap-1.5 text-ink">
-                  {dish.ingredients.map((ing) => (
-                    <li key={ing} className="flex items-baseline gap-3 border-b border-dashed border-riso-blue/50 pb-1.5">
-                      <span aria-hidden="true" className="inline-block h-2.5 w-2.5 shrink-0 translate-y-[-1px] rounded-full bg-riso-pink" />
-                      <span>{ing}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="t-hand mt-2 text-2xl">ingredients still in my head</p>
-              )}
-            </div>
+              </TurnIn>
+            </figure>
+            <h2 className="ev-title mt-4">What went in</h2>
+            {dish.ingredients.length > 0 ? (
+              <ul className="mt-3 grid gap-2">
+                {dish.ingredients.map((ing) => (
+                  <li key={ing} className="flex items-baseline gap-3 border-b border-[rgb(184_138_68/0.45)] pb-2">
+                    <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 translate-y-[-2px] rounded-full bg-[var(--brass)]" />
+                    <span className="min-w-0 [overflow-wrap:anywhere]">{ing}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="ev-soft mt-2 italic">Ingredients still in my head.</p>
+            )}
           </div>
         </aside>
       </div>
 
       {more.length > 0 && (
-        <section aria-labelledby="more-dishes" className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <SectionHead id="more-dishes" title="Also from the kitchen" href="/cooking" linkLabel="All the dishes" />
-          <ul className="grid items-start gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {more.map((d, i) => (
-              <li key={d.id}>
-                <Settle rotate={tilt(i + 2, 0.5)}>
-                  <DishCard dish={d} index={i + 1} />
-                </Settle>
-              </li>
-            ))}
-          </ul>
+        <section aria-labelledby="more-dishes" className="bg-[var(--cloth-deep)]">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+            <SectionHead id="more-dishes" title="Also from the kitchen" href="/cooking" linkLabel="All the dishes" />
+            <ul className="grid items-stretch gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {more.map((d) => (
+                <li key={d.id}><DishCard dish={d} headingLevel="h3" /></li>
+              ))}
+            </ul>
+          </div>
         </section>
       )}
     </article>
