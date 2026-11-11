@@ -47,7 +47,7 @@ export default function CookingContent({ dishes }: { dishes: Dish[] }) {
   const key = shown.map((d) => d.id).join('|')
   useGSAP(() => {
     const el = grid.current
-    if (!el || reduced) return
+    if (!el || reduced || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const items = gsap.utils.toArray<HTMLElement>(el.querySelectorAll('[data-pop]'))
     if (!items.length) return
     gsap.set(items, { rotateX: -80, transformOrigin: '50% 100%', opacity: 0.001 })
