@@ -6,17 +6,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-// The office copy: same paper and ink, no tape or tilt.
+// The host's side of the door: same cloth and linen, no scene, nothing moving.
 export default function LoginPage() {
   return (
     <section aria-labelledby="login-title" className="mx-auto grid max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-      <div className="mx-auto w-full max-w-md border-2 border-riso-blue bg-slip">
-        <div className="border-b-2 border-riso-blue px-6 py-3">
-          <p className="t-label text-lg">Office copy, staff only</p>
-        </div>
-        <div className="px-6 pb-8 pt-6">
-          <h1 id="login-title" className="t-display mis text-5xl">Sign in</h1>
-          <p className="mt-3 text-ink">This is where I add movies, dishes and posts. If you&rsquo;re a guest, the good stuff is on the front page.</p>
+      <div className="relative mx-auto w-full max-w-md">
+        <div aria-hidden="true" className="absolute inset-[-25%] rounded-full bg-[radial-gradient(closest-side,rgb(246_185_79/0.18),transparent)]" />
+        <div className="ev-card relative px-8 pb-10 pt-9">
+          <p aria-hidden="true" className="ev-name text-4xl text-[var(--claret)]">The host</p>
+          <h1 id="login-title" className="ev-h1 mt-1">Sign in</h1>
+          <p className="ev-soft mt-3">This is where I add movies, dishes and posts. If you&rsquo;re a guest, the good stuff is on the table.</p>
           <LoginForm />
         </div>
       </div>

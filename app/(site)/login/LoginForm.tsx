@@ -37,7 +37,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="mt-6">
-      <label htmlFor="login-password" className="t-label block text-lg">Password</label>
+      <label htmlFor="login-password" className="ev-label block">Password</label>
       <input
         id="login-password"
         type="password"
@@ -49,13 +49,13 @@ export default function LoginForm() {
         }}
         aria-invalid={!!error}
         aria-describedby="login-error"
-        className="field mt-1 min-h-[48px]"
+        className="ev-field mt-1.5 min-h-[48px]"
         required
       />
-      <p id="login-error" role="alert" className={`min-h-6 pt-2 text-sm font-semibold text-riso-red ${error ? '' : 'sr-only'}`}>
+      <p id="login-error" role="alert" className={`min-h-6 pt-2 text-sm font-semibold text-[var(--claret)] ${error ? '' : 'sr-only'}`}>
         {error}
       </p>
-      <button type="submit" disabled={loading} className="btn mt-2 w-full">
+      <button type="submit" disabled={loading} className="ev-btn mt-2 w-full">
         {loading && <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />}
         {loading ? 'Signing in' : 'Sign in'}
       </button>
