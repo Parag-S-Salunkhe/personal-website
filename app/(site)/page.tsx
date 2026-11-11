@@ -1,16 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { getDishes, getGuestNotes, getMovies, getNotes, getPosts, getProjects } from '@/lib/content'
-import { tilt } from '@/lib/format'
-import HomeHero from '@/components/zine/HomeHero'
-import CountVisit from '@/components/zine/CountVisit'
-import { CutLine, NoPoster, Plate } from '@/components/zine/Marks'
-import { Empty, SectionHead } from '@/components/zine/SectionHead'
-import Settle from '@/components/zine/Settle'
-import MovieCard from '@/components/zine/MovieCard'
-import DishCard from '@/components/zine/DishCard'
-import PostSpread from '@/components/zine/PostSpread'
-import NoteScrap from '@/components/zine/NoteScrap'
+import CountVisit from '@/components/site/CountVisit'
+import Lazy from '@/components/site/home/Lazy'
+import SkipIntro from '@/components/site/home/SkipIntro'
+import Reveals from '@/components/site/home/Reveals'
+import Courses from '@/components/site/home/Courses'
+import { buildCards, buildFilms, buildStage } from '@/components/site/home/content'
 import { JsonLd, author, person } from '@/lib/jsonld'
 import { siteName, siteUrl, ogBase } from '@/lib/site'
 
@@ -21,13 +16,12 @@ export const metadata: Metadata = {
   openGraph: { ...ogBase, url: '/' },
 }
 
-// On phones each row is a swipeable strip; from lg up it's a four-column spread.
-const strip = 'scroller -mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-6 pt-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-8 lg:overflow-visible lg:px-0'
-
 export default async function HomePage() {
   const [movies, dishes, posts, notes, guests, projects] = await Promise.all([
     getMovies(), getDishes(), getPosts(), getNotes(), getGuestNotes(1), getProjects(),
   ])
+  const rows = { movies, dishes, posts, notes, projects, guests }
+  const stageData = { cards: buildCards(rows), stage: buildStage(rows), films: buildFilms(movies) }
 
   return (
     <>
@@ -37,93 +31,33 @@ export default async function HomePage() {
           description: 'Supper clubs, movie nights and home cooking: what Parag watched, cooked and wrote down.' },
         person,
       ] }} />
-      <HomeHero guest={guests[0] ?? null} />
 
-      <CutLine />
-      <section aria-labelledby="home-movies" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <SectionHead id="home-movies" title="Movies" scribble="double bill, dessert at the interval" href="/movies" linkLabel="All the movies" />
-        {movies.length === 0 ? (
-          <Empty title="Nothing on the projector yet" text="The first double bill will land here." art={<div className="relative aspect-[2/3]"><NoPoster /></div>} />
-        ) : (
-          <ul className={strip}>
-            {movies.slice(0, 8).map((m, i) => (
-              <li key={m.id} className="w-[64%] shrink-0 snap-start sm:w-[40%] lg:w-auto">
-                <Settle rotate={tilt(i)} delay={(i % 4) * 0.06} className="relative">
-                  <MovieCard movie={m} />
-                </Settle>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <CutLine />
-      <section aria-labelledby="home-cooking" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <SectionHead id="home-cooking" title="Cooking" scribble="clipped from the Sunday pile" href="/cooking" linkLabel="All the dishes" />
-        {dishes.length === 0 ? (
-          <Empty title="The kitchen is quiet" text="The first recipe clipping goes here." art={<Plate />} />
-        ) : (
-          <ul className={`${strip} items-start`}>
-            {dishes.slice(0, 8).map((d, i) => (
-              <li key={d.id} className="w-[78%] shrink-0 snap-start sm:w-[46%] lg:w-auto">
-                <Settle rotate={tilt(i + 3, 0.5)} delay={(i % 4) * 0.06}>
-                  <DishCard dish={d} index={i} />
-                </Settle>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <CutLine />
-      <section aria-labelledby="home-blog" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <SectionHead id="home-blog" title="Blog" scribble="things I wrote down" href="/blog" linkLabel="All the posts" />
-        {posts.length === 0 ? (
-          <Empty title="No pages written yet" text="The first spread goes here." />
-        ) : (
-          <ul className="grid gap-8 md:grid-cols-2">
-            {posts.slice(0, 4).map((p, i) => (
-              <li key={p.id}>
-                <Settle rotate={i % 2 ? 0.6 : -0.6}>
-                  <PostSpread post={p} />
-                </Settle>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {notes.length > 0 && (
-        <>
-          <CutLine />
-          <section aria-labelledby="home-notes" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <SectionHead id="home-notes" title="Notes" scribble="scraps from my pockets" href="/notes" linkLabel="All the notes" />
-            <ul className="grid grid-cols-1 gap-6 min-[420px]:grid-cols-2 sm:gap-8 lg:grid-cols-4">
-              {notes.slice(0, 4).map((n, i) => (
-                <li key={n.id}>
-                  <Settle rotate={tilt(i * 3)} className="h-full">
-                    <NoteScrap note={n} />
-                  </Settle>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </>
-      )}
-
-      {projects.length > 0 && (
-        <section aria-labelledby="home-bench" className="mx-auto max-w-6xl px-4 pb-8 sm:px-6">
-          <div className="cut flex flex-wrap items-center gap-x-6 gap-y-3 bg-slip/60 px-5 py-4">
-            <h2 id="home-bench" className="t-title text-2xl">On the workbench</h2>
-            <ul className="flex flex-1 flex-wrap gap-x-4 gap-y-1">
-              {projects.slice(0, 4).map((p) => (
-                <li key={p.id} className="t-label text-lg text-ink">{p.title}</li>
-              ))}
-            </ul>
-            <Link href="/projects" className="t-label ink-link inline-flex min-h-[44px] items-center text-xl">See the build sheets</Link>
+      {/* The story: one evening, scrolled. Under reduced motion the wrapper is as tall as the stage (no story). */}
+      <style>{`@media (prefers-reduced-motion: reduce){[data-story]{height:auto!important}}`}</style>
+      <div data-story className="relative h-[600vh] lg:h-[900vh]">
+        <div className="sticky top-0 h-[100dvh] w-full overflow-hidden">
+          {/* static poster frame (dusk over the terrace, one lit window); the scene fades in over it */}
+          <div aria-hidden="true" className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #1a2a5c 0%, #4a4a86 38%, #E9A66B 78%, #6b3b3a 100%)' }}>
+            <div className="absolute inset-x-0 bottom-0 h-[34%] bg-[#10281F]" />
+            <div className="absolute left-1/2 top-[66%] h-[5px] w-[5px] -translate-x-1/2 rounded-full bg-[var(--wax)]" style={{ boxShadow: '0 0 28px 12px rgba(246,185,79,.8), -180px 6px 22px 8px rgba(246,185,79,.55), 190px 4px 22px 8px rgba(246,185,79,.55), 320px -10px 18px 6px rgba(246,185,79,.4), -330px -6px 18px 6px rgba(246,185,79,.4)' }} />
           </div>
-        </section>
-      )}
+          <Lazy data={stageData} />
+          <header className="pointer-events-none absolute inset-x-0 top-0 z-10 px-4 pt-24 sm:px-12 sm:pt-28" style={{ opacity: 'var(--hero, 1)' }}>
+            <div aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-[rgb(16_40_31/0.9)] via-[rgb(16_40_31/0.6)] to-transparent" />
+            <h1 className="ev-display text-[var(--wax)]" style={{ textShadow: '0 2px 28px rgba(0,0,0,.65)' }}>Supper at Parag&rsquo;s</h1>
+            <p className="mt-3 max-w-md text-lg text-[var(--wax)]" style={{ textShadow: '0 1px 16px rgba(0,0,0,.85)' }}>
+              I host supper clubs and movie nights in Dublin. Scroll through one evening: the street at dusk, the table, then the film.
+            </p>
+          </header>
+        </div>
+      </div>
+      <SkipIntro />
+
+      <div id="courses" tabIndex={-1} className="outline-none">
+        <Reveals>
+          <Courses movies={movies} dishes={dishes} posts={posts} notes={notes} projects={projects} guest={guests[0] ?? null} />
+        </Reveals>
+      </div>
     </>
   )
 }
